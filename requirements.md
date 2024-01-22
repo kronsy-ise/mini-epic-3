@@ -12,19 +12,22 @@ coordinator membership.
 5. Only approved members should have the access(login) to the application and rejected
 records should be deleted from the system.
 6. Approved users can update their profile information i.e. contact number etc.
-Club Management:
+
+## Club Management:
 1. Coordinators can create new clubs within the system.
 2. Each club has a name, description, validity status, and an associated coordinator from a list
 of available coordinators.
 3. A coordinator can only be associated with one club.
 4. The admin coordinator cannot be associated with any club.
-Club Membership:
+
+## Club Membership:
 1. The approved users can see the list of the clubs.
 2. Users can request membership to the club of their choice.
 3. The relevant club coordinator will see the pending requests and approve/reject club
 membership.
 4. Users can request/join a maximum of three clubs
 
+---
 
 ## Event Management:
 1. Club coordinators can create club events with a title, description, date, time, and venue for
@@ -35,10 +38,14 @@ can apply to participate/play in each event listed.
 should automatically be approved.
 4. The approval for members from different clubs requires coordinator intervention/approval.
 
+---
+
 ## Privacy and Information Access:
 1. The admin coordinator has access to contact and membership information for all users.
 2. The club coordinators can only view contact information of members within their club.
 3. All other members can only see their own profile information.
+
+---
 
 ## Design requirements:
 1. Design a Database Schema that is complaint with 3NF.
@@ -50,7 +57,7 @@ statements against that schema.
 5. Design Database views for standard reporting.
 6. Implement triggers for autonomous tasks.
 
-
+---
 
 # Deliverables
 
