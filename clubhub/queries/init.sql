@@ -1,8 +1,7 @@
 -- First, we drop all things
-
-DROP TABLE Sessions;
-DROP TABLE Users;
-DROP TYPE UserKind;
+DROP TABLE IF EXISTS Sessions;
+DROP TABLE IF EXISTS Users CASCADE;
+DROP TYPE IF EXISTS UserKind CASCADE;
 
 
 -- then, we create everything

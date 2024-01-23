@@ -3,8 +3,11 @@ from __future__ import annotations
 import json
 import psycopg2
 from urllib.parse import urlparse
+import os
 
-CONFIG_PATH = "./config.json"
+
+my_path = os.path.abspath(os.path.dirname(__file__))
+CONFIG_PATH = os.path.join(my_path, "..", "config.json")
 
 def load_configuration():
     config_file = open(CONFIG_PATH, "r")

@@ -82,7 +82,6 @@ def approve_user(id):
     return "Approved as " + user_kind, 200
 
 
-
 @app.post("/api/auth")
 def start_session():
     """
