@@ -1,3 +1,10 @@
+-- First, we drop all things
+DROP TABLE Users;
+DROP TYPE UserKind;
+
+
+-- then, we create everything
+
 CREATE TYPE UserKind AS ENUM ('coordinator', 'user', 'unapproved');
 
 
@@ -14,6 +21,8 @@ CREATE TABLE Users(
   user_kind UserKind NOT NULL,
 
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()  
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+  UNIQUE(email)
 );
 

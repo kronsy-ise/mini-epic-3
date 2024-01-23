@@ -4,11 +4,17 @@ import psycopg2
 import pathlib
 import util
 
-def initialize_database(database : psycopg2.cursor, init_script : str):
+def initialize_database(conn : psycopg2.connection, init_script : str):
+
+    cur = conn.cursor()
     script_content = pathlib.Path(init_script).read_text()
     print(f"Init script: {script_content}")
 
-    database.execute(script_content)
+    res = cur.execute(script_content)
+
+    conn.commit()
+
+    print("Response: ", res)
     
 
 
@@ -17,4 +23,4 @@ if __name__ == "__main__":
     db_url = config["DATABASE_URL"]
     db_conn = util.open_database(db_url)
 
-    initialize_database(db_conn.cursor(), "./queries/init.sql")
+    initialize_database(db_conn, "./queries/init.sql")
