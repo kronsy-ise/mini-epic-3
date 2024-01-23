@@ -3,6 +3,7 @@ from os import utime
 import psycopg2
 import pathlib
 import util
+import os
 
 def initialize_database(conn : psycopg2.connection, init_script : str):
 
@@ -23,4 +24,6 @@ if __name__ == "__main__":
     db_url = config["DATABASE_URL"]
     db_conn = util.open_database(db_url)
 
-    initialize_database(db_conn, "./queries/init.sql")
+    file = os.path.join(util.my_path, "..", "queries", "init.sql")
+    
+    initialize_database(db_conn, file)

@@ -81,9 +81,6 @@ def approve_user(id):
 
     return "Approved as " + user_kind, 200
 
-@app.patch("/api/users")
-def update_user():
-
 
 @app.post("/api/users")
 def create_user():
