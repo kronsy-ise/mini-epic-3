@@ -81,9 +81,70 @@ def approve_user(id):
 
     return "Approved as " + user_kind, 200
 
-@app.patch("/api/users")
-def update_user():
 
+
+@app.post("/api/auth")
+def start_session():
+    """
+    We start an auth session 
+
+    Essentially what we do is take the username and password,
+    and create a session entry in the database 
+
+    we return the id of this session as a cookie
+    this session id is quite sensitive and should be kept private 
+
+    Then this session is is provided in the header of each request to identify you 
+    from here we can decide what actions you can perform
+    """
+
+    data = request.json
+
+    if data is None:
+        return "Expected Body", 400
+
+    username : str = data["username"]
+    password : str = data["password"]
+
+    print("AA")
+    cur = db.cursor()
+
+    cur.execute("SELECT password FROM Users WHERE username = %s", (username))
+
+    credential = cur.fetchone()
+
+    if credential is None:
+        return "User with username Not Found", 404
+
+    password_hash : str = credential[0]
+
+    password_hash_enc = password_hash.encode("utf-8")
+    password_enc = password.encode("utf-8")
+
+    is_valid_pw = bcrypt.checkpw(password_enc, password_hash_enc)
+
+    if not is_valid_pw:
+        return "Mismatched password", 403
+
+    
+    return "hello, world", 200
+
+
+# @app.patch("/api/users/<user_id>")
+# def update_user(id):
+#     data = request.json
+#
+#     if data is None:
+#         return "Expected Body", 400
+#
+#     username = data["username"]
+#     email = data["email"]
+#     mobile = data["mobile"]
+#     password : str = data["password"]
+#
+#     password_bytes = password.encode("utf-8")
+#     password_salt = bcrypt.gensalt()
+#     password_hash = bcrypt.hashpw(password_bytes, password_salt)
 
 @app.post("/api/users")
 def create_user():
@@ -93,6 +154,7 @@ def create_user():
         return "Expected Body", 400
 
     username = data["username"]
+    name = data["name"]
     email = data["email"]
     mobile = data["mobile"]
     password : str = data["password"]
@@ -122,9 +184,9 @@ def create_user():
     try:
     # Create the user
         cur.execute("""
-    INSERT INTO Users(username, email, mobile, password_hash, is_admin, user_kind)
-        VALUES (%s, %s, %s, %s, %s, %s)
-        """, (username, email, mobile, password_hash, is_admin, kind))
+    INSERT INTO Users(username, name, email, mobile, password_hash, is_admin, user_kind)
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
+        """, (username, name, email, mobile, password_hash, is_admin, kind))
    
         db.commit()
 
@@ -132,7 +194,7 @@ def create_user():
     
     except pgerrors.UniqueViolation:
         db.commit() 
-        return "User with email already exists", 400 
+        return "User with email or username already exists", 400 
     except:
         db.commit() 
         return "Internal server error", 500
