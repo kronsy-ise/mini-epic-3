@@ -17,4 +17,4 @@ if __name__ == "__main__":
     db_url = config["DATABASE_URL"]
     db_conn = util.open_database(db_url)
 
-    initialize_database(db_conn, "./queries/init.sql")
+    initialize_database(db_conn.cursor(), "./queries/init.sql")
