@@ -3,7 +3,6 @@ from __future__ import annotations
 import json
 import psycopg2
 from urllib.parse import urlparse
-from typing import Optional
 import os
 from flask import request
 

@@ -1,19 +1,12 @@
 from __future__ import annotations
 from typing import Optional
 from flask import Flask, request, request_finished, session, make_response, redirect, render_template
-import psycopg2
-from psycopg2 import errors as pgerrors
-import random
-import bcrypt
-import datetime
 from handlers.users import users_app
 from handlers.auth import auth_app
 from handlers.home import home_app
 
 from util import verify_session
 from globals import db
-
-from models.user import User, UserKind
 
 app = Flask(__name__)
 
