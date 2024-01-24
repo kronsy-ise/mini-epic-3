@@ -6,7 +6,7 @@ DROP TYPE IF EXISTS UserKind CASCADE;
 
 -- then, we create everything
 
-CREATE TYPE UserKind AS ENUM ('coordinator', 'user', 'unapproved');
+CREATE TYPE UserKind AS ENUM ('coordinator', 'user', 'unapproved',"admin");
 
 
 CREATE TABLE Users(
@@ -17,8 +17,6 @@ CREATE TABLE Users(
   mobile TEXT NOT NULL,
 
   password_hash TEXT NOT NULL,
-
-  is_admin BOOLEAN NOT NULL,
 
   user_kind UserKind NOT NULL,
 
