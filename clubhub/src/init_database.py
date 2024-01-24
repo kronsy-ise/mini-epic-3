@@ -1,5 +1,4 @@
 from __future__ import annotations
-from os import utime
 import psycopg2
 import pathlib
 import util
