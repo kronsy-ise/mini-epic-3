@@ -9,7 +9,6 @@ def initialize_database(conn : psycopg2.connection, init_script : str):
 
     cur = conn.cursor()
     script_content = pathlib.Path(init_script).read_text()
-    print(f"Init script: {script_content}")
 
     res = cur.execute(script_content)
 
