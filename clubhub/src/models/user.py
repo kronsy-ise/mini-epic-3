@@ -7,12 +7,14 @@ class UserKind(Enum):
     Unapproved = "unapproved"
     Coordinator = "coordinator"
     User = "user"
-
+    Admin = "admin"
+    
     @staticmethod 
     def from_str(s : str) -> UserKind:
         if s == "unapproved": return UserKind.Unapproved
         elif s == "coordinator": return UserKind.Coordinator
         elif s == "user": return UserKind.User
+        elif s == "admin": return UserKind.Admin
         
         raise Exception("Unknown kind")
 
@@ -21,19 +23,17 @@ class User:
     name : str
     email : str 
     mobile : str
-    is_admin : bool
     kind : UserKind
 
-    def __init__(self, username, name, is_admin, kind, email, mobile) -> None:
+    def __init__(self, username, name, kind, email, mobile) -> None:
         self.username = username
         self.name = name 
-        self.is_admin = is_admin
         self.kind = kind
         self.email = email
         self.mobile = mobile
 
     def __repr__(self) -> str:
-        return f"User {self.name} <{self.username}> {'admin' if self.is_admin else ''} kind={self.kind}"
+        return f"User {self.name} <{self.username}> kind={self.kind}"
 
     @staticmethod
     def fetch(id : int) -> Optional[User]:
