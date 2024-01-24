@@ -1,0 +1,110 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html,body{
+    height: 100%;
+}
+
+
+.nav__link_selected{
+}
+
+.navbar{
+    height: 100%;
+    background-color: white;
+    width: 300px;
+    box-shadow: 0 0 5px black;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+
+    padding: 40px 8px;
+}
+
+.nav__links_container{
+    width: 100%;
+}
+
+.nav__links{
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: 100%;
+}
+
+.nav__links>li{
+    width: 100%;
+    display: flex;
+}
+
+.nav__links>li>a{
+    color: black;
+    width: 100%;
+
+    font-size: 1.2rem;
+    
+    display: flex;
+    justify-content: space-evenly;
+    border-radius: 4px;
+
+    text-decoration: none;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+
+    position: relative;
+
+    display: flex;
+    justify-content: space-between;
+    padding: 32px 20%;
+
+    /* flex-direction: column; */
+    /* align-items: center; */
+}
+
+.nav__links>li.nav__link_selected>a{
+    color: rgb(24, 148, 179);
+}
+
+.nav__links>li>a::before{
+    position: absolute;
+    content: '';
+    width: 5px;
+    height: 0%;
+    background-color: rgb(3, 206, 233);
+    left: 0;
+
+}
+
+.nav__links>li>a:hover::before{
+    height: 50%;
+    transition: height 0.1s linear;
+}
+
+.nav__links>li>a:hover{
+    opacity: 0.9;
+    background-color: rgb(248, 248, 248);
+}
+
+.nav__links>li>a>i{
+    font-size: 1.7rem;
+}
+
+.app__main{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 100%;
+}
+
+
+.app__content{
+    flex: 1 1;
+    background-color: rgb(201, 201, 201);
+    height: 100%;
+    width: 500px;
+}
