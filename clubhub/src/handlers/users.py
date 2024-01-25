@@ -1,5 +1,5 @@
 from __future__ import annotations
-from flask import Blueprint, request
+from flask import Blueprint, redirect, render_template, request, url_for
 from globals import db
 from models.user import User
 from models.user import UserKind
@@ -9,7 +9,6 @@ from util import verify_session
 
 
 users_app = Blueprint('users_app', __name__)
-
 
 @users_app.post("/api/users/<id>/approve")
 def approve_user(id):
@@ -151,6 +150,18 @@ def create_user():
         return "Internal server error", 500
 
 
+@users_app.route("/api/users")
+#returns a list of all users
+def get_users():
+    users = User.query.all()
+    return render_template('users.html', users=users)
+@users_app.route("/api/users/<id>/delete", methods=['POST'])
+def delete_user(id):
+    user = User.query.get(id)
+    if user:
+        db.session.delete(user)
+        db.session.commit()
+    return redirect(url_for('get_users'))
 
 # @users_app.patch("/api/users/<user_id>")
 # def update_user(id):
