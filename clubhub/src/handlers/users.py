@@ -19,7 +19,7 @@ def approve_user(id):
 
     if auth_user is None:
         return "Unauthorized to perform action", 403 
-    elif not auth_user.is_admin:
+    elif not auth_user.UserKind.Admin:
         return "Admin access required to perform action", 403
 
     data = request.json
@@ -72,7 +72,7 @@ def get_all_users():
 
     cur = db.cursor()
     cur.execute("""
-    SELECT username, email, mobile, is_admin, user_kind, id FROM Users
+    SELECT username, email, mobile, user_kind, id FROM Users
     """)
     users = cur.fetchall()
 
@@ -82,15 +82,13 @@ def get_all_users():
         username = user[0]
         email = user[1]
         mobile = user[2]
-        is_admin = user[3]
-        kind = user[4]
-        id = user[5]
+        kind = user[3]
+        id = user[4]
 
         response.append({
             "username" : username,
             "email" : email,
             "mobile" : mobile,
-            "is_admin" : is_admin,
             "kind" : kind,
             "id" : id
         })
@@ -130,16 +128,16 @@ def create_user():
     # When this is the first user, implicitly make this the super-admin account
     # TODO: Make this an sql rule
     is_admin = user_count == 0
-    kind = "coordinator" if is_admin else "unapproved"
+    kind = "admin" if is_admin else "unapproved"
 
     print(f"User count: {user_count}")
 
     try:
     # Create the user
         cur.execute("""
-    INSERT INTO Users(username, name, email, mobile, password_hash, is_admin, user_kind)
+    INSERT INTO Users(username, name, email, mobile, password_hash, user_kind)
         VALUES (%s, %s, %s, %s, %s, %s, %s)
-        """, (username, name, email, mobile, password_hash.decode("utf-8"), is_admin, kind))
+        """, (username, name, email, mobile, password_hash.decode("utf-8"), kind))
    
         db.commit()
 
