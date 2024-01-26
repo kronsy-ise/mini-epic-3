@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Users</title>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Kind</th>
+            <th>Delete USER</th>
+        </tr>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{user.kind}}</td>
+            <td>
+                <td>
+                    <form method="POST" action="{{ url_for('delete_user', id=user.id) }}">
+                        <input type="submit" value="Delete" style="background-color: red;">
+                    </form>
+                </td>
+        </tr>
+        {% endfor %}
+    </table>
+    
+</body>
+</html>

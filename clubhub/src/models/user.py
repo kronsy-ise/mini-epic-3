@@ -40,10 +40,10 @@ class User:
 
         cur = db.cursor()
 
-        cur.execute("SELECT username, name, is_admin, user_kind, email, mobile FROM Users WHERE id = %s", (id,))
+        cur.execute("SELECT username, name, user_kind, email, mobile FROM Users WHERE id = %s", (id,))
         entry = cur.fetchone()
 
         if entry == None:
             return None 
         else:
-            return User(entry[0], entry[1], entry[2], UserKind.from_str(entry[3]), entry[4], entry[5])
+            return User(entry[0], entry[1], UserKind.from_str(entry[2]), entry[3], entry[4])
