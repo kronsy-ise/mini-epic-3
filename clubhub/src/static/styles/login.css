@@ -4,7 +4,7 @@
 }
 
 head,body{
-  background-color: #AAAAAA;
+  background-color: #c4c4c4;
   height: 100%;
   width: 100%;
 }
@@ -24,9 +24,9 @@ head,body{
 
 .center-card{
   position: relative;
-  background: white;
+  background: rgb(255, 255, 255);
   border-radius: 20px;
-  box-shadow: 0 0 8px black;
+  box-shadow: 0 0 8px rgb(0, 0, 0);
 
   display: flex;
   flex-direction: column;
@@ -73,7 +73,7 @@ head,body{
 
 
 .card-content>form>input[type="submit"]{
-  background-color: #0022FF;
+  background-color: #139bda;
   align-self: flex-end;
   color: white;
   font-weight: 700;
