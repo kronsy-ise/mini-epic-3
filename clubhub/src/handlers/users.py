@@ -155,6 +155,7 @@ def create_user():
 def get_users():
     users = User.query.all()
     return render_template('users.html', users=users)
+
 @users_app.route("/api/users/<id>/delete", methods=['POST'])
 def delete_user(id):
     user = User.query.get(id)

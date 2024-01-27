@@ -4,6 +4,7 @@
     <title>Users</title>
 </head>
 <body>
+    <!--Make a table with the headings ID, Username, Email, Kind, and Delete User-->
     <table>
         <tr>
             <th>ID</th>
@@ -12,14 +13,16 @@
             <th>Kind</th>
             <th>Delete USER</th>
         </tr>
+        <!--For each user in users make a column-->
         {% for user in users %}
         <tr>
+            <!--Make cell for each peice of data in a row for each user-->
             <td>{{ user.id }}</td>
             <td>{{ user.username }}</td>
             <td>{{ user.email }}</td>
             <td>{{user.kind}}</td>
             <td>
-                <td>
+                <td><!--Make a form for each user to delete them from the sql database-->
                     <form method="POST" action="{{ url_for('delete_user', id=user.id) }}">
                         <input type="submit" value="Delete" style="background-color: red;">
                     </form>
