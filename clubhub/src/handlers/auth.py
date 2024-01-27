@@ -15,7 +15,35 @@ auth_app = Blueprint('auth_app', __name__)
 
 SESSION_ID_VALID_CHARS="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._+=/$%^"
 
-def start_session(username : str, password : str):
+def start_session_for_user(user_id : int):
+
+    cur = db.cursor()
+    session_secret = ""
+
+    # Generate the session id
+    for _ in range(36):
+        c = random.choice(SESSION_ID_VALID_CHARS)
+        session_secret += c
+
+    now = datetime.datetime.now()
+
+    expiry = now + datetime.timedelta(hours=6)
+
+
+
+    cur.execute("""
+    INSERT INTO Sessions(secret, user_id, expires_at) 
+    VALUES
+    (%s, %s, %s)
+    """, (session_secret, user_id, expiry))
+
+
+    db.commit()
+
+
+    return (session_secret, expiry)
+
+def start_session_with_credentials(username : str, password : str):
     """
     We start an auth session 
 
@@ -53,32 +81,9 @@ def start_session(username : str, password : str):
 
 
     # Now that we know the user has logged in correctly
-    # we simply go ahead and create a new session
-   
-    session_secret = ""
+    # we simply go ahead and create a new session   
 
-    # Generate the session id
-    for _ in range(36):
-        c = random.choice(SESSION_ID_VALID_CHARS)
-        session_secret += c
-
-    now = datetime.datetime.now()
-
-    expiry = now + datetime.timedelta(hours=6)
-
-
-
-    cur.execute("""
-    INSERT INTO Sessions(secret, user_id, expires_at) 
-    VALUES
-    (%s, %s, %s)
-    """, (session_secret, user_id, expiry))
-
-
-    db.commit()
-
-
-    return (session_secret, expiry)
+    return start_session_for_user(user_id)
 
 @auth_app.get("/login")
 def login_page():
@@ -92,6 +97,54 @@ def login_page():
         return redirect("/")
 
 
+@auth_app.get("/signup")
+def signup_page():
+
+
+    return render_template("signup.html")
+
+@auth_app.post("/signup")
+def signup_action():
+    form_data = request.form
+    print(form_data)
+
+
+    username = form_data.get("username")
+    password = form_data.get("password")   
+    name = form_data.get("name")
+    email = form_data.get("email")
+    phone = form_data.get("phone")
+
+
+    password_salt = bcrypt.gensalt()
+    password_enc = password.encode("utf-8")
+    password_hash = bcrypt.hashpw(password_enc, password_salt).decode("utf-8")
+
+    # Create a new user in the database
+
+    cur = db.cursor()
+
+    cur.execute("""
+    INSERT INTO Users(name, username, email, mobile, password_hash)
+    VALUES (%s, %s, %s, %s, %s)
+    RETURNING id
+                   """, (name, username, email, phone, password_hash))
+    
+    new_user_id = cur.fetchone()
+    db.commit()
+    
+    print("Signed up as user with id", new_user_id)
+
+    # Now that we have signed up, we implicitly log in
+
+    session_secret = start_session_for_user(new_user_id[0])
+
+    res = make_response()
+    res.set_cookie("session", session_secret[0], expires=session_secret[1], httponly=True)
+    res.status_code = 302
+    res.headers.set("Location", "/")
+    return res
+
 @auth_app.post("/login")
 def login_action():
     print("Logging in")
@@ -104,16 +157,19 @@ def login_action():
 
     # If the login is correct, set the appropriate cookie and redirect to home 
 
-    session_secret = start_session(username, password)
-    print(session_secret)
 
-    # When the login is wrong, return the login page 
-    # with an error message
-    if session_secret is None:
+    try:
+        session_secret = start_session_with_credentials(username, password)
+
+        # When the login is wrong, return the login page 
+        # with an error message
+        if session_secret is None:
+            return render_template("login.html", invalid=True)
+        else:
+            res = make_response()
+            res.set_cookie("session", session_secret[0], expires=session_secret[1], httponly=True)
+            res.status_code = 302
+            res.headers.set("Location", "/")
+            return res
+    except Exception as e:
         return render_template("login.html", invalid=True)
-    else:
-        res = make_response()
-        res.set_cookie("session", session_secret[0], expires=session_secret[1], httponly=True)
-        res.status_code = 302
-        res.headers.set("Location", "/")
-        return res
