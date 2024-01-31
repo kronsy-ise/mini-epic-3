@@ -6,20 +6,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="static/styles/index.css" rel="stylesheet">
     <script src="https://kit.fontawesome.com/c2b7a7d1d7.js" crossorigin="anonymous"></script>
+    <style>
+      /* Your CSS code here */
+      .app__main {
+        /* Styles for the main section */
+      }
+      
+      .app__content {
+        /* Styles for the content section */
+      }
+      
+      table {
+        background-color: white;
+        border-collapse: collapse;
+        width: 100%;
+      }
+      
+      th {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: left;
+      }
+      
+      td {
+        border: 1px solid black;
+        padding: 8px;
+      }
+      
+      /* ... and so on */
+    </style>
   </head>
   <body>
-
     <main class="app__main">
-      {% set page = 'users' %}
-      {% include 'admin/nav.html' %}
-
+      {% include 'admin/nav.html' %} <!-- Include the navigation bar -->
+      <!-- Show a table containing all user credentials -->
       <div class="app__content">
-          <h1>
-            Admin Users
-           </h1>
+        <table>
+          <tr>
+              <th>Username</th>
+              <th>Fullname</th>
+              <th>Kind</th>
+              <th>Email</th>
+              <th>PhoneNumber</th>
+              <th>Delete</th>
+            </tr> <!-- End of table row -->
+          
+          {% for user in users %} <!-- Loop through the list of users -->
+          <tr>
+              {% for item in user %} <!-- Loop through the user's attributes -->
+              <td>{{ item }}</td> <!-- Display each attribute in a table cell -->
+              {% endfor %}
+              <td>
+                <form method="POST" action="">
+                    <input type="submit" value="Delete" style="background-color: red;"> <!-- Delete button -->
+                </form>
+              </td>
+          </tr>
+          {% endfor %}
+        </table>
       </div>
-
     </main>
-
   </body>
 </html>

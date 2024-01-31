@@ -47,6 +47,8 @@ def verify_session():
     cur.execute("SELECT user_id, expires_at FROM Sessions WHERE expires_at > NOW() AND secret = %s", (session_secret, ))
 
     session = cur.fetchone()
+    if session is None:
+        return None
 
     user_id : int = session[0]
 
