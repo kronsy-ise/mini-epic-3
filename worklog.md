@@ -38,4 +38,14 @@ returns a list of lists containing all user information so that we can
 easily display on the users page
 
 Fixed NoneType not scriptable error by adding none check for session in util.py
+
+---
+
+### 2024-02-15
+
+#### Daniel
+
+completed rest of init.sql tables and added triggers and functions
+
+
 ---

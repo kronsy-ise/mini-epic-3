@@ -10,9 +10,20 @@ DROP TYPE IF EXISTS UserKind CASCADE;
 
 CREATE TYPE UserKind AS ENUM ('coordinator', 'user', 'unapproved','admin');
 
+--    TABLES  --
+CREATE TABLE CLUBS(
+  club_id BIGSERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  description TEXT NOT NULL,
+  validity Text NOT NULL,--pending/approved/rejected
+  coordinator_id BIGINT NOT NULL REFERENCES Users(user_id), -- Added foreign key constraint
+  coordinator_id BIGINT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
 
-CREATE TABLE Users(
-  id BIGSERIAL PRIMARY KEY,
+CREATE TABLE USERS(
+  user_id BIGSERIAL PRIMARY KEY,
   name TEXT NOT NULL,
   username TEXT NOT NULL,
   email TEXT NOT NULL,
@@ -21,7 +32,7 @@ CREATE TABLE Users(
   password_hash TEXT NOT NULL,
 
   user_kind UserKind NOT NULL,
-
+  last_login TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 
@@ -29,6 +40,54 @@ CREATE TABLE Users(
   UNIQUE(username)
 );
 
+CREATE TABLE EVENTS(
+  event_id BIGSERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  description TEXT NOT NULL,
+  date TIMESTAMPTZ NOT NULL,
+  venue TEXT NOT NULL,
+  
+  club_id BIGINT NOT NULL REFERENCES Clubs(club_id),
+  
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE EVENT_PARTICIPATION(
+  event_id BIGINT NOT NULL REFERENCES Events(event_id),
+  user_id BIGINT NOT NULL REFERENCES Users(user_id),
+  PRIMARY KEY(event_id, user_id),
+
+  status TEXT NOT NULL,
+  
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE CLUB_MEMBERSHIP(
+  club_id BIGINT NOT NULL REFERENCES Clubs(club_id),
+  user_id BIGINT NOT NULL REFERENCES Users(user_id),
+  PRIMARY KEY(club_id, user_id),
+
+  status TEXT NOT NULL,
+  
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE Sessions(
+  id BIGSERIAL PRIMARY KEY,
+  secret TEXT NOT NULL,
+
+  user_id BIGINT NOT NULL REFERENCES Users(id),
+
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  expires_at TIMESTAMPTZ NOT NULL,
+
+  UNIQUE(secret)
+);
+
+--    FUNCTIONS AND TRIGGERS  --
 CREATE OR REPLACE FUNCTION set_user_kind()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -49,14 +108,84 @@ BEFORE INSERT ON Users
 FOR EACH ROW 
 EXECUTE FUNCTION set_user_kind();
 
-CREATE TABLE Sessions(
-  id BIGSERIAL PRIMARY KEY,
-  secret TEXT NOT NULL,
 
-  user_id BIGINT NOT NULL REFERENCES Users(id),
+-- Function to approve event participation and add user to club_membership if status is approved
+CREATE OR REPLACE FUNCTION approve_event_participation()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF NEW.status = 'approved' THEN
+    -- Add user to club_membership
+    INSERT INTO Club_Membership(club_id, user_id, status, created_at, updated_at)
+    VALUES (NEW.club_id, NEW.user_id, 'approved', NOW(), NOW());
+  ELSE
+    -- Check if the user is a member of the club
+    IF EXISTS (
+      SELECT 1 FROM Club_Membership
+      WHERE club_id = NEW.club_id AND user_id = NEW.user_id AND status = 'approved'
+    ) THEN
+      NEW.status = 'approved';
+    END IF;
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
 
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  expires_at TIMESTAMPTZ NOT NULL,
+-- Trigger to execute the approve_event_participation function before inserting into Event_Participation table
+CREATE OR REPLACE TRIGGER approve_event_participation_trigger()
+BEFORE INSERT ON Event_Participation
+FOR EACH ROW
+EXECUTE FUNCTION approve_event_participation();
 
-  UNIQUE(secret)
-);
+-- Function to set the coordinator_id to the user_id
+CREATE OR REPLACE FUNCTION set_club_coordinator()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.coordinator_id = NEW.user_id;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Trigger to execute the set_club_coordinator function before inserting into Clubs table
+CREATE TRIGGER set_club_coordinator_trigger
+BEFORE INSERT ON Clubs
+FOR EACH ROW
+EXECUTE FUNCTION set_club_coordinator();
+
+-- Function to check if the user has reached the maximum club membership limit
+CREATE OR REPLACE FUNCTION check_club_membership_limit()
+RETURNS TRIGGER AS $$
+DECLARE
+    club_count INTEGER;
+BEGIN
+    SELECT COUNT(*) INTO club_count
+    FROM CLUB_MEMBERSHIP
+    WHERE user_id = NEW.user_id AND status = 'approved';
+
+    IF club_count >= 3 THEN
+        RAISE EXCEPTION 'User has reached the maximum club membership limit';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Trigger to execute the check_club_membership_limit function before inserting into CLUB_MEMBERSHIP table
+CREATE TRIGGER check_club_membership_limit_trigger
+BEFORE INSERT ON CLUB_MEMBERSHIP
+FOR EACH ROW
+EXECUTE FUNCTION check_club_membership_limit();
+
+-- Function to update the updated_at column with the current timestamp
+CREATE OR REPLACE FUNCTION updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Trigger to execute the updated_at function after inserting, updating, or deleting rows in the Users table
+CREATE TRIGGER updated_at_trigger()
+AFTER INSERT OR UPDATE OR DELETE ON Users
+FOR EACH STATEMENT
+EXECUTE FUNCTION updated_at();
