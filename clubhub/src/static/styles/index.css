@@ -14,7 +14,7 @@ html,body{
 
 .navbar{
     height: 100%;
-    background-color: rgb(255, 255, 255);
+    background-color: rgba(255, 255, 255, 0.367);
     width: 300px;
     box-shadow: 0 0 5px black;
 
@@ -104,7 +104,7 @@ html,body{
 
 .app__content{
     flex: 1 1;
-    background-color: rgb(201, 201, 201);
+    background-color: rgb(13, 1, 245);
     height: 100%;
     width: 500px;
 }

@@ -55,7 +55,7 @@ class User:
         # Returns a list of lists of all users data in the form of strings;
         cur = db.cursor()
 
-        cur.execute("SELECT username, name, user_kind, email, mobile FROM Users")
+        cur.execute("SELECT user_id,username, name, user_kind, email,mobile FROM Users")
         entries = cur.fetchall()
 
         return [list(entry) for entry in entries]

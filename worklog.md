@@ -47,5 +47,5 @@ Fixed NoneType not scriptable error by adding none check for session in util.py
 
 completed rest of init.sql tables and added triggers and functions
 
-
+added page for awaiting approval
 ---

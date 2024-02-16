@@ -15,9 +15,10 @@
       .app__content {
         /* Styles for the content section */
       }
+      html{color-scheme: dark;}
       
       table {
-        background-color: white;
+        background-color: black;
         border-collapse: collapse;
         width: 100%;
       }
@@ -100,132 +101,55 @@
       <div class="app__content">
         <table>
           <tr>
-              <th>Username</th>
-              <th>Fullname</th>
-              <th>Kind</th>
-              <th>Email</th>
-              <th>PhoneNumber</th>
-              <th>Delete</th>
-            </tr> <!-- End of table row -->
-          
-          {% for user in users %} <!-- Loop through the list of users -->
-          <tr data-user-id="{{ user.id }}">
-              {% for item in user %} <!-- Loop through the user's attributes -->
-              <td>{{ item }}</td> <!-- Display each attribute in a table cell -->
-              {% endfor %}
-              <td>
-                <form method="POST" action="">
-                  <button type="button" class="delete-button">
-                    <i class="fas fa-times"></i> <!-- Font Awesome "x" icon -->
-                  </button>
-                </form>
-              </td>
-              </tr>
-              {% endfor %}
-        </table>
-      </div>
-    </main>
-  </body>
-</html>
-border: 1px solid black;
-        padding: 8px;
-      }
-      
-      .delete-button {
-        background-color: transparent;
-        border: none;
-        cursor: pointer;
-        outline: none;
-        transition: background-color 0.3s;
-        border-radius: 50%; /* Add border-radius property to make the button a circle */
-        width: 30px; /* Add width property to set the width of the button */
-        height: 30px; /* Add height property to set the height of the button */
-        display: flex; /* Add display property to center the icon vertically and horizontally */
-        align-items: center; /* Add align-items property to center the icon vertically */
-        justify-content: center; /* Add justify-content property to center the icon horizontally */
-      }
-      
-      .delete-button:hover {
-        background-color: red;
-      }
-      
-      .delete-button.active {
-        background-color: red;
-      }
-      
-      /* ... and so on */
-    </style>
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const deleteButtons = document.querySelectorAll('.delete-button');
-        deleteButtons.forEach(button => {
-          button.addEventListener('click', function() {
-            this.classList.toggle('active');
-            if (this.classList.contains('active')) {
-              // Get the corresponding user ID
-              const userId = this.closest('tr').dataset.userId;
-              // Prompt the user for confirmation
-              const confirmation = confirm('Are you sure you want to delete this user?');
-              if (confirmation) {
-                // Send an AJAX request to delete the user from the database
-                fetch(`/delete-user/${userId}`, {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                })
-                .then(response => response.json())
-                .then(data => {
-                  // Handle the response from the server
-                  if (data.success) {
-                    alert('User deleted successfully');
-                    // Optionally, you can remove the table row from the DOM
-                    this.closest('tr').remove();
-                  } else {
-                    alert('Failed to delete user');
-                  }
-                })
-                .catch(error => {
-                  console.error('Error:', error);
-                });
-              }
-            }
-          });
-        });
-      });
-    </script>
-  </head>
-  <body>
-    <main class="app__main">
-      {% include 'admin/nav.html' %} <!-- Include the navigation bar -->
-      <!-- Show a table containing all user credentials -->
-      <div class="app__content">
-        <table>
-          <tr>
-              <th>Username</th>
-              <th>Fullname</th>
-              <th>Kind</th>
-              <th>Email</th>
-              <th>PhoneNumber</th>
-              <th>Delete</th>
-            </tr> <!-- End of table row -->
-          
-          {% for user in users %} <!-- Loop through the list of users -->
-          <tr data-user-id="{{ user.id }}">
-              {% for item in user %} <!-- Loop through the user's attributes -->
-              <td>{{ item }}</td> <!-- Display each attribute in a table cell -->
-              {% endfor %}
-              <td>
-                <form method="POST" action="">
-                  <button type="button" class="delete-button">
-                    <i class="fas fa-times"></i> <!-- Font Awesome "x" icon -->
-                  </button>
-                </form>
-              </td>
-              </tr>
-              {% endfor %}
-        </table>
-      </div>
-    </main>
-  </body>
-</html>
+                            <th>User_id</th>
+                            <th>Username</th>
+                            <th>Fullname</th>
+                            <th>Kind</th>
+                            <th>Email</th>
+                            <th>PhoneNumber</th>
+                            <th>Actions</th>
+                            </tr> <!-- End of table row -->
+
+                            {% for user in users %} <!-- Loop through the list of users -->
+                            <tr data-user-id="{{ user.id }}">
+                              {% for item in user %} <!-- Loop through the user's attributes -->
+                              <td>{{ item }}</td> <!-- Display each attribute in a table cell -->
+                              {% endfor %}
+                              <td>
+                                {% if user[4] == 'unapproved' %}
+                                    <div style="display: flex;">
+                                      <form method="POST" action="/approve-student/{{ user.id }}">
+                                        <button type="submit">Approve</button>
+                                      </form>
+                                      <form method="POST" action="/reject-coord/{{ user.id }}">
+                                        <button type="submit">Reject</button>
+                                      </form>
+                                      <form method="POST" action="/reject-user/{{ user.id }}">
+                                        <button type="submit">Reject</button>
+                                      </form>
+                                    </div>
+                                    {% else %}
+                                    {% if user[0] != 1 %}
+                                      <form method="POST" action="/delete-user/{{ user.id }}">
+                                        <button type="button" class="delete-button">
+                                          <i class="fas fa-times"></i> <!-- Font Awesome "x" icon -->
+                                        </button>
+                                      </form>
+                                    {% endif %}
+                                    {% endif %}
+                                  </td>
+                                </tr>
+                            {% endfor %}
+                            <tr>
+                              <td colspan="6">
+                                <div style="display: flex; justify-content: center;">
+                                  <button style="width: 100px; height: 30px;">Apply Changes</button>
+                                </div>
+                              </td>
+                            </tr>
+                            </table>
+              
+                            </div>
+                            </main>
+                            </body>
+                            </html>

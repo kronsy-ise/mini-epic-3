@@ -1,10 +1,10 @@
 # Use an official Python runtime as a parent image
 FROM python:3.8-slim-buster
 
-WORKDIR /clubhub/handlers
+WORKDIR /clubhub
 
 # Add the current directory contents into the container at /clubhub
-ADD . /clubhub/handlers
+ADD . /clubhub
 
 # Install PostgreSQL development packages
 RUN apt-get update && apt-get install -y libpq-dev gcc
@@ -16,4 +16,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN apt-get autoremove -y gcc
 
 # Run app.py when the container launches
-CMD ["python", "auth.py"]
+CMD ["python", "main.py"]
