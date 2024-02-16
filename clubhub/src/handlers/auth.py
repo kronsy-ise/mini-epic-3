@@ -53,7 +53,7 @@ def start_session_with_credentials(username : str, password : str):
     we return the id of this session as a cookie
     this session id is quite sensitive and should be kept private 
 
-    Then this session is is provided in the header of each request to identify you 
+    Then this session is provided in the header of each request to identify you 
     from here we can decide what actions you can perform
     """
     cur = db.cursor()
@@ -99,8 +99,6 @@ def login_page():
 
 @auth_app.get("/signup")
 def signup_page():
-
-
     return render_template("signup.html")
 
 @auth_app.post("/signup")
@@ -125,9 +123,9 @@ def signup_action():
     cur = db.cursor()
 
     cur.execute("""
-    INSERT INTO Users(name, username, email, mobile, password_hash)
+    INSERT INTO USERS(name, username, email, mobile, password_hash)
     VALUES (%s, %s, %s, %s, %s)
-    RETURNING id
+    RETURNING user_id
                    """, (name, username, email, phone, password_hash))
     
     new_user_id = cur.fetchone()

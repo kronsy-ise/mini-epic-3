@@ -38,11 +38,11 @@ class User:
         return f"User {self.name} <{self.username}> kind={self.kind}"
 
     @staticmethod
-    def fetch(id : int) -> Optional[User]:
+    def fetch(user_id : int) -> Optional[User]:
 
         cur = db.cursor()
 
-        cur.execute("SELECT username, name, user_kind, email, mobile FROM Users WHERE id = %s", (id,))
+        cur.execute("SELECT username, name, user_kind, email, mobile FROM Users WHERE user_id = %s", (user_id,))
         entry = cur.fetchone()
 
         if entry == None:
