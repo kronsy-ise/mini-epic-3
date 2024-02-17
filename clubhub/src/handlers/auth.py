@@ -171,3 +171,12 @@ def login_action():
             return res
     except Exception as e:
         return render_template("login.html", invalid=True)
+    
+
+
+@auth_app.route('/clear-cookies')
+def clear_cookies():
+    response = make_response(redirect("/"))
+    for key in request.cookies.keys():
+        response.set_cookie(key, '', max_age=0)
+    return response

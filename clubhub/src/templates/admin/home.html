@@ -9,28 +9,33 @@
     <style>
       /* Your CSS code here */
       .app__main {
-        /* Styles for the main section */
+        background-color: #f2f2f2;
+        padding: 20px;
       }
       
       .app__content {
-        /* Styles for the content section */
+        background-color: white;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       }
-      html{color-scheme: dark;}
+     
       
       table {
-        background-color: black;
+        background-color: #f2f2f2;
         border-collapse: collapse;
         width: 100%;
       }
       
       th {
-        border: 1px solid black;
+        border: 1px solid #ccc;
         padding: 8px;
         text-align: left;
+        background-color: #f9f9f9;
       }
       
       td {
-        border: 1px solid black;
+        border: 1px solid #ccc;
         padding: 8px;
       }
       
@@ -40,65 +45,32 @@
         cursor: pointer;
         outline: none;
         transition: background-color 0.3s;
-        border-radius: 50%; /* Add border-radius property to make the button a circle */
-        width: 30px; /* Add width property to set the width of the button */
-        height: 30px; /* Add height property to set the height of the button */
-        display: flex; /* Add display property to center the icon vertically and horizontally */
-        align-items: center; /* Add align-items property to center the icon vertically */
-        justify-content: center; /* Add justify-content property to center the icon horizontally */
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
       
       .delete-button:hover {
-        background-color: red;
+        background-color: #ffcccc;
       }
       
       .delete-button.active {
-        background-color: red;
+        background-color: #ffcccc;
       }
       
       /* ... and so on */
     </style>
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const deleteButtons = document.querySelectorAll('.delete-button');
-        deleteButtons.forEach(button => {
-          button.addEventListener('click', function() {
-            this.classList.toggle('active');
-            if (this.classList.contains('active')) {
-              // Get the corresponding user ID
-              const userId = this.closest('tr').dataset.userId;
-              // Send an AJAX request to delete the user from the database
-              fetch(`/delete-user/${userId}`, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-              })
-              .then(response => response.json())
-              .then(data => {
-                // Handle the response from the server
-                if (data.success) {
-                  alert('User deleted successfully');
-                  // Optionally, you can remove the table row from the DOM
-                  this.closest('tr').remove();
-                } else {
-                  alert('Failed to delete user');
-                }
-              })
-              .catch(error => {
-                console.error('Error:', error);
-              });
-            }
-          });
-        });
-      });
-    </script>
+   
   </head>
   <body>
     <main class="app__main">
       {% include 'admin/nav.html' %} <!-- Include the navigation bar -->
       <!-- Show a table containing all user credentials -->
       <div class="app__content">
+        <h1>Users</h1>
         <table>
           <tr>
                             <th>User_id</th>
@@ -119,10 +91,10 @@
                                 {% if user[4] == 'unapproved' %}
                                     <div style="display: flex;">
                                       <form method="POST" action="/approve-student/{{ user.id }}">
-                                        <button type="submit">Approve</button>
+                                        <button type="submit">Student</button>
                                       </form>
-                                      <form method="POST" action="/reject-coord/{{ user.id }}">
-                                        <button type="submit">Reject</button>
+                                      <form method="POST" action="/approve-coord/{{ user.id }}">
+                                        <button type="submit">Co-ordinator</button>
                                       </form>
                                       <form method="POST" action="/reject-user/{{ user.id }}">
                                         <button type="submit">Reject</button>
