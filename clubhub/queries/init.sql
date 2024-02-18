@@ -194,3 +194,24 @@ CREATE TRIGGER updated_at_trigger
 AFTER INSERT OR UPDATE OR DELETE ON Users
 FOR EACH STATEMENT
 EXECUTE FUNCTION updated_at();
+
+
+--trigger to add another unapproved user once admin has been made for testing
+CREATE OR REPLACE FUNCTION check_entries()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF (SELECT COUNT(*) FROM USERS) = 1 THEN 
+    INSERT INTO USERS(name, username, email, mobile, password_hash)
+    VALUES ('User1', 'user1', 'user1@example.com', '1234567890', 'placeholder_hash');
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER after_insert_users
+AFTER INSERT ON USERS
+FOR EACH ROW
+EXECUTE FUNCTION check_entries();
+
+
+-- Create Views 

@@ -64,6 +64,7 @@ def start_session_with_credentials(username : str, password : str):
 
 
     if credential is None:
+        print(f"Username {username} not found in database")  # Log when username is not found
         raise Exception("Invalid Credentials")
     print("Has credential")
     user_id = credential[0]
@@ -77,6 +78,7 @@ def start_session_with_credentials(username : str, password : str):
     is_valid_pw = bcrypt.checkpw(password_enc, password_hash_enc)
 
     if not is_valid_pw:
+        print(f"Password verification failed for username {username}")  # Log when password verification fails
         raise Exception("Invalid Credentials")
 
 
