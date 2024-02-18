@@ -17,7 +17,7 @@ DROP TYPE IF EXISTS UserKind CASCADE;
 
 -- then, we create everything
 
-CREATE TYPE UserKind AS ENUM ('coordinator', 'user', 'unapproved','admin');
+CREATE TYPE UserKind AS ENUM ('coordinator', 'student', 'unapproved','admin');
 
 --    TABLES  --
 CREATE TABLE USERS(

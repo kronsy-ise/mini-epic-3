@@ -83,26 +83,26 @@
                             </tr> <!-- End of table row -->
 
                             {% for user in users %} <!-- Loop through the list of users -->
-                            <tr data-user-id="{{ user.id }}">
+                            <tr data-user-id="{{ user[0] }}">
                               {% for item in user %} <!-- Loop through the user's attributes -->
                               <td>{{ item }}</td> <!-- Display each attribute in a table cell -->
                               {% endfor %}
                               <td>
-                                {% if user[4] == 'unapproved' %}
+                                {% if user[3] == 'unapproved' %}
                                     <div style="display: flex;">
-                                      <form method="POST" action="/approve-student/{{ user.id }}">
+                                      <form method="POST" action="/approve-student/{{ user[0] }}">
                                         <button type="submit">Student</button>
                                       </form>
-                                      <form method="POST" action="/approve-coord/{{ user.id }}">
+                                      <form method="POST" action="/approve-coord/{{ user[0] }}">
                                         <button type="submit">Co-ordinator</button>
                                       </form>
-                                      <form method="POST" action="/reject-user/{{ user.id }}">
+                                      <form method="POST" action="/reject-user/{{ user[0] }}">
                                         <button type="submit">Reject</button>
                                       </form>
                                     </div>
                                     {% else %}
                                     {% if user[0] != 1 %}
-                                      <form method="POST" action="/delete-user/{{ user.id }}">
+                                      <form method="POST" action="/delete-user/{{ user[0] }}">
                                         <button type="button" class="delete-button">
                                           <i class="fas fa-times"></i> <!-- Font Awesome "x" icon -->
                                         </button>
