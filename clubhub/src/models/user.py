@@ -2,6 +2,8 @@ from __future__ import annotations
 from enum import Enum
 from typing import Optional
 
+from pyparsing import List
+
 from globals import db
 class UserKind(Enum):
     Unapproved = "unapproved"
@@ -36,14 +38,24 @@ class User:
         return f"User {self.name} <{self.username}> kind={self.kind}"
 
     @staticmethod
-    def fetch(id : int) -> Optional[User]:
+    def fetch(user_id : int) -> Optional[User]:
 
         cur = db.cursor()
 
-        cur.execute("SELECT username, name, user_kind, email, mobile FROM Users WHERE id = %s", (id,))
+        cur.execute("SELECT username, name, user_kind, email, mobile FROM Users WHERE user_id = %s", (user_id,))
         entry = cur.fetchone()
 
         if entry == None:
             return None 
         else:
             return User(entry[0], entry[1], UserKind.from_str(entry[2]), entry[3], entry[4])
+    
+    @staticmethod
+    def return_list() -> List[List]:
+        # Returns a list of lists of all users data in the form of strings;
+        cur = db.cursor()
+
+        cur.execute("SELECT user_id,username, name, user_kind, email,mobile FROM Users")
+        entries = cur.fetchall()
+
+        return [list(entry) for entry in entries]
