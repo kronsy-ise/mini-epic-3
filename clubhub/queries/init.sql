@@ -37,9 +37,8 @@ CREATE TABLE USERS(
 CREATE TABLE CLUBS(
   club_id BIGSERIAL PRIMARY KEY,
   name TEXT NOT NULL,
-  description TEXT NOT NULL,
   validity Text NOT NULL,--pending/approved/rejected
-  coordinator_id BIGINT NOT NULL REFERENCES Users(user_id), -- Added foreign key constraint
+  user_id BIGINT NOT NULL REFERENCES Users(user_id), -- Added foreign key constraint
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
@@ -84,7 +83,7 @@ CREATE TABLE Sessions(
   id BIGSERIAL PRIMARY KEY,
   secret TEXT NOT NULL,
 
-  user_id BIGINT NOT NULL REFERENCES Users(user_id),
+  user_id INT NOT NULL REFERENCES Users(user_id),
 
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   expires_at TIMESTAMPTZ NOT NULL,
@@ -113,6 +112,23 @@ BEFORE INSERT ON USERS
 FOR EACH ROW 
 EXECUTE FUNCTION set_user_kind();
 
+-- Function to set club_id when a new club is made
+CREATE OR REPLACE FUNCTION set_club_id()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF NEW.club_id IS NULL THEN
+    NEW.club_id = 1;
+  NEW.club_id = (SELECT MAX(club_id) FROM CLUBS) + 1;
+  RETURN NEW;
+  END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Trigger to execute the set_club_id function before inserting into Clubs table
+CREATE OR REPLACE TRIGGER set_club_id_trigger
+BEFORE INSERT ON CLUBS
+FOR EACH ROW 
+EXECUTE FUNCTION set_club_id();
 
 -- Function to approve event participation and add user to club_membership if status is approved
 CREATE OR REPLACE FUNCTION approve_event_participation()
