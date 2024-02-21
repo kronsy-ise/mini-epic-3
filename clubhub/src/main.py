@@ -14,7 +14,6 @@ app.register_blueprint(users_app)
 app.register_blueprint(auth_app)
 app.register_blueprint(home_app)
 
-
 @app.get("/")
 def home():
     """

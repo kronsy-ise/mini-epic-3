@@ -44,9 +44,15 @@ def verify_session():
         return None
     cur = db.cursor()
 
-    cur.execute("SELECT user_id, expires_at FROM Sessions WHERE expires_at > NOW() AND secret = %s", (session_secret, ))
+    try:
+        cur.execute("SELECT user_id, expires_at FROM Sessions WHERE expires_at > NOW() AND secret = %s", (session_secret, ))
+    except Exception as e:
+        db.rollback()   
+        raise e
 
     session = cur.fetchone()
+    if session is None:
+        return None
 
     user_id : int = session[0]
 
