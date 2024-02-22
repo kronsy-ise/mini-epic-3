@@ -1,0 +1,96 @@
+*{
+  padding: 0;
+  margin: 0;
+}
+
+head,body{
+  background-color: #c4c4c4;
+  height: 100%;
+  width: 100%;
+}
+
+
+
+.page{
+  height: 100%;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.center-card{
+  position: relative;
+  background: rgb(255, 255, 255);
+  border-radius: 20px;
+  box-shadow: 0 0 8px rgb(0, 0, 0);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 32px 20px;
+
+  gap: 32px;
+}
+
+
+.card-header{
+
+}
+
+.card-header>h1{
+  font-family: sans-serif;
+}
+
+.card-content{
+
+}
+
+.card-content>hr{
+  min-width: 100%;
+  padding: 10px;
+  background-color: black;
+  height: 10px;
+}
+
+.card-content>form{
+  display: flex;
+  flex-direction: column;
+
+  gap: 16px;
+}
+
+.card-content>form>input{
+
+  padding: 15px;
+  font-size: 1.3rem;
+}
+
+
+
+.card-content>form>input[type="submit"]{
+  background-color: #139bda;
+  align-self: flex-end;
+  color: white;
+  font-weight: 700;
+}
+
+.card-footer{
+
+}
+
+
+.invalid-container{
+  position: absolute;
+  bottom: -30%;
+  background-color: #f5424e;
+  border-radius: 10px;
+  box-shadow: 0 0 6px #444;
+  color: white;
+  font-family: Arial;
+  padding: 25px 50px;
+}

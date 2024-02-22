@@ -1,0 +1,57 @@
+ /* Your CSS code here */
+ .app__main {
+        /* Styles for the main section */
+    }
+    
+    .app__content {
+        /* Styles for the content section */
+    }
+    
+    table {
+        background-color: white;
+        border-collapse: collapse;
+        width: 100%;
+    }
+    
+    th {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: left;
+    }
+    
+    td {
+        border: 1px solid black;
+        padding: 8px;
+    }
+    
+    .delete-button {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        outline: none;
+        transition: background-color 0.3s;
+        border-radius: 50%; /* Add border-radius property to make the button a circle */
+        width: 30px; /* Add width property to set the width of the button */
+        height: 30px; /* Add height property to set the height of the button */
+        display: flex; /* Add display property to center the icon vertically and horizontally */
+        align-items: center; /* Add align-items property to center the icon vertically */
+        justify-content: center; /* Add justify-content property to center the icon horizontally */
+    }
+    
+    .delete-button:hover {
+        background-color: red;
+    }
+    
+    .delete-button.active {
+        background-color: red;
+    }
+    
+    /* Styles for home.html */
+    .home-section {
+        /* Your styles for the home section */
+    }
+    
+    .home-content {
+        /* Your styles for the home content */
+    }
+  

@@ -1,0 +1,161 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    
+}
+
+html, body {
+    height: 100%;
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh; /* Use viewport height to make it full height */
+    background-color: linear-gradient(90deg, rgba(3, 206, 233, 0.5) 0%, rgba(24, 148, 179, 0.5) 100%);
+    width: 300px;
+    box-shadow: 0 0 5px black;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    padding: 40px 8px;
+    z-index: 1000;
+}
+
+
+.nav__links_container {
+    width: 100%;
+}
+
+.nav__links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: 100%;
+}
+
+.nav__links > li {
+    width: 100%;
+    display: flex;
+}
+
+.nav__links > li > a {
+    color: black;
+    width: 100%;
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: space-evenly;
+    border-radius: 4px;
+    text-decoration: none;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    padding: 32px 20%;
+}
+
+.nav__links > li.nav__link_selected > a {
+    color: rgb(24, 148, 179);
+}
+
+.nav__links > li > a::before {
+    position: absolute;
+    content: '';
+    width: 5px;
+    height: 0%;
+    background-color: rgb(3, 206, 233);
+    left: 0;
+}
+
+.nav__links > li > a:hover::before {
+    height: 50%;
+    transition: height 0.1s linear;
+}
+
+.nav__links > li > a:hover {
+    opacity: 0.9;
+    background-color: rgb(248, 248, 248);
+}
+
+.nav__links > li > a > i {
+    font-size: 1.7rem;
+}
+
+.user_table {
+    min-width: 600px;
+    width: 80%; /* Adjusted width */
+    margin-left: 320px; /* Center the table */
+    border-collapse: collapse;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+}
+
+/* Styles for viewports that are 1024px wide or less */
+@media (max-width: 1024px) {
+    .user_table {
+        width: 70%; /* Adjust as needed */
+        margin-left: 15%; /* Adjust as needed */
+    }
+}
+
+/* Styles for viewports that are 768px wide or less */
+@media (max-width: 768px) {
+    .user_table {
+        width: 100%; /* Adjust as needed */
+        margin-left: 0; /* Adjust as needed */
+    }
+}
+
+.headRow {
+    background: #bdbdbd; /* Background color for header row */
+    color: #ffffff; /* Text color for header row */
+    display: flex; /* Use flexbox for header row */
+}
+
+.divRow {
+    display: flex; /* Use flexbox for rows */
+}
+
+.divCell {
+    flex: 1; /* Distribute cells evenly */
+    padding: 10px; /* Added padding */
+    border-bottom: #ccc 1px solid;
+    border-top: #ccc 1px solid;
+    text-align: center;
+}
+
+.divCell:first-child {
+    border-left: #ccc 1px solid;
+}
+
+.divCell:last-child {
+    border-right: #ccc 1px solid;
+}
+
+.divRow:nth-child(2n+3) {
+    background: #e9e9e9;
+}
+
+.divActions {
+    display: flex;
+    justify-content: space-around; /* Distribute buttons evenly */
+    align-items: center; /* Center buttons vertically */
+}
+
+.action {
+    padding: 10px; /* Add some padding */
+    text-align: center; /* Center the text */
+    border: none; /* Remove the default button border */
+    background-color: #4CAF50; /* Add a background color */
+    color: white; /* Make the text color white */
+    cursor: pointer; /* Change the cursor when hovering over the button */
+    margin: 5px; /* Add some margin around the button */
+}
+
+.action:hover {
+    background-color: #45a049; /* Add a hover effect */
+}
