@@ -53,30 +53,32 @@ def start_session_with_credentials(username : str, password : str):
     we return the id of this session as a cookie
     this session id is quite sensitive and should be kept private 
 
-    Then this session is is provided in the header of each request to identify you 
+    Then this session is provided in the header of each request to identify you 
     from here we can decide what actions you can perform
     """
     cur = db.cursor()
 
-    cur.execute("SELECT id,password_hash FROM Users WHERE username = %s", (username,))
+    cur.execute("SELECT user_id,password_hash FROM Users WHERE username = %s", (username,))
 
     credential = cur.fetchone()
 
 
     if credential is None:
+        print(f"Username {username} not found in database")  # Log when username is not found
         raise Exception("Invalid Credentials")
     print("Has credential")
     user_id = credential[0]
     password_hash : str = credential[1]
-
+    print("Hash in database:", password_hash)
     password_hash_enc = password_hash.encode("utf-8")
 
     print(password_hash_enc)
     password_enc = password.encode("utf-8")
 
     is_valid_pw = bcrypt.checkpw(password_enc, password_hash_enc)
-
+    print(f"Checking password {password} against hash {password_hash}")
     if not is_valid_pw:
+        print(f"Password verification failed for username {username}")  # Log when password verification fails
         raise Exception("Invalid Credentials")
 
 
@@ -99,8 +101,6 @@ def login_page():
 
 @auth_app.get("/signup")
 def signup_page():
-
-
     return render_template("signup.html")
 
 @auth_app.post("/signup")
@@ -116,6 +116,8 @@ def signup_action():
     phone = form_data.get("phone")
 
 
+    print("Signing up as", username, "with password", password, "and name", name, "email", email, "phone", phone)
+
     password_salt = bcrypt.gensalt()
     password_enc = password.encode("utf-8")
     password_hash = bcrypt.hashpw(password_enc, password_salt).decode("utf-8")
@@ -125,9 +127,9 @@ def signup_action():
     cur = db.cursor()
 
     cur.execute("""
-    INSERT INTO Users(name, username, email, mobile, password_hash)
+    INSERT INTO USERS(name, username, email, mobile, password_hash)
     VALUES (%s, %s, %s, %s, %s)
-    RETURNING id
+    RETURNING user_id
                    """, (name, username, email, phone, password_hash))
     
     new_user_id = cur.fetchone()
@@ -172,4 +174,14 @@ def login_action():
             res.headers.set("Location", "/")
             return res
     except Exception as e:
+        print("Exception", e)
         return render_template("login.html", invalid=True)
+    
+
+
+@auth_app.route('/clear-cookies')
+def clear_cookies():
+    response = make_response(redirect("/"))
+    for key in request.cookies.keys():
+        response.set_cookie(key, '', max_age=0)
+    return response

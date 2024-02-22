@@ -1,25 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <title>Admin Home | ClubHub</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="static/styles/index.css" rel="stylesheet">
+    <link href="static/styles/Adminhome.css" rel="stylesheet">
     <script src="https://kit.fontawesome.com/c2b7a7d1d7.js" crossorigin="anonymous"></script>
-  </head>
-  <body>
+</head>
+<body>
+<main class="app__main">
+    <nav class="navbar">
+        <div class="app_logo_container">
+            <h3>ClubHub</h3>
+            <p>Administrator</p>
+        </div>
+        <div class="nav__links_container">
+            <ul class="nav__links">
+                <li><a href="/clear-cookies">Logout <i class="fa-solid fa-user"></i></a></li>
 
-    <main class="app__main">
-      {% set page = 'users' %}
-      {% include 'admin/nav.html' %}
+                <li><a href="#users">Users <i class="fa-solid fa-users"></i></a></li>
 
-      <div class="app__content">
-          <h1>
-            Admin Users
-           </h1>
-      </div>
+                <li><a href="#clubs">Clubs <i class="fa-solid fa-volleyball"></i></a></li>
 
-    </main>
+                <li><a href="#events">Events <i class="fa-solid fa-calendar-days"></i></a></li>
+            </ul>
+        </div>
+    </nav>
+    <!-- Show a table containing all user credentials -->
+    <div class="app__content">
+        <form id="form1">
+            <div class="user_table">
+                <h2 id="users">Users</h2>
+                <div class="headRow">
+                    <div class="divCell">User_id</div>
+                    <div class="divCell">Username</div>
+                    <div class="divCell">Fullname</div>
+                    <div class="divCell">Kind</div>
+                    <div class="divCell">Email</div>
+                    <div class="divCell">PhoneNumber</div>
+                    <div class="divCell">Actions</div>
+                </div>
+                {% for user in users %} <!-- Loop through the list of users -->
+                <div class="divRow" data-user-id="{{ user[0] }}">
+                    {% for item in user %} <!-- Loop through the user's attributes -->
+                    <div class="divCell">{{ item }}</div> <!-- Display each attribute in a table cell -->
+                    {% endfor %}
+                    <div class="divCell">
+                        {% if user[3] == 'unapproved' %}
+                        <div class="divActions" style="display: flex;">
+                            <form method="POST" action="/approve-student/{{ user[0] }}">
+                                <button class="action" type="submit">Student</button>
+                            </form>
+                            <form method="POST" action="/approve-coord/{{ user[0] }}">
+                                <button class="action" type="submit">Co-ordinator</button>
+                            </form>
+                            <form method="POST" action="/reject-user/{{ user[0] }}">
+                                <button class="action" type="submit">Reject</button>
+                            </form>
+                          </div>
+                        {% else %}
+                          {% if user[0] != 1 %}
+                          <div class="divActions" style="display: flex;">
+                          <form method="POST" action="/reject-user/{{ user[0] }}">
+                              <button type="submit">Reject</button>
+                          </form>
+                          </div>
+                          {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+                <div class="divRow" style="display: flex; justify-content: center;">
+                    <button style="width: 100px; height: 30px;">Apply Changes</button>
+                </div>
+            </div>
+        </form>
+    </div>
 
-  </body>
+</main>
+</body>
 </html>

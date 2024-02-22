@@ -24,7 +24,8 @@ def homepage():
     # we show a different home page
     
     if auth_user.kind == UserKind.Admin:
-        return render_template("admin/home.html")
+        users=User.return_list()
+        return render_template("admin/home.html",users=users)
     elif auth_user.kind == UserKind.User:
         return render_template("user/home.html")
     elif auth_user.kind == UserKind.Coordinator:
