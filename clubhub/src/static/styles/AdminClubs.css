@@ -83,7 +83,7 @@ html, body {
     font-size: 1.7rem;
 }
 
-.user_table {
+.club_table {
     min-width: 600px;
     width: 80%;
     margin-left: 320px;
@@ -97,14 +97,14 @@ html, body {
 }
 
 @media (max-width: 1024px) {
-    .user_table {
+    .club_table {
         width: 70%;
         margin-left: 15%;
     }
 }
 
 @media (max-width: 768px) {
-    .user_table {
+    .club_table {
         width: 100%;
         margin-left: 0;
     }
@@ -118,8 +118,9 @@ html, body {
 
 .divRow {
     display: flex;
-    text-align: center;
+    justify-content: space-between;
     align-items: center;
+    padding: 10px 0;
 }
 
 .divRow::after{    
@@ -127,10 +128,10 @@ html, body {
 }
 
 .divCell {
-    flex: 1;
-    padding: 10px;
+    flex: 1 0 0;
     text-align: center;
-    align-items: center;
+    padding: 10px;
+    display: flex;
 }
 
 .divCell:first-child {
@@ -181,4 +182,17 @@ html, body {
     font-size: 1.5rem;
     display: flex;
     flex-direction: column;
+}
+
+.headRow, .divRow {
+    display: flex;
+    justify-content: space-between;
+}
+
+.divCell, .headCell {
+    flex: 1 0 0;
+    text-align: center;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
 }

@@ -25,6 +25,7 @@ def approve_student(student_id):
     response = redirect("/home")
 
     # Close the cursor and connection
+    cur.execute("UPDATE USERS SET user_kind = 'student' WHERE user_id = %s", (student_id,))
     return response
 
 @users_app.route('/approve-coord/<int:coord_id>', methods=['POST'])

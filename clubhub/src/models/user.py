@@ -6,14 +6,14 @@ from globals import db
 class UserKind(Enum):
     Unapproved = "unapproved"
     Coordinator = "coordinator"
-    User = "user"
+    Student = "student"
     Admin = "admin"
     
     @staticmethod 
     def from_str(s : str) -> UserKind:
         if s == "unapproved": return UserKind.Unapproved
         elif s == "coordinator": return UserKind.Coordinator
-        elif s == "user": return UserKind.User
+        elif s == "student": return UserKind.Student
         elif s == "admin": return UserKind.Admin
         
         raise Exception("Unknown kind")
@@ -55,5 +55,4 @@ class User:
 
         cur.execute("SELECT user_id,username, name, user_kind, email,mobile FROM Users")
         entries = cur.fetchall()
-
         return [list(entry) for entry in entries]
