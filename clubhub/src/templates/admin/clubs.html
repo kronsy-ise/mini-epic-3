@@ -88,16 +88,12 @@
                         {% if club.id != 1 %}
                         <div class="divActions" style="display: flex;">
                             
-                            <form method="POST" action="/approve-student/{{ club.id }}">
-                                <button class="action" type="submit">Student</button>
+                            <form method="POST" action="/manage-club/{{ club.id }}">
+                                <button class="action" type="submit">Manage</button>
                             </form>
 
-                            <form method="POST" action="/approve-coord/{{ club.id }}">
-                                <button class="action" type="submit">Co-ordinator</button>
-                            </form>
-
-                            <form method="POST" action="/reject-user/{{ club.id }}">
-                                <button class="action" type="submit">Reject</button>
+                            <form method="POST" action="//{{ club.id }}">
+                                <button class="action" type="submit">Delete</button>
                             </form>
 
                           </div>

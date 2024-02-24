@@ -17,7 +17,7 @@ pip install -r ./clubhub/requirements.txt
 
 Then, spin up the database
 ```bash
-docker-compose -f ./deploy/docker-compose.yml up
+docker-compose -f ./docker-compose.yml up
 ```
 
 After this, make all initializing migrations to the database 
