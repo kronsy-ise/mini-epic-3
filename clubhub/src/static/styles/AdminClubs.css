@@ -184,10 +184,7 @@ html, body {
     flex-direction: column;
 }
 
-.headRow, .divRow {
-    display: flex;
-    justify-content: space-between;
-}
+
 
 .divCell, .headCell {
     flex: 1 0 0;
@@ -195,4 +192,44 @@ html, body {
     padding: 10px;
     display: flex;
     justify-content: center;
+}
+.club_form {
+    margin: 20px 20px 20px 200px; /* Adjust the left margin value to 160px */
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    width: 60%; /* Adjust this value as needed */
+    box-sizing: border-box;
+}
+
+.club_form h2 {
+    text-align: center;
+    color: #333;
+}
+
+.club_form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.club_form input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.club_form input[type="submit"] {
+    background-color: #4CAF50; /* This is a green color, you can change it as you like */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.club_form input[type="submit"]:hover {
+    background-color: #45a049;
 }

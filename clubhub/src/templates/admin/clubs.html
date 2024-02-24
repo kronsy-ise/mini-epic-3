@@ -53,6 +53,7 @@
 
         <form id ="create_club"action="/CreateClub" method="post">
             <div class = "club_table">
+            <div class="club_form">
                 <h2>Create a new Club</h2>
                 <label for="name">Club Name:</label><br>
                 <input type="text" id="name" name="name"><br>
@@ -61,6 +62,7 @@
                 <label for="coord">Club Co-odinator:</label><br>
                 <input type="text" id="coord" name="coord"><br>
                 <input type="submit" value="Submit">
+            </div>
             </div>
         </form>
         
@@ -76,34 +78,25 @@
                     <div class="divCell">Actions</div>
                 </div>
                 {% for club in clubs %} <!-- Loop through the list of users -->
-                <div class="divRow" data-user-id="{{ club.id }}">
-                   
                     <div class="divRow" data-club-id="{{ club.id }}">
                         <div class="divCell">{{ club.id }}</div> <!-- Display each attribute in a table cell -->
                         <div class="divCell">{{ club.name }}</div>
                         <div class="divCell">{{ club.description }}</div>
                         <div class="divCell">{{ club.validity }}</div>
                         <div class="divCell">{{ club.coord }}</div>
-                                            
-                        {% if club.id != 1 %}
+                                                        
                         <div class="divActions" style="display: flex;">
-                            
-                            <form method="POST" action="/approve-student/{{ club.id }}">
-                                <button class="action" type="submit">Student</button>
+                                            
+                            <form method="POST" action="/manage-club/{{ club.id }}">
+                                <button class="action" type="submit">Manage</button>
                             </form>
 
-                            <form method="POST" action="/approve-coord/{{ club.id }}">
-                                <button class="action" type="submit">Co-ordinator</button>
+                            <form method="POST" action="/delete-club/{{ club.id }}">
+                                <button class="action" type="submit">Delete</button>
                             </form>
 
-                            <form method="POST" action="/reject-user/{{ club.id }}">
-                                <button class="action" type="submit">Reject</button>
-                            </form>
-
-                          </div>
-                        {% endif %}
+                        </div>
                     </div>
-                </div>
                 {% endfor %}
                 <div class="divRow" style="display: flex; justify-content: center;">
                     <button style="width: 100px; height: 30px;">Apply Changes</button>

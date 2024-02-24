@@ -41,6 +41,9 @@ def create_club():
         print(newclub,"Club added successfully")
     else:
         print("Adding club failed")
-    users=User.return_list()
-    clubs = Club.return_list()
     return redirect("admin/clubs")
+
+@clubs_app.route("/delete-club/<int:club_id>", methods=['GET', 'POST'])
+def delete_club(club_id):
+    Club.delete_club(club_id)
+    return redirect("/admin/clubs")

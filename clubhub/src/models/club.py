@@ -50,3 +50,11 @@ class Club:
         cur.execute("INSERT INTO Clubs(name, description, validity, user_id) VALUES (%s, %s, %s, %s)", (name, description, 'valid', coord))
         db.commit()
         return "Club added successfully"
+    
+    @staticmethod
+    def delete_club(club_id):
+        cur = db.cursor()
+
+        cur.execute("DELETE FROM Clubs WHERE club_id = %s", (club_id,))
+        db.commit()
+        return "Club deleted successfully"
