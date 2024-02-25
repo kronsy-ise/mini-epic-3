@@ -52,7 +52,9 @@ class User:
     def return_list() -> List[List]:
         # Returns a list of lists of all users data in the form of strings;
         cur = db.cursor()
-
-        cur.execute("SELECT user_id,username, name, user_kind, email,mobile FROM Users")
+        #return an ordered list of user information so the table is ordered by user_id
+        cur.execute("SELECT user_id,username, name, user_kind, email,mobile FROM Users ORDER BY user_id ")
         entries = cur.fetchall()
         return [list(entry) for entry in entries]
+
+    

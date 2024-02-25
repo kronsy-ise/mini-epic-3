@@ -15,12 +15,15 @@ def clubs():
         return redirect("/")
 
     # Depending on the type of registered user 
-    # we show a different home page
+    # we show a different club page
     
     if auth_user.kind == UserKind.Admin:
         users=User.return_list()
         clubs = Club.return_list()
-        return render_template("admin/clubs.html",clubs=clubs,users=users)
+        club_count=len(clubs)
+        unapproved_clubs = Club.return_unapproved_clubs()
+        return render_template("admin/clubs.html",clubs=clubs,users=users,
+                    club_count=club_count,unapproved_clubs=unapproved_clubs)
     elif auth_user.kind == UserKind.Student:
         return render_template("user/clubs.html")
     elif auth_user.kind == UserKind.Coordinator:

@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link href="static/styles/Adminhome.css" rel="stylesheet">
     <script src="https://kit.fontawesome.com/c2b7a7d1d7.js" crossorigin="anonymous"></script>
+
 </head>
 <body>
 <main class="app__main">
@@ -107,5 +108,18 @@
     </div>
 
 </main>
+<script>
+    window.onload = function() {
+        // After the page loads, check if there's a saved scroll position and if so, restore it
+        if (sessionStorage.getItem("scrollPosition") !== null) {
+            window.scrollTo(0, sessionStorage.getItem("scrollPosition"));
+        }
+    }
+    
+    window.onbeforeunload = function() {
+        // Before the page unloads, save the current scroll position
+        sessionStorage.setItem("scrollPosition", window.scrollY || document.documentElement.scrollTop);
+    }
+    </script>
 </body>
 </html>

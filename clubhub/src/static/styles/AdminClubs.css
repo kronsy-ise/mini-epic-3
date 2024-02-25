@@ -233,3 +233,12 @@ html, body {
 .club_form input[type="submit"]:hover {
     background-color: #45a049;
 }
+
+.club_form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    resize: vertical; /* This allows the user to resize the textarea vertically */
+}
