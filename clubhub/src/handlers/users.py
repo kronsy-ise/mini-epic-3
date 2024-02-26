@@ -89,5 +89,7 @@ def reject(user_id):
         flash(e)
         
     response = redirect("/users")
+
+
     # Close the cursor and connection
     return response
