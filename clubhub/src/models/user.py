@@ -1,9 +1,7 @@
 from __future__ import annotations
 from enum import Enum
 from typing import Optional
-
-from pyparsing import List
-
+from typing import List
 from globals import db
 class UserKind(Enum):
     Unapproved = "unapproved"

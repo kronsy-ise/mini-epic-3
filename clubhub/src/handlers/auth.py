@@ -58,7 +58,7 @@ def start_session_with_credentials(username : str, password : str):
     """
     cur = db.cursor()
 
-    cur.execute("SELECT id,password_hash FROM Users WHERE username = %s", (username,))
+    cur.execute("SELECT user_id,password_hash FROM Users WHERE username = %s", (username,))
 
     credential = cur.fetchone()
 
@@ -69,14 +69,14 @@ def start_session_with_credentials(username : str, password : str):
     print("Has credential")
     user_id = credential[0]
     password_hash : str = credential[1]
-
+    print("Hash in database:", password_hash)
     password_hash_enc = password_hash.encode("utf-8")
 
     print(password_hash_enc)
     password_enc = password.encode("utf-8")
 
     is_valid_pw = bcrypt.checkpw(password_enc, password_hash_enc)
-
+    print(f"Checking password {password} against hash {password_hash}")
     if not is_valid_pw:
         print(f"Password verification failed for username {username}")  # Log when password verification fails
         raise Exception("Invalid Credentials")
@@ -115,6 +115,8 @@ def signup_action():
     email = form_data.get("email")
     phone = form_data.get("phone")
 
+
+    print("Signing up as", username, "with password", password, "and name", name, "email", email, "phone", phone)
 
     password_salt = bcrypt.gensalt()
     password_enc = password.encode("utf-8")
@@ -172,6 +174,7 @@ def login_action():
             res.headers.set("Location", "/")
             return res
     except Exception as e:
+        print("Exception", e)
         return render_template("login.html", invalid=True)
     
 

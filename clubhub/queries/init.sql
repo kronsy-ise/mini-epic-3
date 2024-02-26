@@ -217,8 +217,10 @@ CREATE OR REPLACE FUNCTION check_entries()
 RETURNS TRIGGER AS $$
 BEGIN
   IF (SELECT COUNT(*) FROM USERS) = 1 THEN 
-    INSERT INTO USERS(name, username, email, mobile, password_hash)
-    VALUES ('User1', 'user1', 'user1@example.com', '1234567890', 'placeholder_hash');
+    FOR i IN 2..10 LOOP
+      INSERT INTO USERS(name, username, email, mobile, password_hash)
+      VALUES ('User' || i, 'user' || i, 'user' || i || '@example.com', '1234567890', 'placeholder_hash');
+    END LOOP;
   END IF;
   RETURN NEW;
 END;
