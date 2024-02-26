@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Admin ClubPage | ClubHub</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="{{ url_for('static', filename='styles/AdminClubs.css') }}" rel="stylesheet">    
+    <script src="https://kit.fontawesome.com/c2b7a7d1d7.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<main class="app__main">
+    <nav class="navbar">
+        <div class="app_logo_container">
+            <h3>ClubHub</h3>
+            <p>Administrator</p>
+        </div>
+        <div class="nav__links_container">
+            <ul class="nav__links">
+                <li><a href="/clear-cookies">Logout <i class="fa-solid fa-user"></i></a></li>
+                <li><a href="/home">Users <i class="fa-solid fa-users"></i></a></li>
+                <li><a href="/clubs">Clubs <i class="fa-solid fa-volleyball"></i></a></li>
+                <li><a href="/events">Events <i class="fa-solid fa-calendar-days"></i></a></li>
+            </ul>
+        </div>
+    </nav>
+    <!-- Show a table containing all user credentials -->
+    <div class="app__content">
+        <div class="club_table">
+            <h1 class="divRow">Manage Clubs</h1>
+            <br>You can view, update, and carry out queries on the club data using the tables below.
+            </p>
+            <br> 
+            <h2 style="text-align: center;">Site User information</h2>
+            <div class="site_performance">
+                <div class="club_count">
+                    <i class="fa-solid fa-user-friends" style="display: flex; justify-content: center; align-items: center;"></i>
+                    <h3>Clubs:</h3>
+                </div>
+                <div class="club_count">
+                    <i class="fas fa-users-cog" style="display: flex; justify-content: center; align-items: center;"></i>
+                    <h3>Unapproved Clubs: </h3>
+                </div>
+            </div>
+        </div>
+        <form id="create_club" action="/CreateClub" method="post">
+            <div class="club_table">
+                <div class="club_form">
+                    <h2>Create a new Club</h2>
+                    <label for="name">Club Name:</label><br>
+                    <input type="text" id="name" name="name"><br>
+                    <label for="description">Description:</label><br>
+                    <input type="text" id="description" name="description"><br>
+                    <label for="coord">Club Co-odinator:</label><br>
+                    <input type="text" id="coord" name="coord"><br>
+                    <input type="submit" value="Submit">
+                </div>
+            </div>
+        </form>
+        <form id="form1">
+            <div class="club_table">
+                <h2 id="clubs">Clubs</h2>
+                <div class="headRow">
+                    <div class="divCell">Club_id</div>
+                    <div class="divCell">Name</div>
+                    <div class="divCell">Description</div>
+                    <div class="divCell">Validity</div>
+                    <div class="divCell">Co-ord_id</div>
+                    <div class="divCell">Actions</div>
+                </div>
+                {% for club in clubs %}
+                    <div class="divRow" data-club-id="{{ club.id }}">
+                        <div class="divCell">{{ club.id }}</div>
+                        <div class="divCell">{{ club.name }}</div>
+                        <div class="divCell">{{ club.description }}</div>
+                        <div class="divCell">{{ club.validity }}</div>
+                        <div class="divCell">{{ club.coord }}</div>
+                        <div class="divActions" style="display: flex;">
+                            <form method="POST" action="/manage-club/{{ club.id }}">
+                                <button class="action" type="submit">Manage</button>
+                            </form>
+                            <form method="POST" action="/delete-club/{{ club.id }}">
+                                <button class="action" type="submit">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="divRow" style="display: flex; justify-content: center;">
+                    <button style="width: 100px; height: 30px;">Apply Changes</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div id="footer">
+        <footer class="footer">
+            <p>&copy;2024 ClubHub</p>
+        </footer>            
+    </div>
+</main>
+</body>
+</html>

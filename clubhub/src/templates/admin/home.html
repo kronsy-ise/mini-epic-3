@@ -4,79 +4,68 @@
     <title>Admin Home | ClubHub</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="static/styles/Adminhome.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="static/styles/home.css" rel="stylesheet">
     <script src="https://kit.fontawesome.com/c2b7a7d1d7.js" crossorigin="anonymous"></script>
 </head>
 <body>
-<main class="app__main">
-    <nav class="navbar">
-        <div class="app_logo_container">
-            <h3>ClubHub</h3>
-            <p>Administrator</p>
-        </div>
-        <div class="nav__links_container">
-            <ul class="nav__links">
-                <li><a href="/clear-cookies">Logout <i class="fa-solid fa-user"></i></a></li>
-
-                <li><a href="#users">Users <i class="fa-solid fa-users"></i></a></li>
-
-                <li><a href="#clubs">Clubs <i class="fa-solid fa-volleyball"></i></a></li>
-
-                <li><a href="#events">Events <i class="fa-solid fa-calendar-days"></i></a></li>
-            </ul>
-        </div>
-    </nav>
-    <!-- Show a table containing all user credentials -->
-    <div class="app__content">
-        <form id="form1">
-            <div class="user_table">
-                <h2 id="users">Users</h2>
-                <div class="headRow">
-                    <div class="divCell">User_id</div>
-                    <div class="divCell">Username</div>
-                    <div class="divCell">Fullname</div>
-                    <div class="divCell">Kind</div>
-                    <div class="divCell">Email</div>
-                    <div class="divCell">PhoneNumber</div>
-                    <div class="divCell">Actions</div>
+    {% include "scroll_script.html" %}
+    <main class="app__main">
+        <div class="app__content">
+            <div id="navbar">
+               <h2>NavBar</h2>
+            </div>
+            <div class="site-information">
+                <div class="info-card">
+                    <img src="{{ url_for('static', filename='images/user_icon.png') }}" alt="User Logo"
+                    style="width: 50px; height: 50px;">
+                    <br>
+                    <p>Active Users: {{user_count}}</p>
                 </div>
-                {% for user in users %} <!-- Loop through the list of users -->
-                <div class="divRow" data-user-id="{{ user[0] }}">
-                    {% for item in user %} <!-- Loop through the user's attributes -->
-                    <div class="divCell">{{ item }}</div> <!-- Display each attribute in a table cell -->
-                    {% endfor %}
-                    <div class="divCell">
-                        {% if user[3] == 'unapproved' %}
-                        <div class="divActions" style="display: flex;">
-                            <form method="POST" action="/approve-student/{{ user[0] }}">
-                                <button class="action" type="submit">Student</button>
-                            </form>
-                            <form method="POST" action="/approve-coord/{{ user[0] }}">
-                                <button class="action" type="submit">Co-ordinator</button>
-                            </form>
-                            <form method="POST" action="/reject-user/{{ user[0] }}">
-                                <button class="action" type="submit">Reject</button>
-                            </form>
-                          </div>
-                        {% else %}
-                          {% if user[0] != 1 %}
-                          <div class="divActions" style="display: flex;">
-                          <form method="POST" action="/reject-user/{{ user[0] }}">
-                              <button type="submit">Reject</button>
-                          </form>
-                          </div>
-                          {% endif %}
-                        {% endif %}
-                    </div>
+                <div class="info-card">
+                    <img src="{{ url_for('static', filename='images/basket.png') }}" alt="Other Logo"
+                    style="width: 60px; height: 60px;">
+                    <p>Clubs: {{club_count}}</p>
                 </div>
-                {% endfor %}
-                <div class="divRow" style="display: flex; justify-content: center;">
-                    <button style="width: 100px; height: 30px;">Apply Changes</button>
+                <div class="info-card">
+                    <img src="{{ url_for('static', filename='images/calender.png') }}" alt="Other Logo"
+                    style="width: 70px; height: 70px;">
+                    <p>Events: 20</p>
+                </div>
+                <div class="info-card">
+                    <img src="{{ url_for('static', filename='images/approval.png') }}" alt="Other Logo"
+                    style="width: 60px; height: 60px;">
+                    <p>Approvals needed:{{unapproved_count}} </p>
                 </div>
             </div>
-        </form>
-    </div>
+            <div id="admin-controls">
+                <div class="control-card">
+                    <img class="card" src="{{ url_for('static', filename='images/pic1.png') }}" alt="Manage Events Image">                    
+                    <h2>Manage Users</h2>
+                    <br>
+                    <a href="/users"><button type="button">View</button></a>
+                </div>
+                            
+                <div class="control-card">
+                    <img class="card" src="{{ url_for('static', filename='images/pic2.png') }}" alt="Manage Events Image">                    
+                    <h2>Manage Clubs</h2>
+                    <br>
+                    <a href="/clubs"><button type="button">View</button></a>
+                </div>
+                        
+                <div class="control-card">
+                    <img class="card" src="{{ url_for('static', filename='images/pic3.png') }}" alt="Manage Events Image">                 
+                    <h2>Manage Events</h2>
+                    <br>
+                    <a href="/events"><button type="button">View</button></a>
+                </div>
+            </div>
 
-</main>
+            <div id="footer">
+                <footer class="footer">
+                    <p>&copy;2024 ClubHub</p>
+                </footer>            
+            </div>
+    </main>
 </body>
 </html>

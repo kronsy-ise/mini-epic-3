@@ -6,14 +6,14 @@ from globals import db
 class UserKind(Enum):
     Unapproved = "unapproved"
     Coordinator = "coordinator"
-    User = "user"
+    Student = "student"
     Admin = "admin"
     
     @staticmethod 
     def from_str(s : str) -> UserKind:
         if s == "unapproved": return UserKind.Unapproved
         elif s == "coordinator": return UserKind.Coordinator
-        elif s == "user": return UserKind.User
+        elif s == "student": return UserKind.Student
         elif s == "admin": return UserKind.Admin
         
         raise Exception("Unknown kind")
@@ -52,8 +52,20 @@ class User:
     def return_list() -> List[List]:
         # Returns a list of lists of all users data in the form of strings;
         cur = db.cursor()
-
-        cur.execute("SELECT user_id,username, name, user_kind, email,mobile FROM Users")
+        #return an ordered list of user information so the table is ordered by user_id
+        cur.execute("SELECT user_id,username, name, user_kind, email,mobile FROM Users ORDER BY user_id ")
         entries = cur.fetchall()
-
         return [list(entry) for entry in entries]
+
+    def unappointed_coords() -> List[List]:
+        cur = db.cursor()
+        cur.execute("""
+        SELECT Users.user_id, Users.username, Users.name, Users.user_kind, Users.email, Users.mobile 
+        FROM Users 
+        LEFT JOIN Clubs ON Users.user_id = Clubs.user_id
+        WHERE Users.user_kind = 'coordinator' AND Clubs.user_id IS NULL
+        ORDER BY Users.user_id
+        """)
+        entries = cur.fetchall()
+        return [list(entry) for entry in entries]
+        

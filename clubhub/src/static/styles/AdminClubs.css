@@ -83,7 +83,7 @@ html, body {
     font-size: 1.7rem;
 }
 
-.user_table {
+.club_table {
     min-width: 600px;
     width: 80%;
     margin-left: 320px;
@@ -97,14 +97,14 @@ html, body {
 }
 
 @media (max-width: 1024px) {
-    .user_table {
+    .club_table {
         width: 70%;
         margin-left: 15%;
     }
 }
 
 @media (max-width: 768px) {
-    .user_table {
+    .club_table {
         width: 100%;
         margin-left: 0;
     }
@@ -118,8 +118,9 @@ html, body {
 
 .divRow {
     display: flex;
-    text-align: center;
+    justify-content: space-between;
     align-items: center;
+    padding: 10px 0;
 }
 
 .divRow::after{    
@@ -127,10 +128,10 @@ html, body {
 }
 
 .divCell {
-    flex: 1;
-    padding: 10px;
+    flex: 1 0 0;
     text-align: center;
-    align-items: center;
+    padding: 10px;
+    display: flex;
 }
 
 .divCell:first-child {
@@ -181,4 +182,76 @@ html, body {
     font-size: 1.5rem;
     display: flex;
     flex-direction: column;
+}
+
+
+
+.divCell, .headCell {
+    flex: 1 0 0;
+    text-align: center;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+}
+.club_form {
+    margin: 20px 20px 20px 200px; /* Adjust the left margin value to 160px */
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    width: 60%; /* Adjust this value as needed */
+    box-sizing: border-box;
+}
+
+.club_form h2 {
+    text-align: center;
+    color: #333;
+}
+
+.club_form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.club_form input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.club_form input[type="submit"] {
+    background-color: #4CAF50; /* This is a green color, you can change it as you like */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.club_form input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+.club_form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    resize: vertical; /* This allows the user to resize the textarea vertically */
+}
+.box {
+    background-color: grey;
+    border-radius: 10px;
+    text-align: center;
+    color: white;
+}
+.clubContainer {
+    display: flex;
+    flex-direction: column;
+}
+.clubContainer:nth-child(2n+3) .divRow {
+    background: #e9e9e9;
 }
