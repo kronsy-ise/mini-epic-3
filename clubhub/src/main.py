@@ -9,7 +9,7 @@ from util import verify_session
 from globals import db
 
 app = Flask(__name__)
-
+app.secret_key = "super secret"
 app.register_blueprint(users_app)
 app.register_blueprint(auth_app)
 app.register_blueprint(home_app)

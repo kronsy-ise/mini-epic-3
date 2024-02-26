@@ -35,7 +35,8 @@ def homepage():
                 student_count +=1
                 
         return render_template("admin/home.html",users=users ,user_count=num_lists,
-                               coord_count=coord_count,student_count=student_count,unapproved_count =num_lists-coord_count-student_count-1)
+                               coord_count=coord_count,student_count=student_count,
+                               unapproved_count=num_lists-coord_count-student_count-1)
     elif auth_user.kind == UserKind.Student:
         return render_template("user/home.html")
     elif auth_user.kind == UserKind.Coordinator:

@@ -3,27 +3,9 @@ from enum import Enum
 from typing import Optional
 from typing import List
 from globals import db
+import models
 
 class Club:
-    """
-    Represents a club in the system.
-
-    Attributes:
-        id (int): The unique identifier of the club.
-        name (str): The name of the club.
-        description (str): The description of the club.
-        validity (str): The validity status of the club.
-        coord (int): The coordinator of the club.
-
-    Methods:
-        __init__(id, name, description, validity, coord): Initializes a Club object.
-        __repr__(): Returns a string representation of the Club object.
-        fetch(club_id): Fetches a Club object from the database based on the club_id.
-        return_list(): Returns a list of Club objects with all clubs data.
-        add_club(name, description, coord): Adds a new club to the database.
-        delete_club(club_id): Deletes a club from the database.
-        return_unapproved_clubs(): Returns the count of unapproved clubs.
-    """
     id: int
     name: str 
     description: str
@@ -40,6 +22,23 @@ class Club:
     def __repr__(self) -> str:
         return f"Club {self.name} <{self.id}>"
 
+    def get_memberships(self) -> List[models.User]:
+
+        cur = db.cursor()
+
+        cur.execute("SELECT user_id, club_id, role FROM Memberships WHERE club_id = %s", (self.id,))
+        entries = cur.fetchall()
+        Members = [models.User.fetch(entry[0]) for entry in entries]   
+        return Members
+    
+    def upcomming_events(self) -> List[models.Event]:
+        cur = db.cursor()
+
+        cur.execute("SELECT event_id, name, description, date, location, club_id FROM Events WHERE club_id = %s", (self.id,))
+        entries = cur.fetchall()
+        Events = [models.Event(*entry) for entry in entries]   
+        return Events
+    
     @staticmethod
     def fetch(club_id : int) -> Optional[Club]:
         """

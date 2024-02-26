@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Admin Home | ClubHub</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="static/styles/Adminhome.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/c2b7a7d1d7.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    {% include "scroll_script.html" %}
+    <main class="app__main">
+        <nav class="navbar">
+            <div class="app_logo_container">
+                <h3>ClubHub</h3>
+                <p>Administrator</p>
+            </div>
+            <div class="nav__links_container">
+                <ul class="nav__links">
+                    <li><a href="/clear-cookies">Logout <i class="fa-solid fa-user"></i></a></li>
+                    <li><a href="#users">Users <i class="fa-solid fa-users"></i></a></li>
+                    <li><a href="/clubs">Clubs <i class="fa-solid fa-volleyball"></i></a></li>
+                    <li><a href="/events">Events <i class="fa-solid fa-calendar-days"></i></a></li>
+                </ul>
+            </div>
+        </nav>
+        <div class="app__content">
+            <div class="user_table">
+                <h1 class="divRow">Admin Home</h1>
+                <p>As Admin, you have access to all permissions!<br>You can view, update, and carry out queries on the user database using the tables below.</p>
+                <br> 
+                <h2 style="text-align: center;">Site User information</h2>
+                <div class="site_performance">
+                    <div class="user_count">
+                        <i class="fa-solid fa-user-friends" style="display: flex; justify-content: center; align-items: center;"></i>
+                        <h3>Active Users: {{user_count}}</h3>
+                    </div>
+                    <div class="user_count">
+                        <i class="fas fa-users-cog" style="display: flex; justify-content: center; align-items: center;"></i>
+                        <h3>Club Co-odinators: {{coord_count}}</h3>
+                    </div>
+                    <div class="user_count">
+                        <h3>Student Count: {{student_count}}</h3>
+                    </div>
+                    <div class="user_count">
+                        <h3>Unapproved Users: {{unapproved_count}}</h3>
+                    </div>
+                </div>
+            </div>
+            <form id="form1">
+                <div class="user_table">
+                    <h2 id="users">Users</h2>
+                    <div class="headRow">
+                        <div class="divCell">User_id</div>
+                        <div class="divCell">Username</div>
+                        <div class="divCell">Fullname</div>
+                        <div class="divCell">Kind</div>
+                        <div class="divCell">Email</div>
+                        <div class="divCell">PhoneNumber</div>
+                        <div class="divCell">Actions</div>
+                    </div>
+                    {% for user in users %}
+                    <div class="divRow" data-user-id="{{ user.0 }}">
+                        {% for item in user %}
+                        <div class="divCell">{{ item }}</div>
+                        {% endfor %}
+                        <div class="divCell">
+                            {% if user.0 != 1 %}
+                            <div class="divActions" style="display: flex;">
+                                <form method="POST" action="/approve-student/{{ user.0 }}">
+                                    <button class="action" type="submit">Student</button>
+                                </form>
+                                <form method="POST" action="/approve-coord/{{ user.0 }}">
+                                    <button class="action" type="submit">Co-ordinator</button>
+                                </form>
+                                <form method="POST" action="/reject-user/{{ user.0 }}">
+                                    <button class="action" type="submit">Reject</button>
+                                </form>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <div class="divRow" style="display: flex; justify-content: center;">
+                        <button style="width: 100px; height: 30px;">Apply Changes</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+</body>
+</html>

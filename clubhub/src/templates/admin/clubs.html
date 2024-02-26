@@ -1,3 +1,7 @@
+<!-- FILEPATH: /c:/Users/ticta/MyRepos/mini-epic-3/clubhub/src/templates/admin/clubs.html -->
+
+<!-- This is the HTML template for the admin club page in the ClubHub application. It displays a table containing all the club data and provides options to create, manage, and delete clubs. -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,94 +21,117 @@
         </div>
         <div class="nav__links_container">
             <ul class="nav__links">
-                <li><a href="/clear-cookies">Logout <i class="fa-solid fa-user"></i></a></li>
-
-                <li><a href="/home">Users <i class="fa-solid fa-users"></i></a></li>
-
-                <li><a href="#club_list">Clubs <i class="fa-solid fa-volleyball"></i></a></li>
-
-                <li><a href="/events">Events <i class="fa-solid fa-calendar-days"></i></a></li>
+                <li><a href="/clear-cookies">Logout <i class="fa-solid fa-user"></i></a></li> <!-- Logout link -->
+                <li><a href="/home">Users <i class="fa-solid fa-users"></i></a></li> <!-- Users link -->
+                <li><a href="#club_list">Clubs <i class="fa-solid fa-volleyball"></i></a></li> <!-- Clubs link -->
+                <li><a href="/events">Events <i class="fa-solid fa-calendar-days"></i></a></li> <!-- Events link -->
             </ul>
         </div>
     </nav>
-    <!-- Show a table containing all user credentials -->
+    
     <div class="app__content">
-
-        <div class = "club_table">
-            <h1 class ="divRow">Manage Clubs</h1>
-            <br>You can view, update, and carry out queries on the club data using the tables below.
+        {% include "scroll_script.html" %} <!-- Include a script for scrolling functionality -->
+        {%include "dropdown_script.html" %}
+        <div class="club_table">
+            <h1 class="box">Manage Clubs</h1> <!-- Heading for club management section -->
             </p>
             <br> 
-
-            <h2 style="text-align: center;">Site User information</h2>
-        <div class ="site_performance">
-            <div class ="club_count">
-                <i class="fa-solid fa-user-friends"style="display: flex; justify-content: center; align-items: center;">
-                </i>
-                <h3>Clubs:{{club_count}}</h3>
-            </div>
-            <div class ="club_count">
-                <i class="fas fa-users-cog" style="display: flex; justify-content: center; align-items: center;">
-                </i>
-                <h3>Unapproved Clubs:{{unapproved_clubs}} </h3>
+            
+            <h2 style="text-align: center;">Site User information</h2> <!-- Heading for site user information section -->
+            
+            <div class="site_performance">
+                <div class="club_count">
+                    <i class="fa-solid fa-user-friends" style="display: flex; justify-content: center; align-items: center;"></i> <!-- Icon for total clubs count -->
+                    <h3>Clubs:{{club_count}}</h3> <!-- Display total clubs count -->
+                </div>
+                <div class="club_count">
+                    <i class="fas fa-users-cog" style="display: flex; justify-content: center; align-items: center;"></i> <!-- Icon for unapproved clubs count -->
+                    <h3>Unapproved Clubs:{{unapproved_clubs}} </h3> <!-- Display unapproved clubs count -->
+                </div>
             </div>
         </div>
-        </div>
 
-        <form id="create_club" action="/CreateClub" method="post">
+        <form id="create_club" action="/CreateClub" method="post"> <!-- Form to create a new club -->
             <div class="club_table">
                 <div class="club_form">
-                    <h2>Create a new Club</h2>
+                    <h2>Create a new Club</h2> <!-- Heading for create club form -->
                     <label for="name">Club Name:</label><br>
-                    <input type="text" id="name" name="name"><br>
+                    <input type="text" id="name" name="name" required><br> <!-- Input field for club name -->
                     <label for="description">Description:</label><br>
-                    <textarea id="description" name="description"></textarea><br>
+                    <textarea id="description" name="description" required></textarea><br> <!-- Textarea for club description -->
                     <label for="coord">Club Co-odinator:</label><br>
-                    <textarea id="coord" name="coord"></textarea><br>
-                    <input type="submit" value="Submit">
+                    <select id="coord" name="coord" required> <!-- Dropdown for selecting club coordinator -->
+                        {% for coord in unappointed_coords %}
+                            <option value="{{ coord[0] }}">{{ coord[1] }}</option> <!-- Display each coordinator option -->
+                        {% endfor %}
+                    </select><br>
+                    <input type="submit" value="Submit"> <!-- Submit button for creating a club -->
                 </div>
             </div>
         </form>
         
-        <form id="club_list">
+        <form id="club_list"> <!-- Form for club list -->
             <div class="club_table">
-                <h2 id="clubs">Clubs</h2>
-                <div class="headRow">
-                    <div class="divCell">Club_id</div>
-                    <div class="divCell">Name</div>
-                    <div class="divCell">Description</div>
-                    <div class="divCell">Validity</div>
-                    <div class="divCell">Co-ord_id</div>
-                    <div class="divCell">Actions</div>
+                <h2 id="clubs">Clubs</h2> <!-- Heading for club list -->
+                <div class="headRow" >
+                    <div class="divCell">Club_id</div> <!-- Table column header for club ID -->
+                    <div class="divCell">Name</div> <!-- Table column header for club name -->
+                    <div class="divCell">Description</div> <!-- Table column header for club description -->
+                    <div class="divCell">Validity</div> <!-- Table column header for club validity -->
+                    <div class="divCell">Co-ord_id</div> <!-- Table column header for club coordinator ID -->
+                    <div class="divCell">Actions</div> <!-- Table column header for club actions -->
                 </div>
-                {% for club in clubs %} <!-- Loop through the list of users -->
-                    <div class="divRow" data-club-id="{{ club.id }}">
-                        <div class="divCell">{{ club.id }}</div> <!-- Display each attribute in a table cell -->
-                        <div class="divCell">{{ club.name }}</div>
-                        <div class="divCell">{{ club.description }}</div>
-                        <div class="divCell">{{ club.validity }}</div>
-                        <div class="divCell">{{ club.coord }}</div>
-                                                        
-                        <div class="divActions" style="display: flex;">
-                                            
-                            <form method="POST" action="/manage-club/{{ club.id }}">
-                                <button class="action" type="submit">Manage</button>
-                            </form>
+                    {% for club in clubs %} <!-- Loop through the list of clubs -->
+                        <div class="clubContainer">
+                            <div class="divRow" data-club-id="{{ club.id }}" onclick="toggleDetails('clubDetails{{club.id}}')"> <!-- Table row for each club -->
+                                <div class="divCell">{{ club.id }}</div> <!-- Display club ID -->
+                                <div class="divCell">{{ club.name }}</div> <!-- Display club name -->
+                                <div class="divCell">{{ club.description }}</div> <!-- Display club description -->
+                                <div class="divCell">{{ club.validity }}</div> <!-- Display club validity -->
+                                <div class="divCell">{{ club.coord }}</div> <!-- Display club coordinator ID -->
+                                                                        
+                                <div class="divActions" style="display: flex;"> <!-- Actions for each club -->
+                                                    
+                                    <form method="POST" action="/manage-club/{{ club.id }}"> <!-- Form to manage a club -->
+                                        <button class="action" type="submit">Manage</button> <!-- Manage button -->
+                                    </form>
 
-                            <form method="POST" action="/delete-club/{{ club.id }}">
-                                <button class="action" type="submit">Delete</button>
-                            </form>
+                                    <form method="POST" action="/delete-club/{{ club.id }}"> <!-- Form to delete a club -->
+                                        <button class="action" type="submit">Delete</button> <!-- Delete button -->
+                                    </form>
 
+                                </div>
+                            </div>
+                            <div id="clubDetails{{ club.id }}" style="display: none; width: 100%;">
+                                <div class="divCell">Events {% for event in club.upcoming_events %}
+                                    <li>
+                                        Event ID: {{ event.event_id }}<br>
+                                        Name: {{ event.name }}<br>
+                                        Club ID: {{ event.club_id }}<br>
+                                        Description: {{ event.description }}<br>
+                                        Date: {{ event.date }}<br>
+                                        Venue: {{ event.venue }}<br>
+                                    </li>
+                                {% endfor %}</div>
+                                <div class="divCell">Members {% for member in club.memberships %}
+                                    <li>
+                                        User ID: {{ member.user_id }}<br>
+                                        Name: {{ member.name }}<br>
+                                        Email: {{ member.email }}<br>
+                                    </li>
+                                {% endfor %}</div>
+                                <!-- Add more cells as needed -->
+                            </div>
                         </div>
-                    </div>
-                {% endfor %}
-                <div class="divRow" style="display: flex; justify-content: center;">
-                    <button style="width: 100px; height: 30px;">Apply Changes</button>
-                </div>
+                    {% endfor %}
             </div>
         </form>
     </div>
-
+    <div id="footer">
+        <footer class="footer">
+            <p>&copy;2024 ClubHub</p>
+        </footer>            
+    </div>
 </main>
 </body>
 </html>

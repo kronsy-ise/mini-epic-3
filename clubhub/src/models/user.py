@@ -57,4 +57,15 @@ class User:
         entries = cur.fetchall()
         return [list(entry) for entry in entries]
 
-    
+    def unappointed_coords() -> List[List]:
+        cur = db.cursor()
+        cur.execute("""
+        SELECT Users.user_id, Users.username, Users.name, Users.user_kind, Users.email, Users.mobile 
+        FROM Users 
+        LEFT JOIN Clubs ON Users.user_id = Clubs.user_id
+        WHERE Users.user_kind = 'coordinator' AND Clubs.user_id IS NULL
+        ORDER BY Users.user_id
+        """)
+        entries = cur.fetchall()
+        return [list(entry) for entry in entries]
+        
