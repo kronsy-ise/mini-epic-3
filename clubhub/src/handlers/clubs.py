@@ -20,7 +20,8 @@ def clubs():
     if auth_user.kind == UserKind.Admin:
         users=User.return_list()
         clubs = Club.return_list()
-        club_count=len(clubs)
+        club_count=Club.club_count()
+        print(club_count)
         unapproved_clubs = Club.return_unapproved_clubs()
         unappointed_coords = User.unappointed_coords()
         return render_template("admin/clubs.html",clubs=clubs,users=users,

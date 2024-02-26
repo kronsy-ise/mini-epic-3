@@ -4,6 +4,7 @@ from globals import db
 from models.user import UserKind,User
 import util
 from models.club import Club
+from models.event import Event
 events_app = Blueprint('events_app', __name__)
 
 @events_app.get("/events")
@@ -20,7 +21,8 @@ def clubs():
     if auth_user.kind == UserKind.Admin:
         users=User.return_list()
         clubs = Club.return_list()
-        return render_template("admin/events.html",clubs=clubs,users=users)
+        events = Event.return_list()
+        return render_template("admin/events.html",clubs=clubs,users=users,events=events)
     elif auth_user.kind == UserKind.Student:
         return render_template("user/events.html")
     elif auth_user.kind == UserKind.Coordinator:

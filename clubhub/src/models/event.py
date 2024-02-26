@@ -64,8 +64,8 @@ class Event:
         return [Event(*entry) for entry in entries]
     
     @staticmethod
-    def fetch_club_members(club_id: int)-> List[models.User]:
+    def fetch_event_members(event_id: int) -> List[models.User]:
         cur = db.cursor()
-        cur.execute("SELECT user_id, username, name, user_kind, email, mobile FROM Users WHERE user_id IN (SELECT user_id FROM CLUB_MEMBERSHIP WHERE club_id = %s)", (club_id,))
+        cur.execute("SELECT user_id, username, name, user_kind, email, mobile FROM Users WHERE user_id IN (SELECT user_id FROM EVENT_PARTICIPATION WHERE event_id = %s)", (event_id,))
         entries = cur.fetchall()
         return [models.User(*entry) for entry in entries]
