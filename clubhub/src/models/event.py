@@ -5,6 +5,15 @@ from typing import List
 from globals import db
 import models
 class Event:
+    class Events:
+        event_id: int
+        club_id: str 
+        name: str
+        name: str 
+        description: str
+        date: str
+        venue: str	 
+    
     def __init__(self, event_id, club_id, name, description, date, venue, ):
         self.event_id = event_id
         self.name = name
@@ -15,7 +24,7 @@ class Event:
 
 
     def __repr__(self) -> str:
-            return f"Event {self.name} <{self.id}>"
+            return f"Event {self.name} <{self.event_id}>"
 
     @staticmethod
     def fetch(event_id : int) -> Optional[Event]:
@@ -39,13 +48,11 @@ class Event:
         return [Event(*entry) for entry in entries]
 
     @staticmethod
-    def add_event(club_id, name, description, date, venue, time):
-       
+    def add_event(club_id, name, description, date, venue):
         cur = db.cursor()
-
-        cur.execute("INSERT INTO Events(club_id, name, description, date, venue) VALUES (%s, %s, %s, %s, %s, %s)", (club_id, name, description, date, venue, time))
+        cur.execute("INSERT INTO Events(club_id, name, description, date, venue) VALUES (%s, %s, %s, %s, %s)", (club_id, name, description, date, venue))
         db.commit()
-        return "Event added successfully"
+        return Event.fetch(club_id)
     
     @staticmethod
     def delete_event(event_id):

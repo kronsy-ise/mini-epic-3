@@ -57,7 +57,7 @@
 
         </div>
 
-        <form id="create_event" action="/CreateClub" method="post"> <!-- Form to create a new event -->
+        <form id="create_event" action="/CreateEvent" method="post"> <!-- Form to create a new event -->
             <div class="event_table">
                 <div class="event_form">
                     <h2>Create a new Event</h2> <!-- Heading for create event form -->
@@ -73,6 +73,8 @@
                     <textarea id="description" name="description" required></textarea><br> <!-- Textarea for club description -->
                     <label for="date">Date:</label><br>
                     <input type="datetime-local" id="datetime" name="datetime" required><br> <!-- Input for club date and time -->                    <input type="submit" value="Submit"> <!-- Submit button for creating a club -->
+                    <label for="venue">Venue:</label><br>
+                    <input type="text" id="venue" name="venue" required><br> <!-- Input for club name -->
                 </div>
             </div>
         </form>
