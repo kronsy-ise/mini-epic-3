@@ -6,7 +6,7 @@ from models.user import User
 from models.user import UserKind
 import psycopg2.errors as pgerrors
 import util 
-
+from models import Event
 
 users_app = Blueprint('users_app', __name__)
 @users_app.route('/users')
@@ -30,6 +30,7 @@ def users():
         coords = {club.coord: User.fetch(club.coord) for club in clubs}
         get_user_clubs =User.get_user_clubs
         get_user_events=User.get_user_events
+        event_count = Event.event_count()
         for user in users:
             if user[3] == 'coordinator':
                 coord_count += 1
@@ -41,7 +42,7 @@ def users():
                                unapproved_count =num_lists-coord_count-student_count-1,
                                coords=coords,clubs=clubs,get_club=Club.return_club_from_coord,
                                get_user_clubs =get_user_clubs,get_user_events=get_user_events,
-                               club_count=club_count,unapproved_users=unapproved_users)
+                               club_count=club_count,unapproved_users=unapproved_users,event_count=event_count)
     elif auth_user.kind == UserKind.Student:
         return render_template("user/users.html")
     elif auth_user.kind == UserKind.Coordinator:

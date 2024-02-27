@@ -43,5 +43,5 @@ def create_event():
     date = request.form.get('datetime')
     venue = request.form.get('venue')    
     Event.add_event(club_id, name, description, date, venue)
-    return redirect("/clubs")
+    return redirect("/events")
 
