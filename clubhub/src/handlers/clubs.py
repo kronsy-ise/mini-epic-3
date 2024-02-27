@@ -1,5 +1,5 @@
 from __future__ import annotations
-from flask import Blueprint, redirect, render_template, request, url_for
+from flask import Blueprint, redirect, render_template, request, url_for, flash
 from globals import db
 from models.user import UserKind,User
 import util
@@ -67,3 +67,31 @@ def manage_club(club_id):
     upcoming_events = club.upcomming_events()
     # Pass the data to the template
     return render_template('manage_club.html', club=club, upcoming_events=upcoming_events, memberships=memberships)
+
+@clubs_app.route("/join-club/<int:club_id>", methods=['POST'])
+def join_club(club_id):
+    auth_user = util.verify_session()
+    if auth_user is None or auth_user.kind != UserKind.Student:
+        return redirect("/")
+    # Check if the user is already a member of the club
+    if Club.is_user_member(auth_user.user_id, club_id):
+        flash("You are already a member of this club.")
+        return redirect("/clubs")
+    # Create a membership request
+    Club.request_membership(auth_user.user_id, club_id)
+    flash("Your request to join the club has been submitted for approval.")
+    return redirect("/clubs")
+
+@clubs_app.route("/manage-membership/<int:club_id>/<int:user_id>", methods=['POST'])
+def manage_membership_request(club_id, user_id):
+    auth_user = util.verify_session()
+    if auth_user is None or auth_user.kind != UserKind.Coordinator:
+        return redirect("/")
+    action = request.form.get('action')
+    if action == 'approve':
+        Club.approve_membership(user_id, club_id)
+        flash("Membership request approved successfully.")
+    elif action == 'reject':
+        Club.reject_membership(user_id, club_id)
+        flash("Membership request rejected.")
+    return redirect("/clubs")
