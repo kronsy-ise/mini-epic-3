@@ -1,5 +1,4 @@
 from __future__ import annotations
-from enum import Enum
 from typing import Optional
 from typing import List
 from globals import db
@@ -15,7 +14,7 @@ class Event:
 
 
     def __repr__(self) -> str:
-            return f"Event {self.name} <{self.id}>"
+            return f"Event {self.name} <{self.event_id}>"
 
     @staticmethod
     def fetch(event_id : int) -> Optional[Event]:
@@ -83,3 +82,6 @@ class Event:
         cur.execute("SELECT COUNT(*) FROM EVENT_PARTICIPATION WHERE status = 'pending' ")
         count = cur.fetchone()
         return count[0]
+
+
+
