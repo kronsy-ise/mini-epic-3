@@ -6,7 +6,7 @@ from models.user import User
 from models.user import UserKind
 import psycopg2.errors as pgerrors
 import util 
-from models import Event
+from models.event import Event
 
 users_app = Blueprint('users_app', __name__)
 @users_app.route('/users')

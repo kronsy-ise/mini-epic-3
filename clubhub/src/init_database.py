@@ -34,8 +34,5 @@ INIT_SCRIPT = os.path.join(util.my_path, "..", "queries", "init.sql")
 
 
 if __name__ == "__main__":
-    config = util.load_configuration()
-    db_url = config["DATABASE_URL"]
-    db_conn = util.open_database(db_url)
-
-    initialize_database(db_conn, INIT_SCRIPT)
+    import globals
+    initialize_database(globals.db, INIT_SCRIPT)
