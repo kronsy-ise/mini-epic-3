@@ -37,9 +37,7 @@
             <h1 class="box">Manage Clubs</h1> <!-- Heading for club management section -->
             </p>
             <br> 
-            
-            <h2 style="text-align: center;">Site User information</h2> <!-- Heading for site user information section -->
-            <div class="site-information">
+                <div class="site-information">
                 <div class="info-card">
                     <img src="{{ url_for('static', filename='images/basket.png') }}" alt="Other Logo"
                     style="width: 60px; height: 60px;">
@@ -60,7 +58,6 @@
         </div>
 
         <form id="create_club" action="/CreateClub" method="post"> <!-- Form to create a new club -->
-            <div class="club_table">
                 <div class="club_form">
                     <h2>Create a new Club</h2> <!-- Heading for create club form -->
                     <label for="name">Club Name:</label><br>
@@ -75,7 +72,6 @@
                     </select><br>
                     <input type="submit" value="Submit"> <!-- Submit button for creating a club -->
                 </div>
-            </div>
         </form>
         
         <form id="club_list"> <!-- Form for club list -->

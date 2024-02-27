@@ -12,8 +12,6 @@ from models.event import Event
 home_app = Blueprint('home_app', __name__)
 
 
-
-
 @home_app.get("/home")
 def homepage():
     auth_user = util.verify_session()
