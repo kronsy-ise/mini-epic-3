@@ -63,7 +63,7 @@ CREATE TABLE EVENT_PARTICIPATION(
   user_id BIGINT NOT NULL REFERENCES Users(user_id),
   PRIMARY KEY(event_id, user_id),
 
-  status TEXT NOT NULL,
+  status TEXT NOT NULL,--pending/approved/rejected
   
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
@@ -74,7 +74,7 @@ CREATE TABLE CLUB_MEMBERSHIP(
   user_id BIGINT NOT NULL REFERENCES Users(user_id),
   PRIMARY KEY(club_id, user_id),
 
-  status TEXT NOT NULL,
+  status TEXT NOT NULL,--pending/approved/rejected
   
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()

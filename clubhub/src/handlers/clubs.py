@@ -4,6 +4,7 @@ from globals import db
 from models.user import UserKind,User
 import util
 from models.club import Club
+from models.event import Event
 clubs_app = Blueprint('clubs_app', __name__)
 
 @clubs_app.get("/clubs")
@@ -20,7 +21,7 @@ def clubs():
     if auth_user.kind == UserKind.Admin:
         users=User.return_list()
         clubs = Club.return_list()
-        
+        event_count = Event.event_count()
         # Fetch all the coordinator details
         coords = {club.coord: User.fetch(club.coord) for club in clubs}
         club_count=Club.club_count()
@@ -29,7 +30,8 @@ def clubs():
         unappointed_coords = User.unappointed_coords()
         return render_template("admin/clubs.html",clubs=clubs,users=users,
                     club_count=club_count,unapproved_clubs=unapproved_clubs
-                    ,unappointed_coords=unappointed_coords,coords=coords)
+                    ,unappointed_coords=unappointed_coords,coords=coords,
+                    event_count=event_count)
     elif auth_user.kind == UserKind.Student:
         return render_template("user/clubs.html")
     elif auth_user.kind == UserKind.Coordinator:

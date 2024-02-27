@@ -69,3 +69,17 @@ class Event:
         cur.execute("SELECT user_id, username, name, user_kind, email, mobile FROM Users WHERE user_id IN (SELECT user_id FROM EVENT_PARTICIPATION WHERE event_id = %s)", (event_id,))
         entries = cur.fetchall()
         return [models.User(*entry) for entry in entries]
+    
+    @staticmethod
+    def event_count():
+        cur = db.cursor()
+        cur.execute("SELECT COUNT(*) FROM Events")
+        count = cur.fetchone()
+        return count[0]
+    
+    @staticmethod
+    def unapproved_event_memberships():
+        cur = db.cursor()
+        cur.execute("SELECT COUNT(*) FROM EVENT_PARTICIPATION WHERE status = 'pending' ")
+        count = cur.fetchone()
+        return count[0]

@@ -10,6 +10,7 @@
 </head>
 <body>
     {% include "scroll_script.html" %}
+    {%include "dropdown_script.html" %}
     <main class="app__main">
         <nav class="navbar">
             <div class="app_logo_container">
@@ -22,32 +23,39 @@
                     <li><a href="#users">Users <i class="fa-solid fa-users"></i></a></li>
                     <li><a href="/clubs">Clubs <i class="fa-solid fa-volleyball"></i></a></li>
                     <li><a href="/events">Events <i class="fa-solid fa-calendar-days"></i></a></li>
+                    <li><a href="/home">Home <i class="fa-solid fa-chart-bar"></i></a></li> <!-- Dashboard link -->
+
                 </ul>
             </div>
         </nav>
         <div class="app__content">
-            {% if message %}
-                <p>{{ message }}</p>
-            {% endif %}
             <div class="user_table">
                 <h1 class="divRow">Admin Home</h1>
                 <p>As Admin, you have access to all permissions!<br>You can view, update, and carry out queries on the user database using the tables below.</p>
                 <br> 
                 <h2 style="text-align: center;">Site User information</h2>
-                <div class="site_performance">
-                    <div class="user_count">
-                        <i class="fa-solid fa-user-friends" style="display: flex; justify-content: center; align-items: center;"></i>
-                        <h3>Active Users: {{user_count}}</h3>
+                
+                <div class="site-information">
+                    <div class="info-card">
+                        <img src="{{ url_for('static', filename='images/user_icon.png') }}" alt="User Logo"
+                        style="width: 50px; height: 50px;">
+                        <br>
+                        <p>Active Users: {{user_count}}</p>
                     </div>
-                    <div class="user_count">
-                        <i class="fas fa-users-cog" style="display: flex; justify-content: center; align-items: center;"></i>
-                        <h3>Club Co-odinators: {{coord_count}}</h3>
+                    <div class="info-card">
+                        <img src="{{ url_for('static', filename='images/basket.png') }}" alt="Other Logo"
+                        style="width: 60px; height: 60px;">
+                        <p>Clubs: {{club_count}}</p>
                     </div>
-                    <div class="user_count">
-                        <h3>Student Count: {{student_count}}</h3>
+                    <div class="info-card">
+                        <img src="{{ url_for('static', filename='images/calender.png') }}" alt="Other Logo"
+                        style="width: 70px; height: 70px;">
+                        <p>Events: 20</p>
                     </div>
-                    <div class="user_count">
-                        <h3>Unapproved Users: {{unapproved_count}}</h3>
+                    <div class="info-card">
+                        <img src="{{ url_for('static', filename='images/approval.png') }}" alt="Other Logo"
+                        style="width: 60px; height: 60px;">
+                        <p>Approvals needed:{{unapproved_count}} </p>
                     </div>
                 </div>
             </div>
@@ -64,9 +72,9 @@
                         <div class="divCell">Actions</div>
                     </div>
                     {% for user in users %}
-                    <div class="divRow" data-user-id="{{ user.0 }}">
+                    <div class="divRow" data-user-id="{{ user.0 }}" onclick="toggleDetails('userDetails{{user.0}}')">
                         {% for item in user %}
-                        <div class="divCell">{{ item }}</div>
+                            <div class="divCell">{{ item }}</div>
                         {% endfor %}
                         <div class="divCell">
                             {% if user.0 != 1 %}
@@ -84,10 +92,41 @@
                             {% endif %}
                         </div>
                     </div>
-                    {% endfor %}
-                    <div class="divRow" style="display: flex; justify-content: center;">
-                        <button style="width: 100px; height: 30px;">Apply Changes</button>
+                    <div id="userDetails{{ user.0 }}" style="display: none; width: 100%;">
+                        {% if user.3 == "coordinator" %}
+                        <div class="section">
+                            <h2>{{ user.1 }} is a coordinator for:</h2>
+                            <div class="coord-details">
+                            {% set club = get_club(user.0) %}
+                                <li>Club ID: {{ club.id }}</li>
+                                <li>Name: {{ club.name }}</li>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="section">
+                            <h2>{{ user.1 }} is a member of:</h2>
+                            {% set clubs = get_user_clubs(user.0) %}
+                            {% for club in clubs %}
+                            <div class="coord-details">
+                                <li>Club ID: {{ club.id }}</li>
+                                <li>Name: {{ club.name }}</li>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="section">
+                            <h2>{{ user.1 }} has event membership for:</h2>
+                            {% set events = get_user_events(user.0) %}
+                            {% for event in user.events %}
+                            <div class="coord-details">
+                                <li>Event ID: {{ event.id }}</li>
+                                <li>Name: {{ event.name }}</li>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
                     </div>
+                    {% endfor %}
                 </div>
             </form>
         </div>

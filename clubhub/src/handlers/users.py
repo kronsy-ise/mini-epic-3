@@ -24,6 +24,10 @@ def users():
         num_lists = len(User.return_list())
         coord_count = 0
         student_count = 0
+        clubs = Club.return_list()
+        club_count=Club.club_count()
+        coords = {club.coord: User.fetch(club.coord) for club in clubs}
+
         for user in users:
             if user[3] == 'coordinator':
                 coord_count += 1
@@ -31,7 +35,11 @@ def users():
                 student_count +=1
                 
         return render_template("admin/users.html",users=users ,user_count=num_lists,
-                               coord_count=coord_count,student_count=student_count,unapproved_count =num_lists-coord_count-student_count-1)
+                               coord_count=coord_count,student_count=student_count,
+                               unapproved_count =num_lists-coord_count-student_count-1,
+                               coords=coords,clubs=clubs,get_club=Club.return_club_from_coord,
+                               get_user_clubs =User.get_user_clubs,get_user_events=User.get_user_events,
+                               club_count=club_count)
     elif auth_user.kind == UserKind.Student:
         return render_template("user/users.html")
     elif auth_user.kind == UserKind.Coordinator:

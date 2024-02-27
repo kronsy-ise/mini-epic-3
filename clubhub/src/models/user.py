@@ -3,6 +3,7 @@ from enum import Enum
 from typing import Optional
 from typing import List
 from globals import db
+import models
 class UserKind(Enum):
     Unapproved = "unapproved"
     Coordinator = "coordinator"
@@ -58,7 +59,7 @@ class User:
         cur.execute("SELECT user_id,username, name, user_kind, email,mobile FROM Users ORDER BY user_id ")
         entries = cur.fetchall()
         return [list(entry) for entry in entries]
-
+    @staticmethod
     def unappointed_coords() -> List[List]:
         cur = db.cursor()
         cur.execute("""
@@ -70,4 +71,21 @@ class User:
         """)
         entries = cur.fetchall()
         return [list(entry) for entry in entries]
-        
+    
+    @staticmethod   
+    def get_user_clubs(user_id) -> List[models.Club]:
+        # Retrieve all clubs associated with the user
+        cur = db.cursor()
+        cur.execute("SELECT club_id FROM CLUB_MEMBERSHIP WHERE user_id = %s", (user_id,))
+        entries = cur.fetchall()
+        clubs = [models.Club.fetch(entry[0]) for entry in entries]
+        return clubs
+    
+    @staticmethod
+    def get_user_events(user_id) -> List[models.Event]:
+        # Retrieve all events associated with the user
+        cur = db.cursor()
+        cur.execute("SELECT event_id FROM EVENT_PARTICIPATION WHERE user_id = %s", (user_id,))
+        entries = cur.fetchall()
+        events = [models.Event.fetch(entry[0]) for entry in entries]
+        return events
