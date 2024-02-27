@@ -38,17 +38,11 @@ head,body{
 }
 
 
-.card-header{
-
-}
-
 .card-header>h1{
   font-family: sans-serif;
 }
 
-.card-content{
 
-}
 
 .card-content>hr{
   min-width: 100%;

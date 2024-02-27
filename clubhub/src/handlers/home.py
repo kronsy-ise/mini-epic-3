@@ -7,7 +7,8 @@ import psycopg2.errors as pgerrors
 import util
 from models.user import User
 import os
-
+from models.club import Club
+from models.event import Event
 home_app = Blueprint('home_app', __name__)
 
 
@@ -25,8 +26,24 @@ def homepage():
     
     if auth_user.kind == UserKind.Admin:
         users=User.return_list()
-        return render_template("admin/home.html",users=users)
-    elif auth_user.kind == UserKind.User:
+        num_lists = len(User.return_list())
+        coord_count = 0
+        student_count = 0
+        club_count=Club.club_count()
+        event_count = Event.event_count()
+
+        for user in users:
+            if user[3] == 'coordinator':
+                coord_count += 1
+            elif user[3] == 'student':
+                student_count +=1
+                
+        return render_template("admin/home.html",users=users ,user_count=num_lists,
+                               coord_count=coord_count,student_count=student_count,
+                               unapproved_count=num_lists-coord_count-student_count-1,
+                               club_count=club_count,event_count=event_count)   
+
+    elif auth_user.kind == UserKind.Student:
         return render_template("user/home.html")
     elif auth_user.kind == UserKind.Coordinator:
         return render_template("coordinator/home.html")

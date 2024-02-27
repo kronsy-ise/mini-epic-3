@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ClubHub</title>
+    <title>Coordinator Home | ClubHub</title>
     <style>
         body {
             margin: 0;
@@ -82,6 +82,59 @@
         .dropdown:hover .dropdown-content {
             display: block;
         }
+
+        /* Additional styles for the new content */
+        .options-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+
+        .option-box {
+            width: 30%;
+            margin: 10px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .option-image {
+            width: 100px; /* Adjust the size as needed */
+            height: 100px; /* Adjust the size as needed */
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .option-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .option-description {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .option-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .option-button:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 
@@ -98,9 +151,9 @@
                 <i class="fa fa-caret-down"></i>
             </button>
             <div class="dropdown-content">
-                <a href="#">Option 1</a>
-                <a href="#">Option 2</a>
-                <a href="#">Option 3</a>
+                <a href="#">Create Club</a>
+                <a href="#">Edit Club</a>
+                <a href="#">Manage Club</a>
             </div>
         </div>
         <div class="dropdown">
@@ -108,25 +161,46 @@
                 <i class="fa fa-caret-down"></i>
             </button>
             <div class="dropdown-content">
-                <a href="#">Option 1</a>
-                <a href="#">Option 2</a>
-                <a href="#">Option 3</a>
+                <a href="#">Create Event</a>
+                <a href="#">Manage Events</a>
             </div>
         </div>
         <div class="dropdown">
-            <button class="dropbtn">FAQs
+            <button class="dropbtn">Members
                 <i class="fa fa-caret-down"></i>
             </button>
             <div class="dropdown-content">
-                <a href="#">Option 1</a>
-                <a href="#">Option 2</a>
-                <a href="#">Option 3</a>
+                <a href="#">Requests</a>
+                <a href="#">Manage Members</a>
             </div>
         </div>
         <input type="text" placeholder="Search" style="float: right; margin: 14px 16px;">
     </div>
 
-    <!-- Add your content here -->
+    <!-- New Coordinator Home Page Section -->
+    <div class="options-container">
+        <div class="option-box">
+            <img src="clubhub\src\static\styles\images\Home-Pic.jpg" alt="Members" class="option-image">
+            <div class="option-title">Members</div>
+            <div class="option-description">Manage club members.</div>
+            <a href="/coordinator/members.html" class="option-button">Go to Members</a>
+        </div>
+        <div class="option-box">
+            <img src="club_image.jpg" alt="Clubs" class="option-image">
+            <div class="option-title">Clubs</div>
+            <div class="option-description">Manage clubs within the system.</div>
+            <a href="/coordinator/clubs.html" class="option-button">Go to Clubs</a>
+        </div>
+        <div class="option-box">
+            <img src="events_image.jpg" alt="Events" class="option-image">
+            <div class="option-title">Events</div>
+            <div class="option-description">Manage club events.</div>
+            <a href="/coordinator/events.html" class="option-button">Go to Events</a>
+        </div>
+    </div>
+    <!-- End of Coordinator Home Page Section -->
+
+    <!-- Your existing content -->
 
 </body>
 
