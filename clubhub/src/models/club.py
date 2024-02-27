@@ -1,10 +1,8 @@
 from __future__ import annotations
-from enum import Enum
 from typing import Optional
 from typing import List
 from globals import db
 import models
-from datetime import datetime
 
 class Club:
     club_id: int
