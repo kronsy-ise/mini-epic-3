@@ -261,3 +261,54 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 -- Create Views 
+CREATE VIEW users_club_membership_view AS
+SELECT 
+    u.user_id,
+    u.name,
+    u.username,
+    u.email,
+    u.mobile,
+    cm.club_id,
+    cm.status as membership_status
+FROM USERS u
+JOIN CLUB_MEMBERSHIP cm ON u.user_id = cm.user_id;
+
+CREATE VIEW clubs_coordinator_membership_view AS
+SELECT
+    c.club_id,
+    c.name as club_name,
+    u.name as coordinator_name,
+    COUNT(cm.user_id) as membership_count
+FROM CLUBS c
+JOIN USERS u ON c.user_id = u.user_id
+LEFT JOIN CLUB_MEMBERSHIP cm ON c.club_id = cm.club_id
+GROUP BY c.club_id, u.name;
+
+CREATE VIEW upcoming_events_clubs_view AS
+SELECT 
+    e.event_id,
+    e.name as event_name,
+    e.description as event_description,
+    e.date as event_date,
+    e.venue as event_venue,
+    c.club_id,
+    c.name as club_name,
+    ep.user_id,
+    ep.status as participation_status
+FROM EVENTS e
+JOIN CLUBS c ON e.club_id = c.club_id
+JOIN EVENT_PARTICIPATION ep ON e.event_id = ep.event_id
+WHERE e.date > NOW();
+
+CREATE VIEW users_sessions_view AS
+SELECT 
+    u.user_id,
+    u.name,
+    u.username,
+    u.email,
+    u.mobile,
+    s.id as session_id,
+    s.secret,
+    s.expires_at
+FROM USERS u
+JOIN Sessions s ON u.user_id = s.user_id;
