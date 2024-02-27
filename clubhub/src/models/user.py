@@ -19,13 +19,15 @@ class UserKind(Enum):
         raise Exception("Unknown kind")
 
 class User:
-    username : str 
-    name : str
-    email : str 
-    mobile : str
-    kind : UserKind
+    user_id: int
+    username: str 
+    name: str
+    email: str 
+    mobile: str
+    kind: UserKind
 
-    def __init__(self, username, name, kind, email, mobile) -> None:
+    def __init__(self, user_id, username, name, kind, email, mobile) -> None:
+        self.user_id = user_id
         self.username = username
         self.name = name 
         self.kind = kind
@@ -40,13 +42,13 @@ class User:
 
         cur = db.cursor()
 
-        cur.execute("SELECT username, name, user_kind, email, mobile FROM Users WHERE user_id = %s", (user_id,))
+        cur.execute("SELECT user_id, username, name, user_kind, email, mobile FROM Users WHERE user_id = %s", (user_id,))
         entry = cur.fetchone()
 
         if entry == None:
             return None 
         else:
-            return User(entry[0], entry[1], UserKind.from_str(entry[2]), entry[3], entry[4])
+            return User(entry[0], entry[1], entry[2], UserKind.from_str(entry[3]), entry[4], entry[5])
     
     @staticmethod
     def return_list() -> List[List]:

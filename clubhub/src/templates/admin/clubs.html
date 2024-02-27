@@ -38,17 +38,24 @@
             <br> 
             
             <h2 style="text-align: center;">Site User information</h2> <!-- Heading for site user information section -->
-            
-            <div class="site_performance">
-                <div class="club_count">
-                    <i class="fa-solid fa-user-friends" style="display: flex; justify-content: center; align-items: center;"></i> <!-- Icon for total clubs count -->
-                    <h3>Clubs:{{club_count}}</h3> <!-- Display total clubs count -->
+            <div class="site-information">
+                <div class="info-card">
+                    <img src="{{ url_for('static', filename='images/basket.png') }}" alt="Other Logo"
+                    style="width: 60px; height: 60px;">
+                    <p>Clubs: {{club_count}}</p>
                 </div>
-                <div class="club_count">
-                    <i class="fas fa-users-cog" style="display: flex; justify-content: center; align-items: center;"></i> <!-- Icon for unapproved clubs count -->
-                    <h3>Unapproved Clubs:{{unapproved_clubs}} </h3> <!-- Display unapproved clubs count -->
+                <div class="info-card">
+                    <img src="{{ url_for('static', filename='images/calender.png') }}" alt="Other Logo"
+                    style="width: 70px; height: 70px;">
+                    <p>Events: {{event_count}}</p>
+                </div>
+                <div class="info-card">
+                    <img src="{{ url_for('static', filename='images/approval.png') }}" alt="Other Logo"
+                    style="width: 60px; height: 60px;">
+                    <p>Club Approvals needed:{{unapproved_clubs}} </p>
                 </div>
             </div>
+
         </div>
 
         <form id="create_club" action="/CreateClub" method="post"> <!-- Form to create a new club -->
@@ -103,6 +110,16 @@
                                 </div>
                             </div>
                             <div id="clubDetails{{ club.id }}" style="display: none; width: 100%;">
+                                <div class="divCell">Events
+                                    <li>
+                                        Event ID: {{ event.event_id }}<br>
+                                        Name: {{ event.name }}<br>
+                                        Club ID: {{ event.club_id }}<br>
+                                        Description: {{ event.description }}<br>
+                                        Date: {{ event.date }}<br>
+                                        Venue: {{ event.venue }}<br>
+                                    </li>
+                                {% endfor %}</div>
                                 <div class="divCell">Events {% for event in club.upcoming_events %}
                                     <li>
                                         Event ID: {{ event.event_id }}<br>
@@ -120,7 +137,6 @@
                                         Email: {{ member.email }}<br>
                                     </li>
                                 {% endfor %}</div>
-                                <!-- Add more cells as needed -->
                             </div>
                         </div>
                     {% endfor %}

@@ -7,6 +7,7 @@ from handlers.home import home_app
 from handlers.clubs import clubs_app
 from util import verify_session
 from globals import db
+from handlers.events import events_app
 
 app = Flask(__name__)
 app.secret_key = "super secret"
@@ -14,6 +15,7 @@ app.register_blueprint(users_app)
 app.register_blueprint(auth_app)
 app.register_blueprint(home_app)
 app.register_blueprint(clubs_app)
+app.register_blueprint(events_app)
 @app.get("/")
 def home():
     """
