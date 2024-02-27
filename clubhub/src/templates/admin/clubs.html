@@ -80,7 +80,7 @@
         <form id="club_list"> <!-- Form for club list -->
             <div class="club_table">
                 <h2 id="clubs">Clubs</h2> <!-- Heading for club list -->
-                <div class="headRow" >
+                <div class="headRow grid-row" >
                     <div class="divCell">Club_id</div> <!-- Table column header for club ID -->
                     <div class="divCell">Name</div> <!-- Table column header for club name -->
                     <div class="divCell">Description</div> <!-- Table column header for club description -->
@@ -90,7 +90,7 @@
                 </div>
                     {% for club in clubs %} <!-- Loop through the list of clubs -->
                         <div class="clubContainer">
-                            <div class="divRow" data-club-id="{{ club.id }}" onclick="toggleDetails('clubDetails{{club.id}}')"> <!-- Table row for each club -->
+                            <div class="divRow grid-row" data-club-id="{{ club.id }}" onclick="toggleDetails('clubDetails{{club.id}}')"> <!-- Table row for each club -->
                                 <div class="divCell">{{ club.id }}</div> <!-- Display club ID -->
                                 <div class="divCell">{{ club.name }}</div> <!-- Display club name -->
                                 <div class="divCell">{{ club.description }}</div> <!-- Display club description -->
@@ -110,35 +110,42 @@
                                 </div>
                             </div>
                             <div id="clubDetails{{ club.id }}" style="display: none; width: 100%;">
-                                <div class="divCell">Events
-                                    <li>
-                                        Event ID: {{ event.event_id }}<br>
-                                        Name: {{ event.name }}<br>
-                                        Club ID: {{ event.club_id }}<br>
-                                        Description: {{ event.description }}<br>
-                                        Date: {{ event.date }}<br>
-                                        Venue: {{ event.venue }}<br>
-                                    </li>
-                                {% endfor %}</div>
-                                <div class="divCell">Events {% for event in club.upcoming_events %}
-                                    <li>
-                                        Event ID: {{ event.event_id }}<br>
-                                        Name: {{ event.name }}<br>
-                                        Club ID: {{ event.club_id }}<br>
-                                        Description: {{ event.description }}<br>
-                                        Date: {{ event.date }}<br>
-                                        Venue: {{ event.venue }}<br>
-                                    </li>
-                                {% endfor %}</div>
-                                <div class="divCell">Members {% for member in club.memberships %}
-                                    <li>
-                                        User ID: {{ member.user_id }}<br>
-                                        Name: {{ member.name }}<br>
-                                        Email: {{ member.email }}<br>
-                                    </li>
-                                {% endfor %}</div>
+                                <div class="section">
+                                    <h2>{{ club.name }} Club Co-odinator:<h2><br>
+                                <div class="coord-details">
+                                    <li>Co-ordinator ID: {{ coords[club.coord].user_id }}</li>
+                                    <li>Name: {{ coords[club.coord].name }}</li>
+                                    <li>Email: {{ coords[club.coord].email }}</li>
+                                    <li>Mobile: {{ coords[club.coord].mobile }}</li>
+                                    <li>User Kind: {{ coords[club.coord].kind }}</li>
+                                </div>
+                                </div> 
+                                <br>
+                                <div class="section">
+                                    <h2>Events</h2>
+                                    {% for event in club.upcoming_events %}
+                                        <div class="coord-details">
+                                            <li>Event ID: {{ event.event_id }}</li>
+                                            <li>Name: {{ event.name }}</li>
+                                            <li>Club ID: {{ event.club_id }}</li>
+                                            <li>Description: {{ event.description }}</li>
+                                            <li>Date: {{ event.date }}</li>
+                                            <li>Venue: {{ event.venue }}</li>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+
+                                <div class="section">
+                                    <h2>Members</h2>
+                                    {% for member in club.memberships %}
+                                        <div class="coord-details">
+                                            <li>User ID: {{ member.user_id }}</li>
+                                            <li>Name: {{ member.name }}</li>
+                                            <li>Email: {{ member.email }}</li>
+                                        </div>
+                                    {% endfor %}
+                                </div>
                             </div>
-                        </div>
                     {% endfor %}
             </div>
         </form>
@@ -150,4 +157,10 @@
     </div>
 </main>
 </body>
+<style>
+    .grid-row {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+    }
+</style>
 </html>

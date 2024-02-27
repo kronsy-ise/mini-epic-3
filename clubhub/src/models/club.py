@@ -98,10 +98,20 @@ class Club:
         cur.execute("SELECT user_id, username, name, user_kind, email, mobile FROM Users WHERE user_id IN (SELECT user_id FROM CLUB_MEMBERSHIP WHERE club_id = %s)", (club_id,))
         entries = cur.fetchall()
         return [models.User(*entry) for entry in entries]
-    
+    @staticmethod
     def club_count():
         # Return the count of clubs in the database
         cur = db.cursor()
         cur.execute("SELECT COUNT(*) FROM Clubs")
         count = cur.fetchone()
         return count[0]
+    @staticmethod
+    def return_club_from_coord(coord: int):
+        # Return the club associated with a given coordinator
+        cur = db.cursor()
+        cur.execute("SELECT club_id, name, description, validity FROM Clubs WHERE user_id = %s", (coord,))
+        entry = cur.fetchone()
+        if entry is None:
+            return None
+        return Club(entry[0], entry[1], entry[2], entry[3], coord)
+    

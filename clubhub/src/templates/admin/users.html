@@ -9,7 +9,6 @@
     <script src="https://kit.fontawesome.com/c2b7a7d1d7.js" crossorigin="anonymous"></script>
 </head>
 <body>
-
     {% include "scroll_script.html" %}
     <main class="app__main">
         <nav class="navbar">
@@ -27,6 +26,9 @@
             </div>
         </nav>
         <div class="app__content">
+            {% if message %}
+                <p>{{ message }}</p>
+            {% endif %}
             <div class="user_table">
                 <h1 class="divRow">Admin Home</h1>
                 <p>As Admin, you have access to all permissions!<br>You can view, update, and carry out queries on the user database using the tables below.</p>

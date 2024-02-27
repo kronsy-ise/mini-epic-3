@@ -1,5 +1,6 @@
 from __future__ import annotations
 from flask import Blueprint, redirect, render_template,flash
+from models.club import Club
 from globals import db
 from models.user import User
 from models.user import UserKind
@@ -78,16 +79,27 @@ def approve_coordinator(coord_id):
 def reject(user_id):
     # Connect to your database
     cur = db.cursor()
+
+    # Check if the user is associated with a club
+    club = Club.return_club_from_coord(user_id)
+    print(club)
+    if club is not None:
+        print("club is not none")
+        print("Cannot delete user because they are a coordinator of a club.")
+        return redirect("/users")
+
     # Execute the DELETE statement
     try:
         cur.execute("DELETE FROM USERS WHERE user_id = %s", (user_id,))
         db.commit()
     except pgerrors.ForeignKeyViolation as e:
+        print("pgerrors.ForeignKeyViolation")
         db.rollback()  # rollback the transaction
-        flash("Cannot delete user because they are still referenced in the clubs table.")
+        print("Cannot delete user because they are still referenced in the clubs table.")
     except Exception as e:
+        print("Exception")
         db.rollback()  # rollback the transaction
-        flash(e)
+        print(e)
         
     response = redirect("/users")
     # Close the cursor and connection

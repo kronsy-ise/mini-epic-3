@@ -130,6 +130,7 @@ html, body {
     background: #bdbdbd;
     color: #ffffff;
     display: flex;
+    width: 1200px;
 }
 
 .divRow {
@@ -137,17 +138,18 @@ html, body {
     justify-content: space-between;
     align-items: center;
     padding: 10px 0;
+    width: 1200px;
 }
-
 .divRow::after{    
     text-align: center;
 }
 
 .divCell {
-    flex: 1 0 0;
+    flex: 1;
     text-align: center;
-    padding: 10px;
     display: flex;
+    border-right: 1px solid #61687a80;
+    padding: 10px;
 }
 
 .divCell:first-child {
@@ -158,8 +160,9 @@ html, body {
     border-right: #ccc 1px solid;
 }
 
-.divRow:nth-child(2n+3) {
-    background: #e9e9e9;
+
+.divRow:hover {
+    background-color: rgba(0, 0, 139, 0.5); /* Opaque dark blue */
 }
 
 .divActions {
@@ -299,3 +302,25 @@ html, body {
     background-color: white;
 }
 
+.coord-details {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.coord-details li {
+    flex: 1 0 auto;
+    margin: 0 10px;
+}
+.section {
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #000;
+    border-radius: 10px;
+}
+
+.coord-details {
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #000;
+    border-radius: 10px;
+}
