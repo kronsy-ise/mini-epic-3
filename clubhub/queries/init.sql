@@ -64,6 +64,7 @@ CREATE TABLE EVENT_PARTICIPATION(
   PRIMARY KEY(event_id, user_id),
 
   status TEXT NOT NULL,--pending/approved/rejected
+  status TEXT NOT NULL,--pending/approved/rejected
   
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
@@ -74,6 +75,7 @@ CREATE TABLE CLUB_MEMBERSHIP(
   user_id BIGINT NOT NULL REFERENCES Users(user_id),
   PRIMARY KEY(club_id, user_id),
 
+  status TEXT NOT NULL,--pending/approved/rejected
   status TEXT NOT NULL,--pending/approved/rejected
   
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -121,6 +123,7 @@ BEGIN
     NEW.club_id = 1;
   NEW.club_id = (SELECT MAX(club_id) FROM CLUBS) + 1;
   END IF;
+  END IF;
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -166,7 +169,20 @@ EXECUTE FUNCTION approve_event_participation();
 --   RETURN NEW;
 -- END;
 -- $$ LANGUAGE plpgsql;
+-- -- Function to set the coordinator_id to the user_id
+-- CREATE OR REPLACE FUNCTION set_club_coordinator()
+-- RETURNS TRIGGER AS $$
+-- BEGIN
+--   NEW.coordinator_id = NEW.user_id;
+--   RETURN NEW;
+-- END;
+-- $$ LANGUAGE plpgsql;
 
+-- -- Trigger to execute the set_club_coordinator function before inserting into Clubs table
+-- CREATE TRIGGER set_club_coordinator_trigger
+-- BEFORE INSERT ON CLUBS
+-- FOR EACH ROW
+-- EXECUTE FUNCTION set_club_coordinator();
 -- -- Trigger to execute the set_club_coordinator function before inserting into Clubs table
 -- CREATE TRIGGER set_club_coordinator_trigger
 -- BEFORE INSERT ON CLUBS
@@ -232,6 +248,34 @@ AFTER INSERT ON USERS
 FOR EACH ROW
 EXECUTE FUNCTION check_entries();
 
+-- Function to add one club to the database upon initialization
+CREATE OR REPLACE FUNCTION add_initial_club()
+RETURNS VOID AS $$
+BEGIN
+  IF (SELECT COUNT(*) FROM USERS) < 2 OR EXISTS (SELECT 1 FROM CLUBS WHERE name = 'Club Name') THEN
+    RETURN;
+  END IF;
+
+  INSERT INTO CLUBS (name, description, coordinator_id)
+  VALUES ('Club Name', 'Club Description', (SELECT user_id FROM USERS LIMIT 1));
+END;
+$$ LANGUAGE plpgsql;
+
+-- Function to assign the first user in the users table a membership to the club
+CREATE OR REPLACE FUNCTION assign_membership_to_first_user()
+RETURNS VOID AS $$
+BEGIN
+  IF (SELECT COUNT(*) FROM USERS) < 2 OR EXISTS (SELECT 1 FROM CLUB_MEMBERSHIP WHERE user_id = (SELECT user_id FROM USERS ORDER BY user_id LIMIT 1)) THEN
+    RETURN;
+  END IF;
+
+  INSERT INTO CLUB_MEMBERSHIP (club_id, user_id, status, created_at, updated_at)
+  SELECT 1, user_id, 'approved', NOW(), NOW()
+  FROM USERS
+  ORDER BY user_id
+  LIMIT 1;
+END;
+$$ LANGUAGE plpgsql;
 -- Function to add one club to the database upon initialization
 CREATE OR REPLACE FUNCTION add_initial_club()
 RETURNS VOID AS $$
