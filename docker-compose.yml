@@ -1,0 +1,26 @@
+services:
+  database:
+    image: postgres:16.1-alpine
+    container_name: pgsql
+    restart: always
+    ports: 
+    - 5435:5432
+
+    environment:
+      - POSTGRES_USER=default_user
+      - POSTGRES_PASSWORD=password1
+      - POSTGRES_DB=application
+  
+  application:
+    build:
+      dockerfile: ./Dockerfile
+    links:
+      - "database:database"
+
+    ports:
+      - "5000:5000"
+    depends_on:
+      - database
+    environment:
+      - DATABASE_URL=postgres://default_user:password1@database:5432/application
+ 

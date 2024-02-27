@@ -1,25 +1,17 @@
 from __future__ import annotations
-
-import json
 import psycopg2
 from urllib.parse import urlparse
-import os
 from flask import request
 
 
-my_path = os.path.abspath(os.path.dirname(__file__))
-CONFIG_PATH = os.path.join(my_path, "..", "config.json")
+# my_path = os.path.abspath(os.path.dirname(__file__))
+# CONFIG_PATH = os.path.join(my_path, "..", "config.json")
 
-def load_configuration():
-    config_file = open(CONFIG_PATH, "r")
-
-    configuration = json.load(config_file)
-
-    return configuration
 
 
 def open_database(database_url) -> psycopg2.connection:
-    url = urlparse(database_url)
+    print("DATABASE URL: ", database_url)
+    url = urlparse(url=database_url, scheme="postgres")
 
     db_username = url.username
     db_password = url.password
@@ -27,6 +19,11 @@ def open_database(database_url) -> psycopg2.connection:
     db_port = url.port
     db_host= url.hostname
 
+    print("username", db_username)
+    print("password", db_password)
+    print("path", db_path)
+    print("port", db_port)
+    print("host", db_host)
     db = psycopg2.connect(user=db_username, password=db_password, database=db_path, port=db_port, host=db_host)
 
     return db
