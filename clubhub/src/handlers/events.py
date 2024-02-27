@@ -34,14 +34,3 @@ def events():
     else:
         return render_template("awaiting_approval.html")
     
-
-@events_app.route("/CreateEvent", methods=['GET', 'POST'])
-def create_event():
-    club_id = request.form.get('club_id')
-    name = request.form.get('name')
-    description = request.form.get('description')
-    date = request.form.get('datetime')
-    venue = request.form.get('venue')    
-    Event.add_event(club_id, name, description, date, venue)
-    return redirect("/events")
-
