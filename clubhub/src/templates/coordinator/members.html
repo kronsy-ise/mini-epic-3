@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coordinator Home | ClubHub</title>
+    <title>Coordinator Members | ClubHub</title>
     <style>
         body {
             margin: 0;
@@ -178,29 +178,67 @@
         <input type="text" placeholder="Search" style="float: right; margin: 14px 16px;">
     </div>
 
-    <!-- New Coordinator Home Page Section -->
     <div class="options-container">
+        <!-- Table for Club Members -->
         <div class="option-box">
-            <img src="clubhub/src/static/styles/images/Home-Pic.jpg" alt="Members" class="option-image">
-            <div class="option-title">Members</div>
-            <div class="option-description">Manage club members.</div>
-            <a href="/coordinator/members" class="option-button">Go to Members</a>
+            <h2>Club Members</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Loop through club members and display their information -->
+                    {% for member in club_members %}
+                        <tr>
+                            <td>{{ member.user_id }}</td>
+                            <td>{{ member.name }}</td>
+                            <td>{{ member.email }}</td>
+                            <td>{{ member.mobile }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
+    
+        <!-- Table for Membership Requests -->
         <div class="option-box">
-            <img src="club_image.jpg" alt="Clubs" class="option-image">
-            <div class="option-title">Clubs</div>
-            <div class="option-description">Manage clubs within the system.</div>
-            <a href="/coordinator/clubs" class="option-button">Go to Clubs</a>
-        </div>
-        <div class="option-box">
-            <img src="events_image.jpg" alt="Events" class="option-image">
-            <div class="option-title">Events</div>
-            <div class="option-description">Manage club events.</div>
-            <a href="/coordinator/events" class="option-button">Go to Events</a>
+            <h2>Membership Requests</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Loop through membership requests and display user information -->
+                    {% for request in membership_requests %}
+                        <tr>
+                            <td>{{ request.user_id }}</td>
+                            <td>{{ request.name }}</td>
+                            <td>{{ request.email }}</td>
+                            <td>{{ request.mobile }}</td>
+                            <td>
+                                <form method="post" action="/manage-membership/{{ club_id }}/{{ request.user_id }}">
+                                    <input type="hidden" name="action" value="approve">
+                                    <button type="submit" class="option-button">Approve</button>
+                                </form>
+                                <form method="post" action="/manage-membership/{{ club_id }}/{{ request.user_id }}">
+                                    <input type="hidden" name="action" value="reject">
+                                    <button type="submit" class="option-button">Reject</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
-    <!-- End of Coordinator Home Page Section -->
-
-</body>
-
-</html>
