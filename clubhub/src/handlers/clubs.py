@@ -10,8 +10,6 @@ clubs_app = Blueprint('clubs_app', __name__)
 @clubs_app.get("/clubs")
 def clubs():
     auth_user = util.verify_session()
-    print(auth_user.kind)
-
     if auth_user == None:
         return redirect("/")
 

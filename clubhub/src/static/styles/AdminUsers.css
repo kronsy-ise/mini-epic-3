@@ -86,14 +86,13 @@ html, body {
 .user_table {
     min-width: 600px;
     width: 80%;
-    margin-left: 320px;
     border-collapse: collapse;
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr,1fr,1fr,1fr,1fr;
     gap: 10px;
-    transform: scale(0.8);
+    transform: scale(1);
 }
 
 @media (max-width: 1024px) {
@@ -125,6 +124,8 @@ html, body {
 .divRow::after{    
     text-align: center;
 }
+.divRow:hover{    
+    background-color: #ccc;}
 
 .divCell {
     flex: 1;
@@ -203,19 +204,22 @@ html, body {
     padding: 60px;
 }
 .site-information {
-    transform: scale(1.1);
+    transform: scale(1.);
     display: flex;
     flex-direction: row; 
     justify-content: space-around;
     flex-wrap: wrap;
-    width: 100%;
-    margin-bottom: 50px;    
+    margin-bottom: 0px;    
     border: 1px solid #000;
     border-radius: 5px;
     background-color: #0056b3; 
     color: #3d2630;
     padding: 20px; 
-    color: #3d2630;}
+    color: #3d2630;
+    box-sizing: border-box; 
+    width: 80%;    
+    margin-left: 305px;
+}
 
 .info-card {
     border: 1px solid #000;
@@ -226,4 +230,14 @@ html, body {
     box-sizing: border-box;
     text-align: center;
     background-color: white;
+}
+
+#form1{
+    margin: 20px 20px 20px 320px; /* Adjust the left margin value to 320px */
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    border: 2px solid black;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 }

@@ -37,9 +37,7 @@
             <h1 class="box">Manage Clubs</h1> <!-- Heading for club management section -->
             </p>
             <br> 
-            
-            <h2 style="text-align: center;">Site User information</h2> <!-- Heading for site user information section -->
-            <div class="site-information">
+                <div class="site-information">
                 <div class="info-card">
                     <img src="{{ url_for('static', filename='images/basket.png') }}" alt="Other Logo"
                     style="width: 60px; height: 60px;">
@@ -60,7 +58,6 @@
         </div>
 
         <form id="create_club" action="/CreateClub" method="post"> <!-- Form to create a new club -->
-            <div class="club_table">
                 <div class="club_form">
                     <h2>Create a new Club</h2> <!-- Heading for create club form -->
                     <label for="name">Club Name:</label><br>
@@ -75,7 +72,6 @@
                     </select><br>
                     <input type="submit" value="Submit"> <!-- Submit button for creating a club -->
                 </div>
-            </div>
         </form>
         
         <form id="club_list"> <!-- Form for club list -->
@@ -91,26 +87,21 @@
                 </div>
                     {% for club in clubs %} <!-- Loop through the list of clubs -->
                         <div class="clubContainer">
-                            <div class="divRow grid-row" data-club-id="{{ club.id }}" onclick="toggleDetails('clubDetails{{club.id}}')"> <!-- Table row for each club -->
-                                <div class="divCell">{{ club.id }}</div> <!-- Display club ID -->
+                            <div class="divRow grid-row" data-club-id="{{ club.club_id }}" onclick="toggleDetails('clubDetails{{club.club_id}}')"> <!-- Table row for each club -->
+                                <div class="divCell">{{ club.club_id }}</div> <!-- Display club ID -->
                                 <div class="divCell">{{ club.name }}</div> <!-- Display club name -->
                                 <div class="divCell">{{ club.description }}</div> <!-- Display club description -->
                                 <div class="divCell">{{ club.validity }}</div> <!-- Display club validity -->
                                 <div class="divCell">{{ club.coord }}</div> <!-- Display club coordinator ID -->
                                                                         
                                 <div class="divActions" style="display: flex;"> <!-- Actions for each club -->
-                                                    
-                                    <form method="POST" action="/manage-club/{{ club.id }}"> <!-- Form to manage a club -->
-                                        <button class="action" type="submit">Manage</button> <!-- Manage button -->
-                                    </form>
-
-                                    <form method="POST" action="/delete-club/{{ club.id }}"> <!-- Form to delete a club -->
+                                    <form method="POST" action="/delete-club/{{ club.club_id }}"> <!-- Form to delete a club -->
                                         <button class="action" type="submit">Delete</button> <!-- Delete button -->
                                     </form>
 
                                 </div>
                             </div>
-                            <div id="clubDetails{{ club.id }}" style="display: none; width: 100%;">
+                            <div id="clubDetails{{ club.club_id }}" style="display: none; width: 100%;">
                                 <div class="section">
                                     <h2>{{ club.name }} Club Co-odinator:<h2><br>
                                 <div class="coord-details">

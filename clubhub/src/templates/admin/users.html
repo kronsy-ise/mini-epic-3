@@ -11,6 +11,7 @@
 <body>
     {% include "scroll_script.html" %}
     {%include "dropdown_script.html" %}
+    
     <main class="app__main">
         <nav class="navbar">
             <div class="app_logo_container">
@@ -29,12 +30,6 @@
             </div>
         </nav>
         <div class="app__content">
-            <div class="user_table">
-                <h1 class="divRow">Admin Home</h1>
-                <p>As Admin, you have access to all permissions!<br>You can view, update, and carry out queries on the user database using the tables below.</p>
-                <br> 
-                <h2 style="text-align: center;">Site User information</h2>
-                
                 <div class="site-information">
                     <div class="info-card">
                         <img src="{{ url_for('static', filename='images/user_icon.png') }}" alt="User Logo"
@@ -50,18 +45,93 @@
                     <div class="info-card">
                         <img src="{{ url_for('static', filename='images/calender.png') }}" alt="Other Logo"
                         style="width: 70px; height: 70px;">
-                        <p>Events: 20</p>
+                        <p>Events: {{event_count}}</p>
                     </div>
                     <div class="info-card">
                         <img src="{{ url_for('static', filename='images/approval.png') }}" alt="Other Logo"
                         style="width: 60px; height: 60px;">
                         <p>Approvals needed:{{unapproved_count}} </p>
                     </div>
-                </div>
             </div>
             <form id="form1">
                 <div class="user_table">
-                    <h2 id="users">Users</h2>
+                        <h2 id="users">Unapproved Users</h2>   
+                    <div class="headRow">
+                        <div class="divCell">User_id</div>
+                        <div class="divCell">Username</div>
+                        <div class="divCell">Fullname</div>
+                        <div class="divCell">Kind</div>
+                        <div class="divCell">Email</div>
+                        <div class="divCell">PhoneNumber</div>
+                        <div class="divCell">Actions</div>
+                    </div>
+                    {% for user in unapproved_users %}
+                    <div class="divRow" data-user-id="{{user.user_id }}" onclick="toggleDetails('userDetails{{user.user_id}}')">
+                        <div class="divCell">{{ user.user_id }}</div>
+                        <div class="divCell">{{ user.username }}</div>
+                        <div class="divCell">{{ user.name }}</div>
+                        <div class="divCell">{{ user.kind }}</div>
+                        <div class="divCell">{{ user.email }}</div>
+                        <div class="divCell">{{ user.mobile }}</div>
+                        <div class="divCell">
+                            {% if user.id != 1 %}
+                            <div class="divActions" style="display: flex;">
+                                <form method="POST" action="/approve-student/{{ user.user_id }}">
+                                    <button class="action" type="submit">Student</button>
+                                </form>
+                                <form method="POST" action="/approve-coord/{{ user.user_id }}">
+                                    <button class="action" type="submit">Co-ordinator</button>
+                                </form>
+                                <form method="POST" action="/reject-user/{{ user.user_id }}">
+                                    <button class="action" type="submit">Reject</button>
+                                </form>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div id="userDetails{{ user.id }}" style="display: none; width: 100%;">
+                        {% if user.kind == "coordinator" %}
+                        <div class="section">
+                            <h2>{{ user.id }} is a coordinator for:</h2>
+                            <div class="coord-details">
+                            {% set club = get_club(user.user_id) %}
+                                <li>Club ID: {{ club.user_id }}</li>
+                                <li>Name: {{ club.name }}</li>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="section">
+                            <h2>{{ user.user_id }} is a member of:</h2>
+                            {% if user is defined %}
+                            {% set clubs = get_user_clubs(user.user_id) %}
+                            {% for club in clubs %}
+                            <div class="coord-details">
+                                <li>Club ID: {{ club.user_id }}</li>
+                                <li>Name: {{ club.name }}</li>
+                            </div>
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                        
+                        <div class="section">
+                            <h2>{{ user.user_id }} has event membership for:</h2>
+                            {% set events = get_user_events(user.user_id) %}
+                            {% for event in user.events %}
+                            <div class="coord-details">
+                                <li>Event ID: {{ event.user_id }}</li>
+                                <li>Name: {{ event.name }}</li>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </form>
+
+            <form id="form1">
+                <div class="user_table">
+                        <h2 id="users">Users</h2>   
                     <div class="headRow">
                         <div class="divCell">User_id</div>
                         <div class="divCell">Username</div>
@@ -80,13 +150,13 @@
                             {% if user.0 != 1 %}
                             <div class="divActions" style="display: flex;">
                                 <form method="POST" action="/approve-student/{{ user.0 }}">
-                                    <button class="action" type="submit">Student</button>
+                                    <button class="action" type="submit">Set Student</button>
                                 </form>
                                 <form method="POST" action="/approve-coord/{{ user.0 }}">
-                                    <button class="action" type="submit">Co-ordinator</button>
+                                    <button class="action" type="submit">Set Co-ordinator</button>
                                 </form>
                                 <form method="POST" action="/reject-user/{{ user.0 }}">
-                                    <button class="action" type="submit">Reject</button>
+                                    <button class="action" type="submit">Delete</button>
                                 </form>
                             </div>
                             {% endif %}

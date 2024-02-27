@@ -5,15 +5,15 @@ from globals import db
 import models
 
 class Club:
-    id: int
+    club_id: int
     name: str 
     description: str
     validity: str
     coord: int 
 
-    def __init__(self, id, name, description, validity, coord) -> None:
+    def __init__(self, club_id, name, description, validity, coord) -> None:
         # Initialize Club object with provided attributes
-        self.id = id
+        self.club_id = club_id
         self.name = name 
         self.description = description
         self.validity = validity
@@ -21,7 +21,7 @@ class Club:
 
     def __repr__(self) -> str:
         # Return a string representation of the Club object
-        return f"Club {self.name} <{self.id}>"
+        return f"Club {self.name} <{self.club_id}>"
 
     
     def get_memberships(self) -> List[models.User]:
@@ -96,6 +96,7 @@ class Club:
         cur.execute("SELECT user_id, username, name, user_kind, email, mobile FROM Users WHERE user_id IN (SELECT user_id FROM CLUB_MEMBERSHIP WHERE club_id = %s)", (club_id,))
         entries = cur.fetchall()
         return [models.User(*entry) for entry in entries]
+    
     @staticmethod
     def club_count():
         # Return the count of clubs in the database
@@ -103,6 +104,7 @@ class Club:
         cur.execute("SELECT COUNT(*) FROM Clubs")
         count = cur.fetchone()
         return count[0]
+    
     @staticmethod
     def return_club_from_coord(coord: int):
         # Return the club associated with a given coordinator
