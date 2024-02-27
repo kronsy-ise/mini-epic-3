@@ -1,6 +1,6 @@
-<!-- FILEPATH: /c:/Users/ticta/MyRepos/mini-epic-3/clubhub/src/templates/admin/clubs.html -->
+<!-- FILEPATH: /c:/Users/ticta/MyRepos/mini-epic-3/eventhub/src/templates/admin/events.html -->
 
-<!-- This is the HTML template for the admin club page in the ClubHub application. It displays a table containing all the club data and provides options to create, manage, and delete clubs. -->
+<!-- This is the HTML template for the admin event page in the ClubHub application. It displays a table containing all the event data and provides options to create, manage, and delete events. -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -9,7 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link href="{{ url_for('static', filename='styles/AdminClubs.css') }}" rel="stylesheet">    
+    <link href="{{ url_for('static', filename='styles/AdminEvents.css') }}" rel="stylesheet">    
     <script src="https://kit.fontawesome.com/c2b7a7d1d7.js" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -23,7 +23,7 @@
             <ul class="nav__links">
                 <li><a href="/clear-cookies">Logout <i class="fa-solid fa-user"></i></a></li> <!-- Logout link -->
                 <li><a href="/users">Users <i class="fa-solid fa-users"></i></a></li> <!-- Users link -->
-                <li><a href="/club_list">Clubs <i class="fa-solid fa-volleyball"></i></a></li> <!-- Clubs link -->
+                <li><a href="/clubs">Clubs <i class="fa-solid fa-volleyball"></i></a></li> <!-- Clubs link -->
                 <li><a href="/events">Events <i class="fa-solid fa-calendar-days"></i></a></li> <!-- Events link -->
                 <li><a href="/home">Home <i class="fa-solid fa-chart-bar"></i></a></li> <!-- Dashboard link -->
             </ul>
@@ -33,8 +33,8 @@
     <div class="app__content">
         {% include "scroll_script.html" %} <!-- Include a script for scrolling functionality -->
         {%include "dropdown_script.html" %}
-        <div class="club_table">
-            <h1 class="box">Manage Clubs</h1> <!-- Heading for club management section -->
+        <div class="event_table">
+            <h1 class="box">Manage Clubs</h1> <!-- Heading for event management section -->
             </p>
             <br> 
             
@@ -59,10 +59,10 @@
 
         </div>
 
-        <form id="create_club" action="/CreateClub" method="post"> <!-- Form to create a new club -->
-            <div class="club_table">
-                <div class="club_form">
-                    <h2>Create a new Event</h2> <!-- Heading for create club form -->
+        <form id="create_event" action="/CreateClub" method="post"> <!-- Form to create a new event -->
+            <div class="event_table">
+                <div class="event_form">
+                    <h2>Create a new Event</h2> <!-- Heading for create event form -->
                     <label for="club">Club:</label><br>
                     <select id="club" name="club" required> <!-- Dropdown for selecting club coordinator -->
                         {% for club in clubs %}
@@ -99,7 +99,7 @@
                             <div class="divCell">{{ event.description }}</div> <!-- Display event description -->
                             <div class="divCell">{{ event.date }}</div> <!-- Display event date -->
                             <div class="divCell">{{ event.venue }}</div> <!-- Display event venue -->
-                            <div class="divCell">{{ event.club_id }}</div> <!-- Display club ID -->
+                            <div class="divCell">{{ event.club_id }}</div> <!-- Display event ID -->
         
                             <div class="divActions" style="display: flex;"> <!-- Actions for each event -->
                                 <!-- Add your event actions here -->
