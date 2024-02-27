@@ -95,11 +95,6 @@
                                 <div class="divCell">{{ club.coord }}</div> <!-- Display club coordinator ID -->
                                                                         
                                 <div class="divActions" style="display: flex;"> <!-- Actions for each club -->
-                                                    
-                                    <form method="POST" action="/manage-club/{{ club.club_id }}"> <!-- Form to manage a club -->
-                                        <button class="action" type="submit">Manage</button> <!-- Manage button -->
-                                    </form>
-
                                     <form method="POST" action="/delete-club/{{ club.club_id }}"> <!-- Form to delete a club -->
                                         <button class="action" type="submit">Delete</button> <!-- Delete button -->
                                     </form>

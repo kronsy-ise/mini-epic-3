@@ -64,7 +64,7 @@
                     <label for="club">Club:</label><br>
                     <select id="club" name="club" required> <!-- Dropdown for selecting club coordinator -->
                         {% for club in clubs %}
-                            <option value="{{ club.id }}">{{ club.name }}</option> <!-- Display each coordinator option -->
+                            <option value="{{ club.club_id }}">{{ club.club_id }}</option> <!-- Display each coordinator option -->
                         {% endfor %}
                     </select><br>
                     <label for="name">Name:</label><br>
@@ -93,8 +93,8 @@
                 </div>
                 {% for event in events %} <!-- Loop through the list of events -->
                     <div class="eventContainer">
-                        <div class="divRow" data-event-id="{{ event.id }}" onclick="toggleDetails('eventDetails{{event.id}}')"> <!-- Table row for each event -->
-                            <div class="divCell">{{ event.id }}</div> <!-- Display event ID -->
+                        <div class="divRow" data-event-id="{{ event.event_id }}" onclick="toggleDetails('eventDetails{{event.event_id}}')"> <!-- Table row for each event -->
+                            <div class="divCell">{{ event.event_id }}</div> <!-- Display event ID -->
                             <div class="divCell">{{ event.name }}</div> <!-- Display event name -->
                             <div class="divCell">{{ event.description }}</div> <!-- Display event description -->
                             <div class="divCell">{{ event.date }}</div> <!-- Display event date -->
@@ -105,8 +105,21 @@
                                 <!-- Add your event actions here -->
                             </div>
                         </div>
-                        <div id="eventDetails{{ event.id }}" style="display: none; width: 100%;">
-                            <!-- Add more event details here -->
+                        <div id="eventDetails{{ event.event_id }}" style="display: none; width: 100%;">
+                            <div class="eventDetails">
+                                <h3>Event Details</h3>
+                                <p>Event ID: {{ event.event_id }}</p>
+                                <p>Name: {{ event.name }}</p>
+                                <p>Description: {{ event.description }}</p>
+                                <p>Date: {{ event.date }}</p>
+                                <p>Venue: {{ event.venue }}</p>
+                                <p>Club ID: {{ event.club_id }}</p>
+                            </div>
+                            <div class="eventActions">
+                                <a href="/event/{{ event.id }}">View</a>
+                                <a href="/event/{{ event.id }}/edit">Edit</a>
+                                <a href="/event/{{ event.id }}/delete">Delete</a>
+                            </div>
                         </div>
                     </div>
                 {% endfor %}
