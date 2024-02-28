@@ -1,11 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Home | ClubHub</title>
-</head>
-<body>
-    
-</body>
-</html>
+{% extends 'wrapper.html' %}
+
+{%block head%}
+<link rel="stylesheet" href="/static/styles/UserHome.css">
+{%endblock%}
+{% block content %}
+
+<div class="home_container">
+    <div class="memberships_container">
+        <h2>Memberships</h2>
+    </div>
+
+    <div class="events_container">
+        <h2>Participating Events</h2>
+    </div>
+</div>
+
+
+{% endblock %}

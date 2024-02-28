@@ -5,7 +5,9 @@ from models.user import UserKind,User
 import util
 from models.club import Club
 from models.event import Event
+import navigations
 events_app = Blueprint('events_app', __name__)
+
 
 @events_app.get("/events")
 def events():
@@ -28,7 +30,18 @@ def events():
         return render_template("admin/events.html",clubs=clubs,users=users,events=events,event_count=event_count,
                                unapproved_event_memberships=unapproved_event_memberships,club_count=club_count)
     elif auth_user.kind == UserKind.Student:
-        return render_template("user/events.html")
+
+        memberships = User.get_user_clubs(auth_user.user_id)
+        membership_ids = [m.club_id for m in memberships]
+        all_events = Event.return_list()
+
+        club_events = [e for e in all_events if e.club_id in membership_ids]
+        other_events = [e for e in all_events if e.club_id not in membership_ids]
+
+        print(membership_ids)
+        return render_template("user/events.html",
+         navigations=navigations.USER_NAV,
+         user_kind="Student")
     elif auth_user.kind == UserKind.Coordinator:
         return render_template("coordinator/events.html")
     else:

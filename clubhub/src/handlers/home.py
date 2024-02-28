@@ -8,6 +8,7 @@ import util
 from models.user import User
 import os
 from models.club import Club
+import navigations
 from models.event import Event
 home_app = Blueprint('home_app', __name__)
 
@@ -42,7 +43,16 @@ def homepage():
                                club_count=club_count,event_count=event_count)   
 
     elif auth_user.kind == UserKind.Student:
-        return render_template("user/home.html")
+        memberships = User.get_user_clubs(auth_user.user_id)
+        events = User.get_user_events(auth_user.user_id)
+
+
+
+        return render_template("user/home.html",
+            navigations=navigations.USER_NAV,
+            user_kind = "Student",
+            memberships = memberships,
+            enrolled_events = events)
     elif auth_user.kind == UserKind.Coordinator:
         return render_template("coordinator/home.html")
     else:
