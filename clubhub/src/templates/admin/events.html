@@ -34,9 +34,6 @@
         {% include "scroll_script.html" %} <!-- Include a script for scrolling functionality -->
         {%include "dropdown_script.html" %}
         <div class="event_table">
-            <h1 class="box">Manage Clubs</h1> <!-- Heading for event management section -->
-            </p>
-            <br> 
             <div class="site-information">
                 <div class="info-card">
                     <img src="{{ url_for('static', filename='images/basket.png') }}" alt="Other Logo"
@@ -51,13 +48,13 @@
                 <div class="info-card">
                     <img src="{{ url_for('static', filename='images/approval.png') }}" alt="Other Logo"
                     style="width: 60px; height: 60px;">
-                    <p>Event Approvals needed:{{unapproved_event_memberships}} </p>
+                    <p>Event Approvals needed: {{unapproved_event_memberships}} </p>
                 </div>
             </div>
 
         </div>
         <form id="event_list"> <!-- Form for event list -->
-            <div class="event_table">
+            <div class="event_table" style ="transform: scale(1.5); margin-right: 200px;">
                 <h2 id="events">Events</h2> <!-- Heading for event list -->
                 <div class="headRow" >
                     <div class="divCell">Event ID</div> <!-- Table column header for event ID -->

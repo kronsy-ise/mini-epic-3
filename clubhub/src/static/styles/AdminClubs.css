@@ -332,3 +332,12 @@ html, body {
     text-align: center;
     padding: 60px;
 }
+#club_form{
+    margin: 20px 20px 20px 320px; /* Adjust the left margin value to 320px */
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    border: 2px solid black;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}

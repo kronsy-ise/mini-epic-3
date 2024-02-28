@@ -1,7 +1,7 @@
 -- First, we drop all things
 DROP TRIGGER IF EXISTS set_user_kind_trigger ON Users CASCADE;
 DROP FUNCTION IF EXISTS set_user_kind() CASCADE;
-DROP TABLE IF EXISTS Sessions;
+DROP TABLE IF EXISTS Sessions CASCADE;
 DROP TABLE IF EXISTS Users CASCADE;
 DROP TYPE IF EXISTS UserKind CASCADE;
 DROP TABLE IF EXISTS CLUBS CASCADE;
@@ -10,8 +10,6 @@ DROP TABLE IF EXISTS EVENT_PARTICIPATION CASCADE;
 DROP TABLE IF EXISTS CLUB_MEMBERSHIP CASCADE;
 DROP TRIGGER IF EXISTS set_user_kind_trigger ON Users CASCADE;
 DROP FUNCTION IF EXISTS set_user_kind() CASCADE;
-DROP TABLE IF EXISTS USERS CASCADE;
-DROP TABLE IF EXISTS Sessions;
 DROP TYPE IF EXISTS UserKind CASCADE;
 
 
@@ -158,20 +156,6 @@ BEFORE INSERT ON EVENT_PARTICIPATION
 FOR EACH ROW
 EXECUTE FUNCTION approve_event_participation();
 
--- -- Function to set the coordinator_id to the user_id
--- CREATE OR REPLACE FUNCTION set_club_coordinator()
--- RETURNS TRIGGER AS $$
--- BEGIN
---   NEW.coordinator_id = NEW.user_id;
---   RETURN NEW;
--- END;
--- $$ LANGUAGE plpgsql;
-
--- -- Trigger to execute the set_club_coordinator function before inserting into Clubs table
--- CREATE TRIGGER set_club_coordinator_trigger
--- BEFORE INSERT ON CLUBS
--- FOR EACH ROW
--- EXECUTE FUNCTION set_club_coordinator();
 
 -- Function to check if the user has reached the maximum club membership limit
 CREATE OR REPLACE FUNCTION check_club_membership_limit()
