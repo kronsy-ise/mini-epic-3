@@ -1,0 +1,39 @@
+{% extends 'wrapper.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="/static/styles/UserClubs.css">
+<script>
+    function join_club(club_id){
+        fetch(`/clubs/${club_id}/join`, {
+            method: "POST"
+        })
+        .then((s) => console.log("Successfully sent join req"))
+        .catch((e) => console.log("Join error"))
+    }
+</script>
+{% endblock %}
+
+
+{% block content %}
+    <div class="clubs_container">
+        <h1 class="clubs_title">All ClubHub Clubs</h1>
+        <div class="clubs_listing">
+            <div class="club">
+                <p class="club_name">Club Name</p>
+                <p class="club_desc">Club Description</p>
+                <p class="club_join">Join</p>     
+            </div>
+                {% if clubs|length > 0 %}
+                {% for club in clubs %}
+                <div class="club">
+                        <p class="club_name">{{club.name}}</p>
+                        <p class="club_desc">{{club.description}}</p>
+                        <button class="club_join" onclick="join_club({{club.club_id}})">Request to Join</button>
+                </div>
+            {% endfor %}
+            {% else %}
+            <h3>No Clubs Currently Exist</h3>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

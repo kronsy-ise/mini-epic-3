@@ -1,0 +1,96 @@
+<!-- FILEPATH: /path/to/your/templates/coordinator/events.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='CoordinatorEvents.css') }}">
+    <title>Coordinator Events | ClubHub</title>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="app_logo_container">
+            <h3>ClubHub</h3>
+            <p>Coordinator</p>
+        </div>
+        <div class="nav__links_container">
+            <ul class="nav__links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/clubs">Clubs</a></li>
+                <li><a href="/events">Events</a></li>
+                <!-- Add other navigation links as needed -->
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Create Event Section -->
+        <form id="create_event" action="/CreateEvent" method="post">
+            <div class="event_form">
+                <h2>Create a new Event</h2>
+                <label for="name">Event Name:</label><br>
+                <input type="text" id="name" name="name" required><br>
+                <label for="description">Description:</label><br>
+                <textarea id="description" name="description" required></textarea><br>
+                <label for="date">Date:</label><br>
+                <input type="datetime-local" id="date" name="date" required><br>
+                <label for="venue">Venue:</label><br>
+                <input type="text" id="venue" name="venue" required><br>
+                <label for="club">Club ID:</label><br>
+                <input type="number" id="club" name="club" required><br>
+                <input type="submit" value="Create Event">
+            </div>
+        </form>
+
+        <!-- Manage Events Section -->
+        <form id="event_list">
+            <div class="event_table">
+                <h2 id="events">Events</h2>
+                <div class="headRow grid-row">
+                    <div class="divCell">Event ID</div>
+                    <div class="divCell">Name</div>
+                    <div class="divCell">Description</div>
+                    <div class="divCell">Date</div>
+                    <div class="divCell">Venue</div>
+                    <div class="divCell">Club ID</div>
+                    <div class="divCell">Actions</div>
+                </div>
+                {% for event in events %}
+                    <div class="eventContainer">
+                        <div class="divRow grid-row" data-event-id="{{ event.event_id }}" onclick="toggleDetails('eventDetails{{event.event_id}}')">
+                            <div class="divCell">{{ event.event_id }}</div>
+                            <div class="divCell">{{ event.name }}</div>
+                            <div class="divCell">{{ event.description }}</div>
+                            <div class="divCell">{{ event.date }}</div>
+                            <div class="divCell">{{ event.venue }}</div>
+                            <div class="divCell">{{ event.club_id }}</div>
+                            <div class="divActions" style="display: flex;">
+                                <form method="POST" action="/delete-event/{{ event.event_id }}">
+                                    <button class="action" type="submit">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div id="eventDetails{{ event.event_id }}" style="display: none; width: 100%;">
+                            <div class="section">
+                                <h2>{{ event.name }} Event Details:</h2>
+                                <div class="event-details">
+                                    <li>Event ID: {{ event.event_id }}</li>
+                                    <li>Description: {{ event.description }}</li>
+                                    <li>Date: {{ event.date }}</li>
+                                    <li>Venue: {{ event.venue }}</li>
+                                    <li>Club ID: {{ event.club_id }}</li>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </form>
+    </main>
+
+    <!-- Add your scripts and styles if required -->
+
+</body>
+</html>

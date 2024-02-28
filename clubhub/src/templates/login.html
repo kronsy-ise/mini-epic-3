@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <title>ClubHub - Login Page</title>
+    <link rel="stylesheet"  href="static/styles/login.css">
+  </head>
+
+  <body>
+
+    <main class="page">
+      <div class="center-card">
+        <div class="card-header">
+           <h1>Clubhub</h1>
+          <h3>Log In</h3>
+        </div>
+
+
+        <div class="card-content">
+          <form action="/login" method="post">
+            <input type="text" name="username" placeholder="Your Username">
+            <input type="password" name="password" placeholder="Your Password">
+            <input type="submit" name="submit" value="Log In">
+          </form> 
+        </div>
+
+
+        <div class="card-footer">
+          <p>Don't have an account? <a href="/signup">Sign Up</a></p>
+
+          
+        </div>
+          {% if invalid %}
+        <div class="invalid-container">
+            <h2>Invalid Login</h2>
+        </div>
+          {% endif %}
+      </div>
+    
+    </main>
+  </body>
+</html>

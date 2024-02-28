@@ -1,0 +1,102 @@
+{% extends 'wrapper.html' %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='CoordinatorHome.css') }}">
+    <style>
+        .option-box {
+        }
+
+        .option-box h2 {
+            color: #333; /* Set the color for the section title */
+        }
+
+        .option-box p {
+            color: #666; /* Set the color for the section description */
+        }
+
+        .option-box button {
+            background-color: #4CAF50; /* Set the background color for the button */
+            color: white; /* Set the text color for the button */
+            padding: 10px 20px; /* Add padding to the button */
+            border: none; /* Remove the button border */
+            cursor: pointer;
+        }
+
+        /* Style the action buttons */
+        .action-buttons button {
+            background-color: #008CBA;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .home_content{
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            width: 80%;
+            gap: 20px;
+        }
+
+        .club-requests{
+            background-image: url('/static/images/Requests.jpg');
+        }
+
+        .manage-clubs{
+            background-image: url('/static/images/ManageClub.webp');
+
+        }
+        
+        .manage-events{
+            background-image: url('/static/images/ManageEvents.webp');
+            background-size: cover;
+        }
+
+        .option-box>.cover{
+            backdrop-filter: blur(4px) brightness(0.8);
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <div class="home_content">
+        <h1>Welcome, Coordinator!</h1>
+    
+        <!-- Club Requests Section -->
+        <section class="option-box club-requests">
+            <div class="cover">
+                <h2>Club Requests</h2>
+                <p>Approve incoming requests and view members.</p>
+                <button onclick="window.location.href='/users'">Go to Club Requests</button>
+            </div>
+
+        </section>
+    
+        <!-- Manage Club Section -->
+        <section class="option-box manage-clubs">
+            <div class="cover">
+                <h2>Manage Club</h2>
+                <p>Edit club details.</p>
+                <button onclick="window.location.href='/clubs'">Go to Manage Club</button>
+            </div>
+
+        </section>
+    
+        <!-- Manage Events Section -->
+        <section class="option-box manage-events">
+            <div class="cover">
+                <h2>Manage Events</h2>
+                <p>Create and manage events, and approve participants.</p>
+                <button onclick="window.location.href='/events'">Go to Manage Events</button>
+            </div>
+
+        </section>
+    </div>
+
+
+{% endblock %}

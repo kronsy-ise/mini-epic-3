@@ -1,0 +1,13 @@
+<script>
+    window.onload = function() {
+        // After the page loads, check if there's a saved scroll position and if so, restore it
+        if (sessionStorage.getItem("scrollPosition") !== null) {
+            window.scrollTo(0, sessionStorage.getItem("scrollPosition"));
+        }
+    }
+    
+    window.onbeforeunload = function() {
+        // Before the page unloads, save the current scroll position
+        sessionStorage.setItem("scrollPosition", window.scrollY || document.documentElement.scrollTop);
+    }
+    </script>

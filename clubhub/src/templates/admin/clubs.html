@@ -1,0 +1,145 @@
+<!-- FILEPATH: /c:/Users/ticta/MyRepos/mini-epic-3/clubhub/src/templates/admin/clubs.html -->
+
+<!-- This is the HTML template for the admin club page in the ClubHub application. It displays a table containing all the club data and provides options to create, manage, and delete clubs. -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Admin ClubPage | ClubHub</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="{{ url_for('static', filename='styles/AdminClubs.css') }}" rel="stylesheet">    
+    <script src="https://kit.fontawesome.com/c2b7a7d1d7.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<main class="app__main">
+    <nav class="navbar">
+        <div class="app_logo_container">
+            <h3>ClubHub</h3>
+            <p>Administrator</p>
+        </div>
+        <div class="nav__links_container">
+            <ul class="nav__links">
+                <li><a href="/clear-cookies">Logout <i class="fa-solid fa-user"></i></a></li> <!-- Logout link -->
+                <li><a href="/users">Users <i class="fa-solid fa-users"></i></a></li> <!-- Users link -->
+                <li><a href="#club_list">Clubs <i class="fa-solid fa-volleyball"></i></a></li> <!-- Clubs link -->
+                <li><a href="/events">Events <i class="fa-solid fa-calendar-days"></i></a></li> <!-- Events link -->
+                <li><a href="/home">Home <i class="fa-solid fa-chart-bar"></i></a></li> <!-- Dashboard link -->
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="app__content">
+        {% include "scroll_script.html" %} <!-- Include a script for scrolling functionality -->
+        {%include "dropdown_script.html" %}
+        <div class="club_table">
+                <div class="site-information">
+                <div class="info-card">
+                    <img src="{{ url_for('static', filename='images/basket.png') }}" alt="Other Logo"
+                    style="width: 60px; height: 60px;">
+                    <p>Clubs: {{club_count}}</p>
+                </div>
+                <div class="info-card">
+                    <img src="{{ url_for('static', filename='images/calender.png') }}" alt="Other Logo"
+                    style="width: 70px; height: 70px;">
+                    <p>Events: {{event_count}}</p>
+                </div>
+                <div class="info-card">
+                    <img src="{{ url_for('static', filename='images/approval.png') }}" alt="Other Logo"
+                    style="width: 60px; height: 60px;">
+                    <p>Club Approvals needed:{{unapproved_clubs}} </p>
+                </div>
+            </div>
+
+        </div>
+
+        <form id="create_club" action="/CreateClub" method="post"> <!-- Form to create a new club -->
+                <div class="club_form">
+                    <h2>Create a new Club</h2> <!-- Heading for create club form -->
+                    <label for="name">Club Name:</label><br>
+                    <input type="text" id="name" name="name" required><br> <!-- Input field for club name -->
+                    <label for="description">Description:</label><br>
+                    <textarea id="description" name="description" required></textarea><br> <!-- Textarea for club description -->
+                    <label for="coord">Club Co-odinator:</label><br>
+                    <select id="coord" name="coord" required> <!-- Dropdown for selecting club coordinator -->
+                        {% for coord in unappointed_coords %}
+                            <option value="{{ coord[0] }}">{{ coord[1] }}</option> <!-- Display each coordinator option -->
+                        {% endfor %}
+                    </select><br>
+                    <input type="submit" value="Submit"> <!-- Submit button for creating a club -->
+                </div>
+        </form>
+        
+        <form id="club_list"> <!-- Form for club list -->
+            <div class="club_table">
+                <h2 id="clubs">Clubs</h2> <!-- Heading for club list -->
+                <div class="headRow grid-row" >
+                    <div class="divCell">Club_id</div> <!-- Table column header for club ID -->
+                    <div class="divCell">Name</div> <!-- Table column header for club name -->
+                    <div class="divCell">Description</div> <!-- Table column header for club description -->
+                    <div class="divCell">Validity</div> <!-- Table column header for club validity -->
+                    <div class="divCell">Co-ord_id</div> <!-- Table column header for club coordinator ID -->
+                    <div class="divCell">Actions</div> <!-- Table column header for club actions -->
+                </div>
+                    {% for club in clubs %} <!-- Loop through the list of clubs -->
+                        <div class="clubContainer">
+                            <div class="divRow grid-row" data-club-id="{{ club.club_id }}" onclick="toggleDetails('clubDetails{{club.club_id}}')"> <!-- Table row for each club -->
+                                <div class="divCell">{{ club.club_id }}</div> <!-- Display club ID -->
+                                <div class="divCell">{{ club.name }}</div> <!-- Display club name -->
+                                <div class="divCell">{{ club.description }}</div> <!-- Display club description -->
+                                <div class="divCell">{{ club.validity }}</div> <!-- Display club validity -->
+                                <div class="divCell">{{ club.coord }}</div> <!-- Display club coordinator ID -->
+                                                                        
+                                <div class="divActions" style="display: flex;"> <!-- Actions for each club -->
+                                    <form method="POST" action="/delete-club/{{ club.club_id }}"> <!-- Form to delete a club -->
+                                        <button class="action" type="submit">Delete</button> <!-- Delete button -->
+                                    </form>
+
+                                </div>
+                            </div>
+                            <div id="clubDetails{{ club.club_id }}" style="display: none; width: 100%;">
+                                <div class="section">
+                                    <h2>{{ club.name }} Club Co-odinator:<h2><br>
+                                <div class="coord-details">
+                                    <li>Co-ordinator ID: {{ coords[club.coord].user_id }}</li>
+                                    <li>Name: {{ coords[club.coord].name }}</li>
+                                    <li>Email: {{ coords[club.coord].email }}</li>
+                                    <li>Mobile: {{ coords[club.coord].mobile }}</li>
+                                    <li>User Kind: {{ coords[club.coord].kind }}</li>
+                                </div>
+                                </div> 
+                                <br>
+                                <div class="section">
+                                    <h2>Events</h2>
+                                    {% for event in club.upcoming_events %}
+                                        <div class="coord-details">
+                                            <li>Event ID: {{ event.event_id }}</li>
+                                            <li>Name: {{ event.name }}</li>
+                                            <li>Club ID: {{ event.club_id }}</li>
+                                            <li>Description: {{ event.description }}</li>
+                                            <li>Date: {{ event.date }}</li>
+                                            <li>Venue: {{ event.venue }}</li>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+
+                                <div class="section">
+                                    <h2>Members</h2>
+                                    {% for member in club.memberships %}
+                                        <div class="coord-details">
+                                            <li>User ID: {{ member.user_id }}</li>
+                                            <li>Name: {{ member.name }}</li>
+                                            <li>Email: {{ member.email }}</li>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                    {% endfor %}
+            </div>
+        </form>
+    </div>
+   
+</main>
+</body>
+</html>
