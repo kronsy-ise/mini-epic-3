@@ -28,5 +28,5 @@ DATABASE_URL="postgres://default_user:password1@localhost:5435/application" pyth
 
 Finally, we can run the application
 ```bash 
-python ./clubhub/src/main.py
+DATABASE_URL="postgres://default_user:password1@localhost:5435/application" python ./clubhub/src/main.py
 ```
