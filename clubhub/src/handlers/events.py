@@ -3,7 +3,7 @@ from flask import Blueprint, redirect, render_template, request
 from globals import db
 from models.user import UserKind,User
 import util
-from models.club import Club
+from models.Club import Club
 from models.event import Event
 events_app = Blueprint('events_app', __name__)
 

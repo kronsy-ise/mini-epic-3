@@ -1,6 +1,10 @@
 -- First, we drop all things
 DROP TRIGGER IF EXISTS set_user_kind_trigger ON Users CASCADE;
 DROP FUNCTION IF EXISTS set_user_kind() CASCADE;
+DROP VIEW IF EXISTS users_club_membership_view CASCADE;
+DROP VIEW IF EXISTS clubs_coordinator_membership_view CASCADE;
+DROP VIEW IF EXISTS upcoming_events_clubs_view CASCADE;
+DROP VIEW IF EXISTS users_sessions_view CASCADE;
 DROP TABLE IF EXISTS Sessions;
 DROP TABLE IF EXISTS Users CASCADE;
 DROP TYPE IF EXISTS UserKind CASCADE;
