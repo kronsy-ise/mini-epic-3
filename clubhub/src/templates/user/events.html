@@ -1,19 +1,70 @@
 {% extends 'wrapper.html' %}
 
 {% block head %}
+<link rel="stylesheet" href="/static/styles/UserEvents.css">
+
+<script>
+    function join_event(event_id){
+        console.log("Joining", event_id)
+        fetch(`/events/${event_id}/join`, {
+            method: "POST"
+        }).then((response) => console.log("Successfully joined event"))
+        .catch((e) => console.error("An error occurred while joining the event"))
+    }
+</script>
 {% endblock %}
 
 
 {% block content %}
     <div class="events_container">
-        <h1>ClubHub Events</h1>
-        <div>
-            <div>
+        <h1 class="events_title">ClubHub Events</h1>
+        <div class="events_sections">
+            <div class="events_items">
                 <h2>In your space</h2>
+                <div class="events">
+                    <div class="event">
+                        <p class="event_name">Event Name</p>
+                        <p class="event_desc">Event Description</p>
+                        <p class="event_date">Event Date</p>     
+                        <p class="event_date">Join</p>     
+                    </div>
+                    {% if club_events|length > 0 %}
+                    {% for event in club_events %}
+                        <div class="event">
+                            <p class="event_name">{{ event.name }}</p>
+                            <p class="event_desc">{{ event.description }}</p>
+                            <p class="event_date">{{ event.date }}</p>
+                            <button onclick="join_event({{event.event_id}})">Join</button>
+                        </div>
+                    {% endfor %}
+                    {% else %}
+                    <h3>No Club Events Currently Active</h3>
+                    {% endif %}
+                </div>
             </div>
 
-            <div>
+            <div class="events_items">
                 <h2>Other Events</h2>
+                <div class="events">
+                    <div class="event">
+                        <p class="event_name">Event Name</p>
+                        <p class="event_desc">Event Description</p>
+                        <p class="event_date">Event Date</p>     
+                        <p class="event_date">Join Request</p>     
+                    </div>
+                    {% if club_events|length > 0 %}
+                    {% for event in club_events %}
+                    <div class="event">
+                        <p class="event_name">{{ event.name }}</p>
+                        <p class="event_desc">{{ event.description }}</p>
+                        <p class="event_date">{{ event.date }}</p>
+                        <button onclick="join_event({{event.event_id}})">Request to Join</button>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <h3>No Other Events Currently Active</h3>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>

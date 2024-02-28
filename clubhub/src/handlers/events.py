@@ -37,13 +37,56 @@ def events():
 
         club_events = [e for e in all_events if e.club_id in membership_ids]
         other_events = [e for e in all_events if e.club_id not in membership_ids]
-
+        
         print(membership_ids)
         return render_template("user/events.html",
          navigations=navigations.USER_NAV,
-         user_kind="Student")
+         user_kind="Student",
+         club_events=club_events,
+         other_events=other_events)
     elif auth_user.kind == UserKind.Coordinator:
         return render_template("coordinator/events.html")
     else:
         return render_template("awaiting_approval.html")
     
+
+@events_app.route("/CreateEvent", methods=['GET', 'POST'])
+def create_event():
+    club_id = request.form.get('club_id')
+    name = request.form.get('name')
+    description = request.form.get('description')
+    date = request.form.get('datetime')
+    venue = request.form.get('venue')    
+    Event.add_event(club_id, name, description, date, venue)
+    return redirect("/events")
+
+@events_app.post("/events/<int:event_id>/join")
+def join_event(event_id):
+    auth_user = util.verify_session()
+
+    if auth_user == None:
+        return redirect("/")
+    if auth_user.kind != UserKind.Student:
+        return "Only users may join events", 400
+    user_id = auth_user.user_id
+
+    event = Event.fetch(event_id)
+
+    if event is None:
+        return "Event Not Found", 404
+    
+    club = event.club_id
+
+    user_clubs = User.get_user_clubs(user_id)
+
+    if club in user_clubs:
+        # Join Directly to the event 
+
+        Event.join(user_id, event_id)
+        return "Successsfully joined event", 200
+    else:
+        # Create a join request to the event
+        Event.request_join(user_id, event_id)
+        return "Successsfully requested to join event", 200
+
+

@@ -1,12 +1,100 @@
 .home_container{
-
+    display: flex;
+    width: 100%;
 }
 
+.home_container>*{
+    flex: 1 1;
+}
 
 .memberships_container{
-
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .events_container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.clubs_container{
+    width: 60%;
+}
+
+.clubs_title{
+    text-align: center;
+}
+
+.club>*{
+    flex: 1 1;
+    height: 100%;
+}
+
+
+.club:nth-child(odd){
+    background-color: rgb(212, 212, 212);
+}
+
+.club:nth-child(1){
+    background-color: rgb(0, 108, 231);
+    color: white;
+}
+.club{
+    display: flex;
+    padding: 10px 20px;
+    align-items: center;
+    justify-content: space-between;
     
+}
+
+.club_desc{
+    text-wrap: wrap;
+}
+
+.events_container{
+    width: 60%;
+}
+
+.events_title{
+    text-align: center;
+}
+
+.events{
+    width: 100%;
+    margin: 10px 20px;
+}
+.events_sections{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+.events_items{
+    width: 100%;
+}
+
+.event>*{
+    flex: 1 1;
+    height: 100%;
+}
+
+
+.event:nth-child(odd){
+    background-color: rgb(212, 212, 212);
+}
+
+.event:nth-child(1){
+    background-color: rgb(0, 108, 231);
+    color: white;
+}
+.event{
+    display: flex;
+    padding: 10px 20px;
+    align-items: center;
+    justify-content: space-between;
+    
+}
+
+.event_desc{
+    text-wrap: wrap;
 }

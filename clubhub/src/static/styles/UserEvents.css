@@ -1,26 +1,39 @@
-.clubs_container{
+.events_container{
     width: 60%;
 }
 
-.clubs_title{
+.events_title{
     text-align: center;
 }
 
-.club>*{
+.events{
+    width: 100%;
+    margin: 10px 20px;
+}
+.events_sections{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+.events_items{
+    width: 100%;
+}
+
+.event>*{
     flex: 1 1;
     height: 100%;
 }
 
 
-.club:nth-child(odd){
+.event:nth-child(odd){
     background-color: rgb(212, 212, 212);
 }
 
-.club:nth-child(1){
+.event:nth-child(1){
     background-color: rgb(0, 108, 231);
     color: white;
 }
-.club{
+.event{
     display: flex;
     padding: 10px 20px;
     align-items: center;
@@ -28,6 +41,6 @@
     
 }
 
-.club_desc{
+.event_desc{
     text-wrap: wrap;
 }

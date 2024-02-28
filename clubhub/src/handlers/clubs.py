@@ -65,15 +65,15 @@ def join_club(club_id):
         return redirect("/")
 
     if auth_user.kind != UserKind.Student:
-        return 403, "Only students may join clubs"
+        return "Only students may join clubs", 403
     
 
     try:
         Club.request_membership(auth_user.user_id, club_id)
     except:
-        pass
+        return "Internal Server error", 500
 
-    return redirect("/clubs")
+    return "Successfully requested to join club", 200
 
 @clubs_app.route("/delete-club/<int:club_id>", methods=['POST'])
 def delete_club(club_id):

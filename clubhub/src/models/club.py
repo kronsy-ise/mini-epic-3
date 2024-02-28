@@ -40,7 +40,7 @@ class Club:
             cur.execute("INSERT INTO CLUB_MEMBERSHIP(club_id, user_id, status) VALUES (%s, %s, 'pending')", (club_id, user_id))
         except Exception as e:
             print("Couldnt request membership")
-            db.rollback(d)
+            db.rollback()
             raise e
         db.commit()
 
