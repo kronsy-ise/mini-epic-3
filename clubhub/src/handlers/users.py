@@ -7,6 +7,7 @@ from models.user import UserKind
 import psycopg2.errors as pgerrors
 import util 
 from models.event import Event
+import navigations
 
 users_app = Blueprint('users_app', __name__)
 @users_app.route('/users')
@@ -46,7 +47,9 @@ def users():
     elif auth_user.kind == UserKind.Student:
         return render_template("user/users.html")
     elif auth_user.kind == UserKind.Coordinator:
-        return render_template("coordinator/users.html")
+        return render_template("coordinator/users.html",
+            navigations=navigations.COORDINATOR_NAV,
+            user_kind = "Coordinator")
     else:
         return render_template("awaiting_approval.html")
 

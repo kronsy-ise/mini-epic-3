@@ -39,7 +39,9 @@ def clubs():
             user_kind="Student",
             clubs = all_clubs)
     elif auth_user.kind == UserKind.Coordinator:
-        return render_template("coordinator/clubs.html")
+        return render_template("coordinator/clubs.html",
+            navigations=navigations.COORDINATOR_NAV,
+            user_kind = "Coordinator")
     else:
         return render_template("awaiting_approval.html")
     

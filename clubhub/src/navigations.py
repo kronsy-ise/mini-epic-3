@@ -20,3 +20,10 @@ USER_NAV = [
     Nav("Clubs", "/clubs", "fa-sold fa-volleyball"),
     Nav("Events", "/events", "fa-sold fa-calendar-days")
 ]
+
+COORDINATOR_NAV = [
+    Nav("Home", "/home", "fa-solid fa-home"),
+    Nav("Clubs", "/clubs", "fa-sold fa-volleyball"),
+    Nav("Events", "/events", "fa-sold fa-calendar-days"),
+    Nav("Users", "/users", "fa-solid fa-users")
+]

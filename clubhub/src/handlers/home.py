@@ -45,15 +45,16 @@ def homepage():
     elif auth_user.kind == UserKind.Student:
         memberships = User.get_user_clubs(auth_user.user_id)
         events = User.get_user_events(auth_user.user_id)
-
-
-
         return render_template("user/home.html",
             navigations=navigations.USER_NAV,
             user_kind = "Student",
             memberships = memberships,
             enrolled_events = events)
+        
+        
     elif auth_user.kind == UserKind.Coordinator:
-        return render_template("coordinator/home.html")
+        return render_template("coordinator/home.html",
+            navigations=navigations.COORDINATOR_NAV,
+            user_kind = "Coordinator")
     else:
         return render_template("awaiting_approval.html")
