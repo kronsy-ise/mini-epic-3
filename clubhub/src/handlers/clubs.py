@@ -77,6 +77,23 @@ def join_club(club_id):
 
     return "Successfully requested to join club", 200
 
+@clubs_app.post("/clubs/<int:club_id>/approve/<int:user_id>")
+def approve_club(club_id, user_id):
+    auth_user = util.verify_session()
+    if auth_user == None:
+        return redirect("/")
+
+    if auth_user.kind != UserKind.Coordinator:
+        return "Only coordinators may approve", 403
+    
+
+    try:
+        Club.approve_membership(user_id, club_id)
+    except:
+        return "Internal Server error", 500
+
+    return "Successfully requested to join club", 200
+
 @clubs_app.route("/delete-club/<int:club_id>", methods=['POST'])
 def delete_club(club_id):
     Club.delete_club(club_id)

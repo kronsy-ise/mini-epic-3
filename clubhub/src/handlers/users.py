@@ -47,9 +47,27 @@ def users():
     elif auth_user.kind == UserKind.Student:
         return render_template("user/users.html")
     elif auth_user.kind == UserKind.Coordinator:
+        
+        reqs = Club.fetch_membership_requests()
+        
+        new_reqs = []
+        
+        for r in reqs:
+            user_id = r["user_id"]
+            club_id = r["club_id"]
+            
+            user = User.fetch(user_id)
+            
+            new_reqs.append({
+                "user_id": user_id,
+                "club_id": club_id,
+                "user": user
+            })
+
         return render_template("coordinator/users.html",
             navigations=navigations.COORDINATOR_NAV,
-            user_kind = "Coordinator")
+            user_kind = "Coordinator",
+            requests=new_reqs)
     else:
         return render_template("awaiting_approval.html")
 
