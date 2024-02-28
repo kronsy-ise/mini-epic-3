@@ -9,9 +9,6 @@ html,body{
 }
 
 
-.nav__link_selected{
-}
-
 .navbar{
     height: 100%;
     background-color: rgba(255, 255, 255, 0.367);
@@ -62,8 +59,6 @@ html,body{
     justify-content: space-between;
     padding: 32px 20%;
 
-    /* flex-direction: column; */
-    /* align-items: center; */
 }
 
 .nav__links>li.nav__link_selected>a{
@@ -104,7 +99,9 @@ html,body{
 
 .app__content{
     flex: 1 1;
-    background-color:linear-gradient(90deg, rgba(3, 206, 233, 0.5) 0%, rgba(24, 148, 179, 0.5) 100%);
-    height: 100%;
-    width: 500px;
+    display: flex;
+    justify-content: center;
+    padding: 30px 40px;
 }
+
+
