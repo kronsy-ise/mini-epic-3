@@ -39,9 +39,12 @@ def clubs():
             user_kind="Student",
             clubs = all_clubs)
     elif auth_user.kind == UserKind.Coordinator:
-        return render_template("coordinator/clubs.html",
+            return render_template("coordinator/clubs.html",
             navigations=navigations.COORDINATOR_NAV,
-            user_kind = "Coordinator")
+            user_kind = "Coordinator",
+            current_user=auth_user
+            
+            )
     else:
         return render_template("awaiting_approval.html")
     
@@ -72,7 +75,8 @@ def join_club(club_id):
 
     try:
         Club.request_membership(auth_user.user_id, club_id)
-    except:
+    except Exception as e:
+        print(e)
         return "Internal Server error", 500
 
     return "Successfully requested to join club", 200
@@ -89,7 +93,7 @@ def approve_club(club_id, user_id):
 
     try:
         Club.approve_membership(user_id, club_id)
-    except:
+    except Exception as e:
         return "Internal Server error", 500
 
     return "Successfully requested to join club", 200
@@ -107,3 +111,4 @@ def manage_club(club_id):
     upcoming_events = club.upcomming_events()
     # Pass the data to the template
     return render_template('manage_club.html', club=club, upcoming_events=upcoming_events, memberships=memberships)
+

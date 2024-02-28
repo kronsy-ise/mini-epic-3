@@ -134,22 +134,16 @@ BEFORE INSERT ON CLUBS
 FOR EACH ROW 
 EXECUTE FUNCTION set_club_id();
 
--- Function to approve event participation and add user to club_membership if status is approved
 CREATE OR REPLACE FUNCTION approve_event_participation()
 RETURNS TRIGGER AS $$
 BEGIN
-  IF NEW.status = 'approved' THEN
-    -- Add user to club_membership
-    INSERT INTO CLUB_MEMBERSHIP(club_id, user_id, status, created_at, updated_at)
-    VALUES (NEW.club_id, NEW.user_id, 'approved', NOW(), NOW());
-  ELSE
-    -- Check if the user is a member of the club
-    IF EXISTS (
-      SELECT 1 FROM CLUB_MEMBERSHIP
-      WHERE club_id = NEW.club_id AND user_id = NEW.user_id AND status = 'approved'
-    ) THEN
-      NEW.status = 'approved';
-    END IF;
+  -- Check if the user is a member of the club associated with the event
+  IF EXISTS (
+    SELECT 1 FROM CLUB_MEMBERSHIP
+    WHERE club_id = (SELECT club_id FROM Events WHERE event_id = NEW.event_id) AND user_id = NEW.user_id AND status = 'approved'
+  ) THEN
+    -- If the user is a member of the club, approve their participation
+    NEW.status = 'approved';
   END IF;
   RETURN NEW;
 END;
