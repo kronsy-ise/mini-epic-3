@@ -1,92 +1,80 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='CoordinatorUsers.css') }}">
-    <title>Coordinator Users | ClubHub</title>
-</head>
-<body>
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="app_logo_container">
-            <h3>ClubHub</h3>
-            <p>Coordinator</p>
-        </div>
-        <div class="nav__links_container">
-            <ul class="nav__links">
-                <li><a href="/">Home</a></li>
-                <li><a href="/clubs">Clubs</a></li>
-                <li><a href="/events">Events</a></li>
-                <!-- Add other navigation links as needed -->
-            </ul>
-        </div>
-    </nav>
-    <main>
-        <h1>Coordinator Users</h1>
+{% extends 'wrapper.html' %}
 
-        <!-- Join Requests Section -->
-        <section class="option-box">
-            <h2>Join Requests</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>User ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Loop through join requests and populate the table -->
-                    {% for join_request in join_requests %}
-                        <tr>
-                            <td>{{ join_request.user_id }}</td>
-                            <td>{{ join_request.name }}</td>
-                            <td>{{ join_request.email }}</td>
-                            <td>{{ join_request.phone }}</td>
-                            <td>
-                                <!-- Add buttons for approval and disapproval with relevant URLs -->
-                                <button onclick="approveRequest('{{ join_request.user_id }}')">Approve</button>
-                                <button onclick="disapproveRequest('{{ join_request.user_id }}')">Disapprove</button>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </section>
+{% block head %}
+<script>
+    function approve_req(user_id, club_id){
+        fetch(`/clubs/${club_id}/approve/${user_id}`, {
+            method: "POST"
+        }).then((response) => console.log("Successfully joined event"))
+        .catch((e) => console.error("An error occurred while joining the event"))
+    }
+    function reject_req(user_id, club_id){
+        fetch(`/clubs/${club_id}/reject/${user_id}`, {
+            method: "POST"
+        }).then((response) => console.log("Successfully joined event"))
+        .catch((e) => console.error("An error occurred while joining the event"))
+    }
+</script>
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/CoordinatorUsers.css') }}"/>
+{% endblock %}
 
-        <!-- Club Members Section -->
-        <section class="option-box">
-            <h2>Club Members</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>User ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Loop through club members and populate the table -->
-                    {% for club_member in club_members %}
-                        <tr>
-                            <td>{{ club_member.user_id }}</td>
-                            <td>{{ club_member.name }}</td>
-                            <td>{{ club_member.email }}</td>
-                            <td>{{ club_member.phone }}</td>
-                            <td>
-                                <!-- Add buttons for additional actions if needed -->
-                                <button onclick="removeMember('{{ club_member.user_id }}')">Remove</button>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </section>
-    </main>
-</body>
-</html>
+{% block content %}
+<div class="events_container">
+    <h1 class="events_title">ClubHub Users</h1>
+    <div class="events_sections">
+        <div class="events_items">
+            <h2>Club Requests</h2>
+            <div class="events">
+                <div class="event">
+                    <p class="event_name">User Id</p>
+                    <p class="event_desc">Name</p>
+                    <p class="event_date">Username</p>     
+                    <p class="event_date">Email</p>     
+                    <p class="event_date">Phone</p>  
+                    
+                </div>
+                {% if requests|length > 0 %}
+                {% for req in requests %}
+                    <div class="event">
+                        <p class="event_name">{{ req.user_id }}</p>
+                        <p class="event_desc">{{ req.user.name }}</p>
+                        <p class="event_date">{{ req.user.username }}</p>
+                        <p class="event_date">{{ req.user.email }}</p>
+                        <p class="event_date">{{ req.user.mobile }}</p>
+                        <button onclick="approve_req({{req.user_id}}, {{req.club_id}})">Approve</button>   
+                        <button onclick="reject_req({{req.user_id}}, {{req.club_id}})">Reject</button>   
+                    </div>
+                {% endfor %}
+                {% else %}
+                <h3>No Club Events Currently Active</h3>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="events_items">
+            <h2>Members</h2>
+            <div class="events">
+                <div class="event">
+                    <p class="event_name">User Id</p>
+                    <p class="event_desc">Name</p>
+                    <p class="event_date">Username</p>     
+                    <p class="event_date">Email</p>     
+                    <p class="event_date">Phone</p>      
+                </div>
+                {% if club_events|length > 0 %}
+                {% for event in club_events %}
+                <div class="event">
+                    <p class="event_name">{{ member.username }}</p>
+                    <p class="event_desc">{{ member.name }}</p>
+                    <p class="event_date">{{ member.id }}</p>
+                    <button onclick="join_event({{member.email}})">Accept</button>
+                    <button onclick="join_event({{member.phone}})">Reject</button>
+                </div>
+                {% endfor %}
+                {% else %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

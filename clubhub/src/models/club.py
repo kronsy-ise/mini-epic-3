@@ -127,3 +127,26 @@ class Club:
             return None
         return Club(entry[0], entry[1], entry[2], entry[3], coord)
     
+
+    @staticmethod
+    def reject_membership(user_id: int, club_id: int):
+        # Reject a user's membership to a club
+        cur = db.cursor()
+        try:
+            cur.execute("UPDATE CLUB_MEMBERSHIP SET status = 'rejected' WHERE user_id = %s AND club_id = %s", (user_id, club_id))
+        except Exception as e:
+            print("Could not reject membership")
+            db.rollback()
+            raise e
+        
+    @staticmethod
+    def approve_membership(user_id: int, club_id: int):
+        # Approve a user's membership to a club
+        cur = db.cursor()
+        try:
+            cur.execute("UPDATE CLUB_MEMBERSHIP SET status = 'approved' WHERE user_id = %s AND club_id = %s", (user_id, club_id))
+        except Exception as e:
+            print("Could not approve membership")
+            db.rollback()
+            raise e
+        db.commit()

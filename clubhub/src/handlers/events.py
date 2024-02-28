@@ -45,7 +45,9 @@ def events():
          club_events=club_events,
          other_events=other_events)
     elif auth_user.kind == UserKind.Coordinator:
-        return render_template("coordinator/events.html")
+        return render_template("coordinator/events.html",
+            navigations=navigations.COORDINATOR_NAV,
+            user_kind = "Coordinator")
     else:
         return render_template("awaiting_approval.html")
     
