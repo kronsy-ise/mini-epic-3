@@ -1,6 +1,6 @@
 from __future__ import annotations
 from flask import Blueprint, redirect, render_template,flash
-from models.Club import Club
+from models.club import Club
 from globals import db
 from models.user import User
 from models.user import UserKind
