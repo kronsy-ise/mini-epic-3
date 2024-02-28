@@ -5,6 +5,7 @@ from models.user import UserKind,User
 import util
 from models.Club import Club
 from models.event import Event
+import navigations
 clubs_app = Blueprint('clubs_app', __name__)
 
 @clubs_app.get("/clubs")
@@ -31,7 +32,12 @@ def clubs():
                     ,unappointed_coords=unappointed_coords,coords=coords,
                     event_count=event_count)
     elif auth_user.kind == UserKind.Student:
-        return render_template("user/clubs.html")
+        all_clubs = Club.return_list()
+        print(all_clubs)
+        return render_template("user/clubs.html",
+            navigations=navigations.USER_NAV,
+            user_kind="Student",
+            clubs = all_clubs)
     elif auth_user.kind == UserKind.Coordinator:
         return render_template("coordinator/clubs.html")
     else:
@@ -51,6 +57,23 @@ def create_club():
     else:
         print("Adding club failed")
     return redirect("/clubs")
+
+@clubs_app.post("/clubs/<int:club_id>/join")
+def join_club(club_id):
+    auth_user = util.verify_session()
+    if auth_user == None:
+        return redirect("/")
+
+    if auth_user.kind != UserKind.Student:
+        return "Only students may join clubs", 403
+    
+
+    try:
+        Club.request_membership(auth_user.user_id, club_id)
+    except:
+        return "Internal Server error", 500
+
+    return "Successfully requested to join club", 200
 
 @clubs_app.route("/delete-club/<int:club_id>", methods=['POST'])
 def delete_club(club_id):

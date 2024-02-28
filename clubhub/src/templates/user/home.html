@@ -1,11 +1,53 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Home | ClubHub</title>
-</head>
-<body>
-    
-</body>
-</html>
+{% extends 'wrapper.html' %}
+
+{%block head%}
+<link rel="stylesheet" href="/static/styles/UserHome.css">
+{%endblock%}
+{% block content %}
+
+<div class="home_container">
+    <div class="memberships_container">
+        <h2>Memberships</h2>
+        <div>            
+            <div class="club">
+                <p class="club_name">Name</p>
+                <p class="club_desc">Description</p>
+            </div>
+            {% if memberships|length > 0 %}
+            {% for mem in memberships %}
+            <div class="club">
+                <p class="club_name">{{mem.name}}</p>
+                <p class="club_desc">{{mem.description}}</p>
+            </div>
+            {% endfor %}
+            {% else %}
+            <h3>No Memberships, Consider <a href="/clubs">Joining a Club</a></h3>
+            {%endif%}
+        </div>
+    </div>
+
+    <div class="events_container">
+        <h2>Participating Events</h2>
+        <div class="events">
+            <div class="event">
+                <p class="event_name">Name</p>
+                <p class="event_desc">Description</p>
+                <p class="event_date">Date</p>     
+            </div>
+            {% if club_events|length > 0 %}
+            {% for event in club_events %}
+                <div class="event">
+                    <p class="event_name">{{ event.name }}</p>
+                    <p class="event_desc">{{ event.description }}</p>
+                    <p class="event_date">{{ event.date }}</p>
+                </div>
+            {% endfor %}
+            {% else %}
+            <h3>You are not participating in any events, consider <a href="/events">Joining Some Events</a></h3>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

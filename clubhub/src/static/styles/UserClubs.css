@@ -1,0 +1,33 @@
+.clubs_container{
+    width: 60%;
+}
+
+.clubs_title{
+    text-align: center;
+}
+
+.club>*{
+    flex: 1 1;
+    height: 100%;
+}
+
+
+.club:nth-child(odd){
+    background-color: rgb(212, 212, 212);
+}
+
+.club:nth-child(1){
+    background-color: rgb(0, 108, 231);
+    color: white;
+}
+.club{
+    display: flex;
+    padding: 10px 20px;
+    align-items: center;
+    justify-content: space-between;
+    
+}
+
+.club_desc{
+    text-wrap: wrap;
+}

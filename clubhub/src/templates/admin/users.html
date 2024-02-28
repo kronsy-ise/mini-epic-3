@@ -150,10 +150,10 @@
                             {% if user.0 != 1 %}
                             <div class="divActions" style="display: flex;">
                                 <form method="POST" action="/approve-student/{{ user.0 }}">
-                                    <button class="action" type="submit">Set Student</button>
+                                    <button class="action" type="submit">Student</button>
                                 </form>
                                 <form method="POST" action="/approve-coord/{{ user.0 }}">
-                                    <button class="action" type="submit">Set Co-ordinator</button>
+                                    <button class="action" type="submit">Co-ordinator</button>
                                 </form>
                                 <form method="POST" action="/reject-user/{{ user.0 }}">
                                     <button class="action" type="submit">Delete</button>

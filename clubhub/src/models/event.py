@@ -6,8 +6,7 @@ import models
 class Event:
     class Events:
         event_id: int
-        club_id: str 
-        name: str
+        club_id: int
         name: str 
         description: str
         date: str
@@ -45,6 +44,24 @@ class Event:
         cur.execute("SELECT event_id, club_id, name, description, date, venue FROM Events ORDER BY event_id")
         entries = cur.fetchall()
         return [Event(*entry) for entry in entries]
+
+    @staticmethod
+    def join(user_id : int, event_id : int):
+        cur = db.cursor()
+
+        cur.execute("INSERT INTO EVENT_PARTICIPATION(event_id, user_id, status) VALUES (%s, %s, 'approved')", (event_id, user_id))
+
+        db.commit()
+        pass 
+
+    @staticmethod
+    def request_join(user_id : int, event_id : int):
+        cur = db.cursor()
+
+        cur.execute("INSERT INTO EVENT_PARTICIPATION(event_id, user_id, status) VALUES (%s, %s, 'pending')", (event_id, user_id))
+
+        db.commit()
+        pass 
 
     @staticmethod
     def add_event(club_id, name, description, date, venue):
