@@ -27,11 +27,23 @@ class Club:
     def get_memberships(self) -> List[models.User]:
         # Retrieve all memberships associated with the club
         cur = db.cursor()
-        cur.execute("SELECT user_id, club_id, role FROM Memberships WHERE club_id = %s", (self.id,))
+        cur.execute("SELECT user_id, club_id, role FROM Memberships WHERE club_id = %s", (self.club_id,))
         entries = cur.fetchall()
         Members = [models.User.fetch(entry[0]) for entry in entries]   
         return Members
     
+    @staticmethod
+    def request_membership(user_id : int, club_id : int):
+        cur = db.cursor()
+
+        try:
+            cur.execute("INSERT INTO CLUB_MEMBERSHIP(club_id, user_id, status) VALUES (%s, %s, 'pending')", (club_id, user_id))
+        except Exception as e:
+            print("Couldnt request membership")
+            db.rollback(d)
+            raise e
+        db.commit()
+
     def upcomming_events(self) -> List[models.Event]:
         # Retrieve all upcoming events associated with the club
         cur = db.cursor()

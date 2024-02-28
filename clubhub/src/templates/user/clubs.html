@@ -1,0 +1,23 @@
+{% extends 'wrapper.html' %}
+
+{% block head %}
+{% endblock %}
+
+
+{% block content %}
+    <div class="clubs_container">
+        <h1>All ClubHub Clubs</h1>
+        <div class="clubs_listing">
+            {% for club in clubs %}
+                <div class="club">
+                    <h2 class="club_title">{{ club.name }}</h2>
+                    <h3>{{ club.description }}</h3>
+
+                    <form method="post" action="jclubs/{{club.club_id}}/join">
+                        <input type="submit" value="Request to Join">
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
