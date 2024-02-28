@@ -1,0 +1,90 @@
+<!-- FILEPATH: /path/to/your/templates/coordinator/clubs.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='CoordinatorClubs.css') }}">
+    <title>Coordinator Clubs | ClubHub</title>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="app_logo_container">
+            <h3>ClubHub</h3>
+            <p>Coordinator</p>
+        </div>
+        <div class="nav__links_container">
+            <ul class="nav__links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/clubs">Clubs</a></li>
+                <li><a href="/events">Events</a></li>
+                <!-- Add other navigation links as needed -->
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Create Club Section -->
+        <form id="create_club" action="/CreateClub" method="post">
+            <div class="club_form">
+                <h2>Create a new Club</h2>
+                <label for="name">Club Name:</label><br>
+                <input type="text" id="name" name="name" required><br>
+                <label for="description">Description:</label><br>
+                <textarea id="description" name="description" required></textarea><br>
+                <input type="hidden" id="coord" name="coord" value="{{ current_user.user_id }}">
+                <input type="submit" value="Submit">
+            </div>
+        </form>
+
+        <!-- Manage Clubs Section -->
+        <form id="club_list">
+            <div class="club_table">
+                <h2 id="clubs">Clubs</h2>
+                <div class="headRow grid-row">
+                    <div class="divCell">Club ID</div>
+                    <div class="divCell">Name</div>
+                    <div class="divCell">Description</div>
+                    <div class="divCell">Validity</div>
+                    <div class="divCell">Coordinator</div>
+                    <div class="divCell">Actions</div>
+                </div>
+                {% for club in clubs %}
+                    <div class="clubContainer">
+                        <div class="divRow grid-row" data-club-id="{{ club.club_id }}" onclick="toggleDetails('clubDetails{{club.club_id}}')">
+                            <div class="divCell">{{ club.club_id }}</div>
+                            <div class="divCell">{{ club.name }}</div>
+                            <div class="divCell">{{ club.description }}</div>
+                            <div class="divCell">{{ club.validity }}</div>
+                            <div class="divCell">{{ club.coord }}</div>
+                            <div class="divActions" style="display: flex;">
+                                <form method="POST" action="/delete-club/{{ club.club_id }}">
+                                    <button class="action" type="submit">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div id="clubDetails{{ club.club_id }}" style="display: none; width: 100%;">
+                            <div class="section">
+                                <h2>{{ club.name }} Club Coordinator:</h2>
+                                <div class="coord-details">
+                                    <li>Coordinator ID: {{ current_user.user_id }}</li>
+                                    <li>Name: {{ current_user.name }}</li>
+                                    <li>Email: {{ current_user.email }}</li>
+                                    <li>Mobile: {{ current_user.mobile }}</li>
+                                    <li>User Kind: {{ current_user.kind }}</li>
+                                </div>
+                            </div>
+                            <!-- Add other club details as needed -->
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </form>
+    </main>
+
+    <!-- Add your scripts and styles if required -->
+
+</body>
+</html>

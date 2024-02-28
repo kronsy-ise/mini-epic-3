@@ -1,7 +1,12 @@
 -- First, we drop all things
 DROP TRIGGER IF EXISTS set_user_kind_trigger ON Users CASCADE;
 DROP FUNCTION IF EXISTS set_user_kind() CASCADE;
+DROP VIEW IF EXISTS users_club_membership_view CASCADE;
+DROP VIEW IF EXISTS clubs_coordinator_membership_view CASCADE;
+DROP VIEW IF EXISTS upcoming_events_clubs_view CASCADE;
+DROP VIEW IF EXISTS users_sessions_view CASCADE;
 DROP TABLE IF EXISTS Sessions;
+DROP TABLE IF EXISTS Sessions CASCADE;
 DROP TABLE IF EXISTS Users CASCADE;
 DROP TYPE IF EXISTS UserKind CASCADE;
 DROP TABLE IF EXISTS CLUBS CASCADE;
@@ -10,8 +15,6 @@ DROP TABLE IF EXISTS EVENT_PARTICIPATION CASCADE;
 DROP TABLE IF EXISTS CLUB_MEMBERSHIP CASCADE;
 DROP TRIGGER IF EXISTS set_user_kind_trigger ON Users CASCADE;
 DROP FUNCTION IF EXISTS set_user_kind() CASCADE;
-DROP TABLE IF EXISTS USERS CASCADE;
-DROP TABLE IF EXISTS Sessions;
 DROP TYPE IF EXISTS UserKind CASCADE;
 
 
@@ -131,22 +134,16 @@ BEFORE INSERT ON CLUBS
 FOR EACH ROW 
 EXECUTE FUNCTION set_club_id();
 
--- Function to approve event participation and add user to club_membership if status is approved
 CREATE OR REPLACE FUNCTION approve_event_participation()
 RETURNS TRIGGER AS $$
 BEGIN
-  IF NEW.status = 'approved' THEN
-    -- Add user to club_membership
-    INSERT INTO CLUB_MEMBERSHIP(club_id, user_id, status, created_at, updated_at)
-    VALUES (NEW.club_id, NEW.user_id, 'approved', NOW(), NOW());
-  ELSE
-    -- Check if the user is a member of the club
-    IF EXISTS (
-      SELECT 1 FROM CLUB_MEMBERSHIP
-      WHERE club_id = NEW.club_id AND user_id = NEW.user_id AND status = 'approved'
-    ) THEN
-      NEW.status = 'approved';
-    END IF;
+  -- Check if the user is a member of the club associated with the event
+  IF EXISTS (
+    SELECT 1 FROM CLUB_MEMBERSHIP
+    WHERE club_id = (SELECT club_id FROM Events WHERE event_id = NEW.event_id) AND user_id = NEW.user_id AND status = 'approved'
+  ) THEN
+    -- If the user is a member of the club, approve their participation
+    NEW.status = 'approved';
   END IF;
   RETURN NEW;
 END;
@@ -158,20 +155,6 @@ BEFORE INSERT ON EVENT_PARTICIPATION
 FOR EACH ROW
 EXECUTE FUNCTION approve_event_participation();
 
--- -- Function to set the coordinator_id to the user_id
--- CREATE OR REPLACE FUNCTION set_club_coordinator()
--- RETURNS TRIGGER AS $$
--- BEGIN
---   NEW.coordinator_id = NEW.user_id;
---   RETURN NEW;
--- END;
--- $$ LANGUAGE plpgsql;
-
--- -- Trigger to execute the set_club_coordinator function before inserting into Clubs table
--- CREATE TRIGGER set_club_coordinator_trigger
--- BEFORE INSERT ON CLUBS
--- FOR EACH ROW
--- EXECUTE FUNCTION set_club_coordinator();
 
 -- Function to check if the user has reached the maximum club membership limit
 CREATE OR REPLACE FUNCTION check_club_membership_limit()
@@ -261,3 +244,54 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 -- Create Views 
+CREATE VIEW users_club_membership_view AS
+SELECT 
+    u.user_id,
+    u.name,
+    u.username,
+    u.email,
+    u.mobile,
+    cm.club_id,
+    cm.status as membership_status
+FROM USERS u
+JOIN CLUB_MEMBERSHIP cm ON u.user_id = cm.user_id;
+
+CREATE VIEW clubs_coordinator_membership_view AS
+SELECT
+    c.club_id,
+    c.name as club_name,
+    u.name as coordinator_name,
+    COUNT(cm.user_id) as membership_count
+FROM CLUBS c
+JOIN USERS u ON c.user_id = u.user_id
+LEFT JOIN CLUB_MEMBERSHIP cm ON c.club_id = cm.club_id
+GROUP BY c.club_id, u.name;
+
+CREATE VIEW upcoming_events_clubs_view AS
+SELECT 
+    e.event_id,
+    e.name as event_name,
+    e.description as event_description,
+    e.date as event_date,
+    e.venue as event_venue,
+    c.club_id,
+    c.name as club_name,
+    ep.user_id,
+    ep.status as participation_status
+FROM EVENTS e
+JOIN CLUBS c ON e.club_id = c.club_id
+JOIN EVENT_PARTICIPATION ep ON e.event_id = ep.event_id
+WHERE e.date > NOW();
+
+CREATE VIEW users_sessions_view AS
+SELECT 
+    u.user_id,
+    u.name,
+    u.username,
+    u.email,
+    u.mobile,
+    s.id as session_id,
+    s.secret,
+    s.expires_at
+FROM USERS u
+JOIN Sessions s ON u.user_id = s.user_id;

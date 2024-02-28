@@ -1,0 +1,17 @@
+
+include: 
+  - ./db-compose.yml
+services: 
+  application:
+    build:
+      dockerfile: ./Dockerfile
+    links:
+      - "database:database"
+
+    ports:
+      - "5000:5000"
+    depends_on:
+      - database
+    environment:
+      - DATABASE_URL=postgres://default_user:password1@database:5432/application
+ 

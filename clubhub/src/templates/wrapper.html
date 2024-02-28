@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/styles/index.css">
+    <script src="https://kit.fontawesome.com/c2b7a7d1d7.js" crossorigin="anonymous"></script>
+    <title>ClubHub</title>
+
+    {% block head %}
+    {% endblock %}
+</head>
+<body>
+    <main class="app__main">
+        {% include 'navbar.html' %}
+
+        <div class="app__content">
+            {% block content %}
+            {% endblock %}
+        </div>
+
+    </main>
+</body>
+</html>

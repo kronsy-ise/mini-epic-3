@@ -1,0 +1,80 @@
+{% extends 'wrapper.html' %}
+
+{% block head %}
+<script>
+    function approve_req(user_id, club_id){
+        fetch(`/clubs/${club_id}/approve/${user_id}`, {
+            method: "POST"
+        }).then((response) => console.log("Successfully joined event"))
+        .catch((e) => console.error("An error occurred while joining the event"))
+    }
+    function reject_req(user_id, club_id){
+        fetch(`/clubs/${club_id}/reject/${user_id}`, {
+            method: "POST"
+        }).then((response) => console.log("Successfully joined event"))
+        .catch((e) => console.error("An error occurred while joining the event"))
+    }
+</script>
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/CoordinatorUsers.css') }}"/>
+{% endblock %}
+
+{% block content %}
+<div class="events_container">
+    <h1 class="events_title">ClubHub Users</h1>
+    <div class="events_sections">
+        <div class="events_items">
+            <h2>Club Requests</h2>
+            <div class="events">
+                <div class="event">
+                    <p class="event_name">User Id</p>
+                    <p class="event_desc">Name</p>
+                    <p class="event_date">Username</p>     
+                    <p class="event_date">Email</p>     
+                    <p class="event_date">Phone</p>  
+                    
+                </div>
+                {% if requests|length > 0 %}
+                {% for req in requests %}
+                    <div class="event">
+                        <p class="event_name">{{ req.user_id }}</p>
+                        <p class="event_desc">{{ req.user.name }}</p>
+                        <p class="event_date">{{ req.user.username }}</p>
+                        <p class="event_date">{{ req.user.email }}</p>
+                        <p class="event_date">{{ req.user.mobile }}</p>
+                        <button onclick="approve_req({{req.user_id}}, {{req.club_id}})">Approve</button>   
+                        <button onclick="reject_req({{req.user_id}}, {{req.club_id}})">Reject</button>   
+                    </div>
+                {% endfor %}
+                {% else %}
+                <h3>No Club Events Currently Active</h3>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="events_items">
+            <h2>Members</h2>
+            <div class="events">
+                <div class="event">
+                    <p class="event_name">User Id</p>
+                    <p class="event_desc">Name</p>
+                    <p class="event_date">Username</p>     
+                    <p class="event_date">Email</p>     
+                    <p class="event_date">Phone</p>      
+                </div>
+                {% if club_events|length > 0 %}
+                {% for event in club_events %}
+                <div class="event">
+                    <p class="event_name">{{ member.username }}</p>
+                    <p class="event_desc">{{ member.name }}</p>
+                    <p class="event_date">{{ member.id }}</p>
+                    <button onclick="join_event({{member.email}})">Accept</button>
+                    <button onclick="join_event({{member.phone}})">Reject</button>
+                </div>
+                {% endfor %}
+                {% else %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

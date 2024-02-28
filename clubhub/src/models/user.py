@@ -52,6 +52,13 @@ class User:
             return User(entry[0], entry[1], entry[2], UserKind.from_str(entry[3]), entry[4], entry[5])
     
     @staticmethod
+    def fetch_unapproved_users() -> List[User]:
+        cur = db.cursor()
+        cur.execute("SELECT user_id, username, name, user_kind, email, mobile FROM Users WHERE user_kind = 'unapproved'")
+        entries = cur.fetchall()
+        return [User(*entry) for entry in entries]
+    
+    @staticmethod
     def return_list() -> List[List]:
         # Returns a list of lists of all users data in the form of strings;
         cur = db.cursor()
@@ -73,12 +80,12 @@ class User:
         return [list(entry) for entry in entries]
     
     @staticmethod   
-    def get_user_clubs(user_id) -> List[models.Club]:
+    def get_user_clubs(user_id) -> List[models.club.Club]:
         # Retrieve all clubs associated with the user
         cur = db.cursor()
-        cur.execute("SELECT club_id FROM CLUB_MEMBERSHIP WHERE user_id = %s", (user_id,))
+        cur.execute("SELECT club_id FROM CLUB_MEMBERSHIP WHERE user_id = %s AND status = 'approved'", (user_id,))
         entries = cur.fetchall()
-        clubs = [models.Club.fetch(entry[0]) for entry in entries]
+        clubs = [models.club.Club.fetch(entry[0]) for entry in entries]
         return clubs
     
     @staticmethod

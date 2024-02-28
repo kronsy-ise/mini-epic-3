@@ -1,10 +1,17 @@
 from __future__ import annotations
-from enum import Enum
 from typing import Optional
 from typing import List
 from globals import db
 import models
 class Event:
+    class Events:
+        event_id: int
+        club_id: int
+        name: str 
+        description: str
+        date: str
+        venue: str	 
+    
     def __init__(self, event_id, club_id, name, description, date, venue, ):
         self.event_id = event_id
         self.name = name
@@ -15,7 +22,7 @@ class Event:
 
 
     def __repr__(self) -> str:
-            return f"Event {self.name} <{self.id}>"
+            return f"Event {self.name} <{self.event_id}>"
 
     @staticmethod
     def fetch(event_id : int) -> Optional[Event]:
@@ -39,13 +46,29 @@ class Event:
         return [Event(*entry) for entry in entries]
 
     @staticmethod
-    def add_event(club_id, name, description, date, venue, time):
-       
+    def join(user_id : int, event_id : int):
         cur = db.cursor()
 
-        cur.execute("INSERT INTO Events(club_id, name, description, date, venue) VALUES (%s, %s, %s, %s, %s, %s)", (club_id, name, description, date, venue, time))
+        cur.execute("INSERT INTO EVENT_PARTICIPATION(event_id, user_id, status) VALUES (%s, %s, 'approved')", (event_id, user_id))
+
         db.commit()
-        return "Event added successfully"
+        pass 
+
+    @staticmethod
+    def request_join(user_id : int, event_id : int):
+        cur = db.cursor()
+
+        cur.execute("INSERT INTO EVENT_PARTICIPATION(event_id, user_id, status) VALUES (%s, %s, 'pending')", (event_id, user_id))
+
+        db.commit()
+        pass 
+
+    @staticmethod
+    def add_event(club_id, name, description, date, venue):
+        cur = db.cursor()
+        cur.execute("INSERT INTO Events(club_id, name, description, date, venue) VALUES (%s, %s, %s, %s, %s)", (club_id, name, description, date, venue))
+        db.commit()
+        return Event.fetch(club_id)
     
     @staticmethod
     def delete_event(event_id):

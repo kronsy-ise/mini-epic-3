@@ -17,16 +17,16 @@ pip install -r ./clubhub/requirements.txt
 
 Then, spin up the database
 ```bash
-docker-compose -f ./deploy/docker-compose.yml up
+docker-compose -f ./db-compose.yml up
 ```
 
 After this, make all initializing migrations to the database 
+Run this every time you make schema changes
 ```bash
-python ./clubhub/src/init_database.py
+DATABASE_URL="postgres://default_user:password1@localhost:5435/application" python ./clubhub/src/init_database.py
 ```
-
 
 Finally, we can run the application
 ```bash 
-python ./clubhub/src/main.py
+DATABASE_URL="postgres://default_user:password1@localhost:5435/application" python ./clubhub/src/main.py
 ```

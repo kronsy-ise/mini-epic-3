@@ -34,11 +34,6 @@
         {% include "scroll_script.html" %} <!-- Include a script for scrolling functionality -->
         {%include "dropdown_script.html" %}
         <div class="event_table">
-            <h1 class="box">Manage Clubs</h1> <!-- Heading for event management section -->
-            </p>
-            <br> 
-            
-            <h2 style="text-align: center;">Site User information</h2> <!-- Heading for site user information section -->
             <div class="site-information">
                 <div class="info-card">
                     <img src="{{ url_for('static', filename='images/basket.png') }}" alt="Other Logo"
@@ -53,34 +48,13 @@
                 <div class="info-card">
                     <img src="{{ url_for('static', filename='images/approval.png') }}" alt="Other Logo"
                     style="width: 60px; height: 60px;">
-                    <p>Event Approvals needed:{{unapproved_event_memberships}} </p>
+                    <p>Event Approvals needed: {{unapproved_event_memberships}} </p>
                 </div>
             </div>
 
         </div>
-
-        <form id="create_event" action="/CreateClub" method="post"> <!-- Form to create a new event -->
-            <div class="event_table">
-                <div class="event_form">
-                    <h2>Create a new Event</h2> <!-- Heading for create event form -->
-                    <label for="club">Club:</label><br>
-                    <select id="club" name="club" required> <!-- Dropdown for selecting club coordinator -->
-                        {% for club in clubs %}
-                            <option value="{{ club.id }}">{{ club.name }}</option> <!-- Display each coordinator option -->
-                        {% endfor %}
-                    </select><br>
-                    <label for="name">Name:</label><br>
-                    <input type="text" id="name" name="name" required><br> <!-- Input for club name -->
-                    <label for="description">Description:</label><br>
-                    <textarea id="description" name="description" required></textarea><br> <!-- Textarea for club description -->
-                    <label for="date">Date:</label><br>
-                    <input type="datetime-local" id="datetime" name="datetime" required><br> <!-- Input for club date and time -->                    <input type="submit" value="Submit"> <!-- Submit button for creating a club -->
-                </div>
-            </div>
-        </form>
-        
         <form id="event_list"> <!-- Form for event list -->
-            <div class="event_table">
+            <div class="event_table" style ="transform: scale(1.5); margin-right: 200px;">
                 <h2 id="events">Events</h2> <!-- Heading for event list -->
                 <div class="headRow" >
                     <div class="divCell">Event ID</div> <!-- Table column header for event ID -->
@@ -93,8 +67,8 @@
                 </div>
                 {% for event in events %} <!-- Loop through the list of events -->
                     <div class="eventContainer">
-                        <div class="divRow" data-event-id="{{ event.id }}" onclick="toggleDetails('eventDetails{{event.id}}')"> <!-- Table row for each event -->
-                            <div class="divCell">{{ event.id }}</div> <!-- Display event ID -->
+                        <div class="divRow" data-event-id="{{ event.event_id }}" onclick="toggleDetails('eventDetails{{event.event_id}}')"> <!-- Table row for each event -->
+                            <div class="divCell">{{ event.event_id }}</div> <!-- Display event ID -->
                             <div class="divCell">{{ event.name }}</div> <!-- Display event name -->
                             <div class="divCell">{{ event.description }}</div> <!-- Display event description -->
                             <div class="divCell">{{ event.date }}</div> <!-- Display event date -->
@@ -105,8 +79,21 @@
                                 <!-- Add your event actions here -->
                             </div>
                         </div>
-                        <div id="eventDetails{{ event.id }}" style="display: none; width: 100%;">
-                            <!-- Add more event details here -->
+                        <div id="eventDetails{{ event.event_id }}" style="display: none; width: 100%;">
+                            <div class="eventDetails">
+                                <h3>Event Details</h3>
+                                <p>Event ID: {{ event.event_id }}</p>
+                                <p>Name: {{ event.name }}</p>
+                                <p>Description: {{ event.description }}</p>
+                                <p>Date: {{ event.date }}</p>
+                                <p>Venue: {{ event.venue }}</p>
+                                <p>Club ID: {{ event.club_id }}</p>
+                            </div>
+                            <div class="eventActions">
+                                <a href="/event/{{ event.id }}">View</a>
+                                <a href="/event/{{ event.id }}/edit">Edit</a>
+                                <a href="/event/{{ event.id }}/delete">Delete</a>
+                            </div>
                         </div>
                     </div>
                 {% endfor %}

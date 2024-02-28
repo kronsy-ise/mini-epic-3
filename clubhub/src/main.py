@@ -5,10 +5,13 @@ from handlers.users import users_app
 from handlers.auth import auth_app
 from handlers.home import home_app
 from handlers.clubs import clubs_app
+from handlers.events import events_app
 from util import verify_session
 from globals import db
-from handlers.events import events_app
 
+import init_database
+
+init_database.maybe_initialize_database(db, init_database.INIT_SCRIPT)
 app = Flask(__name__)
 app.secret_key = "super secret"
 app.register_blueprint(users_app)
@@ -39,5 +42,6 @@ def home():
 
 
 
-app.run("0.0.0.0", 8080, debug=True)
+if __name__ == "__main__":
+    app.run("0.0.0.0", 8080, debug=True)
 
